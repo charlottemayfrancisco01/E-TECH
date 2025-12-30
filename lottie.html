@@ -300,21 +300,33 @@
     .prev { left: 10px; }
     .next { right: 10px; }
 
-    .sign-language-overlay {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      width: 220px;
-      background: rgba(255,255,255,0.9);
-      border-radius: 10px;
-      padding: 6px;
-      z-index: 25;
-    }
+    .slides-container {
+  flex: 2;
+  position: relative; /* ensures children absolute positioning works */
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 
-    .sign-language-overlay video {
-      width: 100%;
-      border-radius: 8px;
-    }
+.sign-language-overlay {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 220px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  padding: 6px;
+  z-index: 999; /* very high so it's above slide content */
+}
+
+.sign-language-overlay video {
+  width: 100%;
+  border-radius: 8px;
+  pointer-events: none; /* optional, allows clicks to pass through */
+}
+
 
     .subtitle {
       position: absolute;
@@ -495,7 +507,6 @@
     ]
   };
 
-
 let currentSlides = [];
 let currentIndex = 0;
 let captionTimer = null;
@@ -509,8 +520,11 @@ function openStory(key) {
 
 function closeStory() {
   document.getElementById('overlay').style.display = 'none';
-  signVideo.pause();
-  signVideo.style.display = 'none';
+  if (signVideo) {
+    signVideo.pause();
+    signVideo.style.display = 'none';
+    signVideo.src = '';
+  }
   if (captionTimer) clearInterval(captionTimer);
 }
 
@@ -549,19 +563,18 @@ function showSlide(index) {
   const activeSlide = slides[currentIndex];
   activeSlide.classList.add('active');
 
-  // Play main video if slide is video
+  // Play main video if slide type is video
   if (currentSlides[currentIndex].type === 'video') {
     const mainVideo = activeSlide.querySelector('video');
-    if (mainVideo) mainVideo.play();
+    if (mainVideo) mainVideo.play().catch(() => {});
   }
 
   // Show sign language video if exists
-  const signSrc = currentSlides[currentIndex].sign;
-  if (signSrc) {
+  const slideData = currentSlides[currentIndex];
+  if (slideData.sign) {
     signVideo.style.display = 'block';
-    signVideo.pause();
+    signVideo.src = slideData.sign;
     signVideo.currentTime = 0;
-    signVideo.src = signSrc;
     signVideo.play().catch(() => {});
   } else {
     signVideo.pause();
@@ -571,6 +584,7 @@ function showSlide(index) {
 
   startCaptionRotation();
 }
+
 
 function changeSlide(direction) {
   showSlide(currentIndex + direction);
@@ -587,7 +601,10 @@ function startCaptionRotation() {
   if (slideData.captions) captions = slideData.captions;
   else if (slideData.caption) captions = [slideData.caption];
 
-  if (captions.length === 0) { subtitleEl.textContent = ''; return; }
+  if (captions.length === 0) {
+    subtitleEl.textContent = '';
+    return;
+  }
 
   let captionIndex = 0;
   subtitleEl.textContent = captions[captionIndex];
@@ -596,16 +613,15 @@ function startCaptionRotation() {
 
   captionTimer = setInterval(() => {
     captionIndex++;
-    if (captionIndex >= captions.length) { clearInterval(captionTimer); return; }
+    if (captionIndex >= captions.length) {
+      clearInterval(captionTimer);
+      return;
+    }
     subtitleEl.textContent = captions[captionIndex];
   }, 5000);
 }
 </script>
 
+
 </body>
 </html>
-
-
-
-
-
