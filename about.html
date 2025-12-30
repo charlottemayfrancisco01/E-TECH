@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Homepage</title>
+  <script src="/_sdk/element_sdk.js"></script>
+   <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+  :root {
+  --purple: #c084fc;
+  --purple-dark: #a855f7;
+  --blue-bg: #e8f6ff;
+  --footer-bg: #eedcff;
+  --text-dark: #1f2937;
+  --text-muted: #6b7280;
+  --card-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--text-dark);
+  background: #ffffff;
+}
+
+/* NAVBAR */
+.navbar {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+ .logo {
+  max-width: 150px;
+  width: 100%;
+  height: auto;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  font-weight: 500;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #111827;
+}
+
+/* HERO SECTION */
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  background: url('room.jpg') no-repeat center center;
+  background-size: cover;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+
+
+.hero-image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero-placeholder h2 {
+  font-size: 100px;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.hero-placeholder img {
+  max-width: 450px;
+  width: 100%;
+  height: auto;
+}
+.heromo-section {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  background: url('rom.jpg') no-repeat center center;
+  background-size: cover;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+}
+
+
+.heromo-image-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heromo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0px;
+  text-align: center;
+  padding: 2rem;
+}
+
+.heromo-placeholder h2 {
+  font-size: 100px;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.heromo-placeholder img {
+  max-width: 450px;
+  width: 100%;
+  height: auto;
+}
+
+/* FOOTER */
+footer {
+  background: var(--footer-bg);
+  text-align: center;
+  padding: 32px 16px;
+  font-size: 16px;
+}
+
+/* ABOUT SECTION */
+.about-section {
+  background: #f9fafb;
+  padding: 80px 20px;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  padding-left: 100px;
+}
+
+.about-logo img {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+}
+
+/* ABOUT TEXT CARD */
+.about-text {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 18px;
+  box-shadow: var(--card-shadow);
+  max-width: 600px;
+}
+
+.about-text h3 {
+  font-size: 32px;
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.about-text p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .about-container {
+    flex-direction: column;
+    text-align: center;
+    padding-left: 0;
+  }
+
+  .about-logo img {
+    max-width: 200px;
+  }
+
+  .hero-placeholder h2 {
+    font-size: 60px;
+  }
+
+  .hero-placeholder img {
+    max-width: 220px;
+  }
+}
+
+  </style>
+  <body>
+ <!-- NAV -->
+  <header class="navbar">
+    <img src="lougo.jpg" alt="e-tech logo" class="logo">
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="lottie.html">Content</a>
+      <a href="activities.html">Activities</a>
+    </nav>
+  </header>
+  
+<section id="home" class="hero-section">
+  <div class="hero-image-container">
+   <div class="hero-placeholder">
+
+  <!-- Left character -->
+  <img src="pepe.png" alt="Pepe character" class="hero-character">
+  <!-- Center text -->
+  <h2 id="hero-title">E-TECH</h2>
+  <!-- Right character -->
+  <img src="pilar.png" alt="Pilar character" class="hero-character">
+
+</div>
+
+  </div>
+</section>
+<section class="about-section">
+  <div class="about-container">
+
+    <!-- Logo -->
+    <div class="about-logo">
+      <img src="logoo.jpg" alt="Kids Corner Logo">
+    </div>
+
+    <!-- Text Content -->
+    <div class="about-text">
+      <h3>INTRODUCTION</h3>
+      <p>
+       E-Tech is a web-based platform that uses interactive storytelling to make learning fun and engaging for Grade 4 learners. It combines stories with interactive activities to enhance reading comprehension, creativity, and basic ICT skills. Aligned with the DepEd MATATAG curriculum, E-Tech helps students learn meaningfully while developing digital literacy.
+      </p>
+	  <br>
+    </div>
+  </div>
+</section>
+<section class="about-section">
+  <div class="about-container">
+       <div class="about-text">
+       <h3>WHAT WE DO</h3>
+      <p>
+       E-Tech is a learner-centered web-based platform designed to support the Department of Education’s MATATAG curriculum. We focus on empowering Grade 4 learners by promoting literacy, digital competence, creativity, and critical thinking through interactive storytelling and technology-enhanced learning experiences.
+      </p>
+	  <br>
+	  <h3>HOW WE DO IT</h3>
+      <p>
+       We develop web-based interactive storytelling materials that are carefully aligned with DepEd Grade 4 learning competencies. Our resources are crafted to strengthen reading comprehension, communication skills, creativity, and basic ICT skills. By ensuring that every material is engaging, age-appropriate, and inclusive, we provide digital learning experiences that encourage meaningful exploration and independent learning, helping young learners grow with confidence in both academics and technology.
+      </p>
+	  </div>
+	  <!-- Logo -->
+    <div class="about-logo">
+      <img src="logoo.jpg" alt="Kids Corner Logo">
+    </div>
+	  </div>
+	  </section>
+	  <section id="home" class="heromo-section">
+  <div class="hero-image-container">
+   <div class="hero-placeholder">
+      <p>
+       We develop web-based interactive storytelling materials that are carefully aligned with DepEd Grade 4 learning competencies. Our resources are crafted to strengthen reading comprehension, communication skills, creativity, and basic ICT skills. By ensuring that every material is engaging, age-appropriate, and inclusive, we provide digital learning experiences that encourage meaningful exploration and independent learning, helping young learners grow with confidence in both academics and technology.
+      </p>
+	  </div>
+</div>
+</div>
+   </section>
+   <!-- FOOTER -->
+  <footer>
+    Made with ❤️ for curious kids everywhere
+  </footer>
+   </html>
