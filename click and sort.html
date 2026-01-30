@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Software vs Hardware</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root {
+  --purple: #c9b6ff;
+  --purple-dark: #9f8cff;
+  --purple-light: #f4f1ff;
+  --white: #ffffff;
+  --green: #2ecc71;
+  --red: #e74c3c;
+}
+
+/* 🌈 PAGE */
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  background: linear-gradient(135deg, #f6f3ff, #ffffff);
+  padding: 20px;
+  text-align: center;
+  color: #4a3f78;
+}
+
+/* 📘 DIRECTIONS BOX */
+.instructions {
+  max-width: 650px;
+  margin: 0 auto 25px;
+  background: var(--purple-light);
+  border-radius: 18px;
+  padding: 20px 25px;
+  box-shadow: 0 10px 20px rgba(160, 140, 255, 0.25);
+}
+
+.instructions h3 {
+  margin: 0 0 10px;
+  color: var(--purple-dark);
+  font-size: 22px;
+}
+
+.instructions p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* 🧩 GAME CONTAINER */
+.game {
+  max-width: 650px;
+  margin: auto;
+  background: var(--white);
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 15px 30px rgba(160, 140, 255, 0.25);
+}
+
+/* 🏷 TITLE */
+h2 {
+  margin-bottom: 15px;
+  font-size: 28px;
+  color: var(--purple-dark);
+}
+
+/* 📌 HEADERS */
+.header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-weight: bold;
+  margin-bottom: 25px;
+  font-size: 18px;
+}
+
+.header div {
+  background: var(--purple-light);
+  padding: 10px;
+  border-radius: 12px;
+  margin: 0 5px;
+}
+
+/* 🧱 ROW */
+.row {
+  position: relative;
+  height: 120px;
+  margin-bottom: 18px;
+  background: #faf9ff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ➖ TRACK */
+.track {
+  position: absolute;
+  top: 60px;
+  left: 20px;
+  right: 20px;
+  height: 4px;
+  background: linear-gradient(to right, #e0d9ff, #c9b6ff);
+  border-radius: 10px;
+}
+
+/* 🃏 CARD */
+.card {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  width: 90px;
+  cursor: grab;
+  transition: transform 0.2s ease, left 0.25s ease;
+}
+
+.card:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ✅ FEEDBACK */
+.correct {
+  outline: 4px solid var(--green);
+  animation: pop 0.3s ease;
+}
+
+.wrong {
+  outline: 4px solid var(--red);
+  animation: shake 0.3s ease;
+}
+
+/* 🎉 BUTTON */
+button {
+  margin-top: 25px;
+  padding: 14px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(160, 140, 255, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 26px rgba(160, 140, 255, 0.6);
+}
+
+/* 📊 SCORE */
+#score {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--purple-dark);
+}
+
+/* ✨ ANIMATIONS */
+@keyframes pop {
+  0% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+</style>
+</head>
+
+<body>
+
+<h2>CLICK AND SORT</h2>
+
+<!-- 📘 DIRECTIONS -->
+<div class="instructions">
+  <h3>Panuto:</h3>
+  <p>
+  Suriin ang mga larawan, ilagay ang bawat isa sa tamang kategorya—<strong>Hardware</strong>. kung ito ay pisikal na parte na nahahawakan at <strong>Software</strong> kung ito ay programang ginagamit sa computer.
+  </p>
+</div>
+
+<div class="game">
+
+  <div class="header">
+    <div>Software</div>
+    <div>Hardware</div>
+  </div>
+
+  <div class="row" data-answer="hardware">
+    <div class="track"></div>
+    <div class="card"><img src="GAME1.png" alt="keyboard"></div>
+  </div>
+
+  <div class="row" data-answer="hardware">
+    <div class="track"></div>
+    <div class="card"><img src="GAME2.png" alt="monitor"></div>
+  </div>
+
+  <div class="row" data-answer="software">
+    <div class="track"></div>
+    <div class="card"><img src="GAME3.png" alt="presentation"></div>
+  </div>
+
+  <div class="row" data-answer="software">
+    <div class="track"></div>
+    <div class="card"><img src="GAME4.png" alt="word"></div>
+  </div>
+
+  <div class="row" data-answer="hardware">
+    <div class="track"></div>
+    <div class="card"><img src="GAME5.png" alt="CPU"></div>
+  </div>
+
+</div>
+
+<button id="check">Check Answers</button>
+<p id="score"></p>
+
+<script>
+const columns = ["software", "hardware"];
+let columnCenters = [];
+
+function calculateColumns() {
+  const width = document.querySelector(".game").offsetWidth;
+  columnCenters = [width * 0.25, width * 0.75];
+}
+
+calculateColumns();
+window.addEventListener("resize", calculateColumns);
+
+document.querySelectorAll(".card").forEach(card => {
+  let dragging = false;
+  let startX = 0;
+  let startLeft = 0;
+
+  card.addEventListener("mousedown", e => {
+    dragging = true;
+    startX = e.clientX;
+    startLeft = card.offsetLeft;
+    card.style.transition = "none";
+  });
+
+  document.addEventListener("mousemove", e => {
+    if (!dragging) return;
+    card.style.left = Math.max(0, startLeft + (e.clientX - startX)) + "px";
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (!dragging) return;
+    dragging = false;
+    card.style.transition = "left 0.25s ease";
+
+    const center = card.offsetLeft + card.offsetWidth / 2;
+    const colIndex = center < columnCenters[1] ? 0 : 1;
+
+    card.style.left =
+      columnCenters[colIndex] - card.offsetWidth / 2 + "px";
+    card.dataset.choice = columns[colIndex];
+  });
+});
+
+document.getElementById("check").addEventListener("click", () => {
+  let score = 0;
+  const rows = document.querySelectorAll(".row");
+
+  rows.forEach(row => {
+    const card = row.querySelector(".card");
+    card.classList.remove("correct", "wrong");
+
+    if (card.dataset.choice === row.dataset.answer) {
+      score++;
+      card.classList.add("correct");
+    } else {
+      card.classList.add("wrong");
+    }
+  });
+
+  document.getElementById("score").textContent =
+    `🎉 Score: ${score} / ${rows.length}`;
+});
+</script>
+
+</body>
+</html>
