@@ -107,23 +107,46 @@
     }
 
     /* CTA BUTTON */
-    .cta-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-top: 60px;
-    }
+.cta-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+}
 
-    .cta-button {
-      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-      color: #ffffff;
-      border: none;
-      padding: 18px 42px;
-      font-size: 18px;
-      font-weight: 600;
-      border-radius: 999px;
-      cursor: pointer;
-      box-shadow: 0 12px 30px rgba(168, 85, 247, 0.35);
-    }
+.cta-button {
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  color: #ffffff;
+  border: none;
+  padding: 18px 42px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.35);
+}
+
+/* SLIDE TOP-LEFT BUTTON */
+.slide-button {
+  position: absolute;       /* stay on top of the slide */
+  top: 15px;                /* distance from top */
+  left: 15px;               /* distance from left */
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.35);
+  z-index: 50;              /* above image/video */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.slide-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(168, 85, 247, 0.45);
+}
+
 	
 	/* CARD HOVER ANIMATION */
 .card {
@@ -507,121 +530,104 @@
     ]
   };
 
-let currentSlides = [];
-let currentIndex = 0;
-let captionTimer = null;
+ let currentSlides = [];
+    let currentIndex = 0;
+    let captionTimer = null;
+    const signVideo = document.getElementById('signVideo');
 
-const signVideo = document.getElementById('signVideo');
-
-function openStory(key) {
-  document.getElementById('overlay').style.display = 'flex';
-  loadStory(key);
-}
-
-function closeStory() {
-  document.getElementById('overlay').style.display = 'none';
-  if (signVideo) {
-    signVideo.pause();
-    signVideo.style.display = 'none';
-    signVideo.src = '';
-  }
-  if (captionTimer) clearInterval(captionTimer);
-}
-
-function loadStory(key) {
-  const slidesContainer = document.getElementById('slides');
-  slidesContainer.innerHTML = '';
-  currentSlides = stories[key];
-  currentIndex = 0;
-
-  currentSlides.forEach((slide, index) => {
-    const div = document.createElement('div');
-    div.className = 'slide';
-    if (index === 0) div.classList.add('active');
-
-    if (slide.type === 'image') {
-      div.innerHTML = `<img src="${slide.src}"><div class="subtitle"></div>`;
-    } else if (slide.type === 'video') {
-      div.innerHTML = `<video src="${slide.src}" controls></video><div class="subtitle"></div>`;
+    function openStory(key) {
+      document.getElementById('overlay').style.display = 'flex';
+      loadStory(key);
     }
 
-    slidesContainer.appendChild(div);
-  });
-
-  showSlide(0);
-}
-
-function showSlide(index) {
-  const slides = document.querySelectorAll('.slide');
-  slides.forEach(s => {
-    s.classList.remove('active');
-    const video = s.querySelector('video');
-    if (video) video.pause();
-  });
-
-  currentIndex = (index + currentSlides.length) % currentSlides.length;
-  const activeSlide = slides[currentIndex];
-  activeSlide.classList.add('active');
-
-  // Play main video if slide type is video
-  if (currentSlides[currentIndex].type === 'video') {
-    const mainVideo = activeSlide.querySelector('video');
-    if (mainVideo) mainVideo.play().catch(() => {});
-  }
-
-  // Show sign language video if exists
-  const slideData = currentSlides[currentIndex];
-  if (slideData.sign) {
-    signVideo.style.display = 'block';
-    signVideo.src = slideData.sign;
-    signVideo.currentTime = 0;
-    signVideo.play().catch(() => {});
-  } else {
-    signVideo.pause();
-    signVideo.style.display = 'none';
-    signVideo.src = '';
-  }
-
-  startCaptionRotation();
-}
-
-
-function changeSlide(direction) {
-  showSlide(currentIndex + direction);
-}
-
-function startCaptionRotation() {
-  if (captionTimer) clearInterval(captionTimer);
-
-  const slideData = currentSlides[currentIndex];
-  const subtitleEl = document.querySelector('.slide.active .subtitle');
-  if (!subtitleEl) return;
-
-  let captions = [];
-  if (slideData.captions) captions = slideData.captions;
-  else if (slideData.caption) captions = [slideData.caption];
-
-  if (captions.length === 0) {
-    subtitleEl.textContent = '';
-    return;
-  }
-
-  let captionIndex = 0;
-  subtitleEl.textContent = captions[captionIndex];
-
-  if (captions.length === 1) return;
-
-  captionTimer = setInterval(() => {
-    captionIndex++;
-    if (captionIndex >= captions.length) {
-      clearInterval(captionTimer);
-      return;
+    function closeStory() {
+      document.getElementById('overlay').style.display = 'none';
+      if(signVideo) { signVideo.pause(); signVideo.style.display='none'; signVideo.src=''; }
+      if(captionTimer) clearInterval(captionTimer);
     }
-    subtitleEl.textContent = captions[captionIndex];
-  }, 5000);
-}
-</script>
 
+    function loadStory(key) {
+      const slidesContainer = document.getElementById('slides');
+      slidesContainer.innerHTML = '';
+      currentSlides = stories[key];
+      currentIndex = 0;
+
+      const kabanataLinks = {1:'10.html',2:'11.html',3:'12.html',4:'13.html',5:'14.html',6:'15.html'};
+      const slideLink = kabanataLinks[key];
+
+      currentSlides.forEach((slide,index)=>{
+        const div = document.createElement('div');
+        div.className = 'slide';
+        if(index===0) div.classList.add('active');
+
+        if(slide.type==='image'){
+          div.innerHTML = `<a href="${slideLink}" target="_blank" class="slide-button">Play</a>
+            <img src="${slide.src}">
+            <div class="subtitle"></div>`;
+        } else if(slide.type==='video'){
+          div.innerHTML = `<a href="${slideLink}" target="_blank" class="slide-button">Play</a>
+            <video src="${slide.src}" controls></video>
+            <div class="subtitle"></div>`;
+        }
+        slidesContainer.appendChild(div);
+      });
+
+      showSlide(0);
+    }
+
+    function showSlide(index){
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach(s=>{ s.classList.remove('active'); const video=s.querySelector('video'); if(video) video.pause(); });
+
+      currentIndex = (index+currentSlides.length)%currentSlides.length;
+      const activeSlide = slides[currentIndex];
+      activeSlide.classList.add('active');
+
+      const slideData = currentSlides[currentIndex];
+
+      if(slideData.type==='video'){
+        const mainVideo = activeSlide.querySelector('video');
+        if(mainVideo) mainVideo.play().catch(()=>{});
+      }
+
+      if(slideData.sign){
+        signVideo.style.display='block';
+        signVideo.src=slideData.sign;
+        signVideo.currentTime=0;
+        signVideo.play().catch(()=>{});
+      } else {
+        signVideo.pause();
+        signVideo.style.display='none';
+        signVideo.src='';
+      }
+
+      startCaptionRotation();
+    }
+
+    function changeSlide(direction){ showSlide(currentIndex+direction); }
+
+    function startCaptionRotation(){
+      if(captionTimer) clearInterval(captionTimer);
+      const slideData = currentSlides[currentIndex];
+      const subtitleEl = document.querySelector('.slide.active .subtitle');
+      if(!subtitleEl) return;
+
+      let captions=[];
+      if(slideData.captions) captions=slideData.captions;
+      else if(slideData.caption) captions=[slideData.caption];
+      if(captions.length===0){ subtitleEl.textContent=''; return; }
+
+      let captionIndex=0;
+      subtitleEl.textContent=captions[captionIndex];
+      if(captions.length===1) return;
+
+      captionTimer=setInterval(()=>{
+        captionIndex++;
+        if(captionIndex>=captions.length){ clearInterval(captionTimer); return; }
+        subtitleEl.textContent=captions[captionIndex];
+      },5000);
+    }
+  </script>
 
 </body>
 </html>
