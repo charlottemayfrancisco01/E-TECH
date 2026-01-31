@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kids Jigsaw Puzzle</title>
+<style>
+  body {
+    margin: 0;
+    overflow: hidden;
+    font-family: "Comic Sans MS", "Poppins", Arial, sans-serif;
+    background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+  }
+  canvas { display: block; }
+
+  #ui {
+    position: fixed; bottom: 20px; right: 20px; z-index: 10;
+  }
+  button {
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    color: #4b145f;
+    border: none; border-radius: 20px;
+    font-weight: bold; cursor: pointer;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  button:hover { transform: scale(1.08); box-shadow: 0 10px 25px rgba(0,0,0,0.35); }
+
+ #levelInfo {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: rgba(255,255,255,0.95);
+  color: #4b145f;
+
+  padding: 26px;
+  border-radius: 26px;
+  max-width: 380px;
+
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+}
+
+#levelInfo h2 {
+  margin: 0 0 12px;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+#levelInfo p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+
+  .confetti {
+    position: fixed; width: 10px; height: 10px; top: -10px;
+    animation: fall 3s linear forwards; z-index: 999;
+  }
+  @keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity:0; } }
+
+  .topLink {
+    position: fixed; left:15px; z-index:10;
+    padding: 10px 16px; font-size:14px; border-radius:14px;
+    background:#6a5acd; color:white; text-decoration:none; font-weight:bold;
+    box-shadow:0 6px 15px rgba(0,0,0,0.2); transition:0.3s;
+  }
+  .topLink:nth-child(1){ top:15px; }
+  .topLink:nth-child(2){ top:60px; }
+  .topLink:hover { transform: scale(1.08); background:#5846c9; }
+</style>
+</head>
+<body>
+
+<a href="activities.html" class="topLink">Activities</a>
+<a href="lottie.html" class="topLink">Story</a>
+
+<div id="ui">
+  <button onclick="nextLevel()">🎮 Next Level</button>
+</div>
+
+<div id="levelInfo">
+  <h2 id="levelTitle"></h2>
+  <p id="levelDesc"></p>
+</div>
+
+<canvas id="canvas"></canvas>
+
+<script>
+/* ========== CANVAS ========== */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+let currentImageIndex = 0;
+
+function resize() {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize", resize);
+
+/* ========== CONFIG ========== */
+const LEVELS = [
+  { rows: 2, cols: 2 }
+];
+const IMAGES = [
+  {
+    src: "P1.png",
+    title: "1",
+    desc: "Ano ang tawag sa bahagi ng presentation software kung saan makikita ang kabuuang itsura ng software kung saan nandiyan ang mga menu, toolbar, slide panel at workspace."
+  },
+  {
+    src: "P2.png",
+    title: "2",
+    desc: "Ano ang ginagamit upang mabilis na mabigyan ng kulay, font style, at layout ang lahat ng slides sa isang presentasyon?"
+  },
+  {
+    src: "P3.png",
+    title: "3",
+    desc: "Ito ay isang masining na paraan ng pagpapakita ng teksto. Ginagamit ito para mas maging kaakit-akit ang mga salita sa presentation. "
+  },
+  {
+    src: "P4.png",
+    title: "4",
+    desc: "Ito ay ang proseso na ginagamit para mag lagay ng teksto. Pwede rin itong i-format at baguhin ang font,laki, kulay at alignment."
+  },
+  {
+    src: "P5.png",
+    title: "5",
+    desc: "Ano ang proseso ng pagdaragdag ng larawan, video, o chart sa isang slide upang mas maging malinaw ang impormasyon?"
+  },
+  ];
+
+let currentImageData = null;
+
+const SNAP = 18;
+const TAB_RATIO = 0.28;
+const BLEED_RATIO = 0.3;
+
+let pieces = [];
+let groups = [];
+let levelIndex = 0;
+let board = null;
+
+const image = new Image();
+const imageCanvas = document.createElement("canvas");
+const imageCtx = imageCanvas.getContext("2d");
+
+
+/* ========== BOARD ========== */
+function getBoard() {
+  const size = Math.min(canvas.width, canvas.height) * 0.55;
+  return {
+    x: (canvas.width - size) / 2,
+    y: (canvas.height - size) / 2,
+    size
+  };
+}
+function randomOutsideBoard(board, pieceW, pieceH) {
+  const margin = 30;
+  const side = Math.floor(Math.random() * 4);
+
+  switch (side) {
+    case 0: // left of board
+      return {
+        x: board.x - pieceW - margin,
+        y: board.y + Math.random() * (board.size - pieceH)
+      };
+    case 1: // right of board
+      return {
+        x: board.x + board.size + margin,
+        y: board.y + Math.random() * (board.size - pieceH)
+      };
+    case 2: // top of board
+      return {
+        x: board.x + Math.random() * (board.size - pieceW),
+        y: board.y - pieceH - margin
+      };
+    case 3: // bottom of board
+      return {
+        x: board.x + Math.random() * (board.size - pieceW),
+        y: board.y + board.size + margin
+      };
+  }
+}
+
+
+/* ========== PIECE ========== */
+class Piece {
+  constructor(r, c, w, h, edges, board) {
+    this.row = r;
+    this.col = c;
+    this.w = w;
+    this.h = h;
+    this.edges = edges;
+
+    this.bleed = Math.min(w, h) * BLEED_RATIO; // extension for tabs
+    this.drawW = w + this.bleed * 2;
+    this.drawH = h + this.bleed * 2;
+
+    this.correctX = board.x + c * w - this.bleed;
+    this.correctY = board.y + r * h - this.bleed;
+
+    const spawn = randomOutsideBoard(board, this.drawW, this.drawH);
+this.x = spawn.x;
+this.y = spawn.y;
+
+    this.group = null;
+  }
+
+  draw() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+
+    // Draw path with bleed included
+    ctx.beginPath();
+    ctx.translate(this.bleed, this.bleed); // shift path to account for bleed
+    drawJigsawPath(ctx, this.w, this.h, this.edges);
+    ctx.closePath();
+
+    // clip to piece shape
+    ctx.clip();
+
+    // draw image including bleed so it fills the tabs
+    ctx.drawImage(
+      imageCanvas,
+      this.col * this.w - this.bleed,
+      this.row * this.h - this.bleed,
+      this.w + 2 * this.bleed,
+      this.h + 2 * this.bleed,
+      -this.bleed,
+      -this.bleed,
+      this.w + 2 * this.bleed,
+      this.h + 2 * this.bleed
+    );
+
+    ctx.restore();
+
+    // Draw outline (without shifting)
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.beginPath();
+    ctx.translate(this.bleed, this.bleed);
+    drawJigsawPath(ctx, this.w, this.h, this.edges);
+    ctx.strokeStyle = "rgba(255,255,255,0.35)";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+
+/* ========== GROUP ========== */
+class Group {
+  constructor(p) {
+    this.pieces = [p];
+    p.group = this;
+  }
+
+  move(dx, dy) {
+    this.pieces.forEach(p => {
+      p.x += dx;
+      p.y += dy;
+    });
+  }
+
+  trySnap(other) {
+    for (let a of this.pieces) {
+      for (let b of other.pieces) {
+        const dr = a.row - b.row;
+        const dc = a.col - b.col;
+        if (Math.abs(dr) + Math.abs(dc) !== 1) continue;
+
+        const dx = a.x - b.x - (a.correctX - b.correctX);
+        const dy = a.y - b.y - (a.correctY - b.correctY);
+
+        if (Math.abs(dx) < SNAP && Math.abs(dy) < SNAP) {
+          other.move(dx, dy);
+          this.merge(other);
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  merge(other) {
+    other.pieces.forEach(p => p.group = this);
+    this.pieces.push(...other.pieces);
+    groups = groups.filter(g => g !== other);
+  }
+}
+
+/* ========== JIGSAW PATH ========== */
+function drawJigsawPath(ctx, w, h, e) {
+  const t = Math.min(w, h) * TAB_RATIO;
+  ctx.moveTo(0, 0);
+
+  // top
+  if (e.top === 0) ctx.lineTo(w, 0);
+  else ctx.bezierCurveTo(w/4, -t*e.top, 3*w/4, -t*e.top, w, 0);
+
+  // right
+  if (e.right === 0) ctx.lineTo(w, h);
+  else ctx.bezierCurveTo(w + t*e.right, h/4, w + t*e.right, 3*h/4, w, h);
+
+  // bottom
+  if (e.bottom === 0) ctx.lineTo(0, h);
+  else ctx.bezierCurveTo(3*w/4, h + t*e.bottom, w/4, h + t*e.bottom, 0, h);
+
+  // left
+  if (e.left === 0) ctx.lineTo(0, 0);
+  else ctx.bezierCurveTo(-t*e.left, 3*h/4, -t*e.left, h/4, 0, 0);
+}
+
+/* ========== SPAWN PIECES ========== */
+function spawnPieces() {
+  groups = [];
+  pieces.forEach(p => groups.push(new Group(p)));
+}
+
+/* ========== START PUZZLE ========== */
+function startPuzzle() {
+  pieces = [];
+  board = getBoard();
+    // Scale image to fit the board
+  imageCanvas.width = board.size;
+  imageCanvas.height = board.size;
+
+  imageCtx.fillStyle = "black";
+imageCtx.fillRect(0, 0, board.size, board.size);
+
+  const scale = Math.min(
+    board.size / image.width,
+    board.size / image.height
+  );
+
+  const drawW = image.width * scale;
+  const drawH = image.height * scale;
+
+  const dx = (board.size - drawW) / 2;
+  const dy = (board.size - drawH) / 2;
+
+  imageCtx.drawImage(image, dx, dy, drawW, drawH);
+
+
+  const lvl = LEVELS[levelIndex];
+  const pw = board.size / lvl.cols;
+  const ph = board.size / lvl.rows;
+
+  const edges = [];
+  for (let r = 0; r < lvl.rows; r++) {
+    edges[r] = [];
+    for (let c = 0; c < lvl.cols; c++) {
+      edges[r][c] = {
+        top: r===0?0:-edges[r-1][c].bottom,
+        left: c===0?0:-edges[r][c-1].right,
+        right: c===lvl.cols-1?0:(Math.random()>0.5?1:-1),
+        bottom: r===lvl.rows-1?0:(Math.random()>0.5?1:-1)
+      };
+    }
+  }
+
+  for (let r = 0; r < lvl.rows; r++) {
+    for (let c = 0; c < lvl.cols; c++) {
+      const p = new Piece(r, c, pw, ph, edges[r][c], board);
+      pieces.push(p);
+    }
+  }
+
+  spawnPieces();
+}
+
+/* ========== NEXT LEVEL ========== */
+function nextLevel() {
+  levelIndex = (levelIndex + 1) % LEVELS.length;
+
+  currentImageData = IMAGES[currentImageIndex];
+currentImageIndex = (currentImageIndex + 1) % IMAGES.length;
+
+
+  image.src = currentImageData.src;
+
+  document.getElementById("levelTitle").textContent = currentImageData.title;
+  document.getElementById("levelDesc").textContent = currentImageData.desc;
+}
+
+
+image.onload = startPuzzle;
+currentImageData = IMAGES[0];
+image.src = currentImageData.src;
+
+document.getElementById("levelTitle").textContent = currentImageData.title;
+document.getElementById("levelDesc").textContent = currentImageData.desc;
+
+
+/* ========== INPUT ========== */
+let active = null, ox = 0, oy = 0;
+
+canvas.addEventListener("mousedown", e => {
+  for (let i = pieces.length-1; i >= 0; i--) {
+    const p = pieces[i];
+    if (
+  e.offsetX > p.x &&
+  e.offsetX < p.x + p.drawW &&
+  e.offsetY > p.y &&
+  e.offsetY < p.y + p.drawH
+) {
+
+      active = p.group;
+      ox = e.offsetX;
+      oy = e.offsetY;
+      break;
+    }
+  }
+});
+
+canvas.addEventListener("mousemove", e => {
+  if (!active) return;
+  active.move(e.offsetX - ox, e.offsetY - oy);
+  ox = e.offsetX;
+  oy = e.offsetY;
+});
+
+canvas.addEventListener("mouseup", () => {
+  if (!active) return;
+  for (let g of groups) if (g !== active && active.trySnap(g)) break;
+  active = null;
+
+  // Check if level is completed after snapping
+  checkLevelComplete();
+});
+
+/* ========== LEVEL COMPLETION CHECK ========== */
+function checkLevelComplete() {
+  // If there is only one group containing all pieces, puzzle is complete
+  if (groups.length === 1 && groups[0].pieces.length === pieces.length) {
+    // Show completion message
+    setTimeout(() => { // small delay to avoid overlap with snapping
+      const proceed = confirm("Congratulations! You completed the level. Do you want to go to the next level?");
+      if (proceed) {
+        nextLevel();
+      }
+    }, 50);
+  }
+}
+
+/* ========== LOOP ========== */
+function loop() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // draw board outline
+  if(board) {
+    ctx.strokeStyle="rgba(255,255,255,0.3)";
+    ctx.lineWidth=2;
+    ctx.strokeRect(board.x, board.y, board.size, board.size);
+  }
+
+  pieces.forEach(p=>p.draw());
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+
+
+</body>
+</html>
