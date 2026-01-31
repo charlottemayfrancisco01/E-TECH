@@ -10,7 +10,7 @@
     font-family: "Comic Sans MS", "Poppins", Arial, sans-serif;
     background: linear-gradient(135deg, #a18cd1, #fbc2eb);
   }
-  canvas { display: block; }
+  canvas { display: block; touch-action: none; }
 
   #ui {
     position: fixed; bottom: 20px; right: 20px; z-index: 10;
@@ -52,6 +52,13 @@
   line-height: 1.6;
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 
   .confetti {
     position: fixed; width: 10px; height: 10px; top: -10px;
@@ -76,7 +83,7 @@
 <a href="lottie.html" class="topLink">Story</a>
 
 <div id="ui">
-  <button onclick="nextLevel()">🎮 Next Level</button>
+  <button id="nextBtn" onclick="nextLevel()"> Next Level</button>
 </div>
 
 <div id="levelInfo">
@@ -91,6 +98,7 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 let currentImageIndex = 0;
+let levelCompleted = false;
 
 function resize() {
   canvas.width = innerWidth;
@@ -111,22 +119,22 @@ const IMAGES = [
   },
   {
     src: "P2.png",
-    title: "Panuto: Basahin mabuti ang bawat tanong at buoin ang tamang sagot gamit ang puzzle.",
+    title: "",
     desc: "Ano ang ginagamit upang mabilis na mabigyan ng kulay, font style, at layout ang lahat ng slides sa isang presentasyon?"
   },
   {
     src: "P3.png",
-    title: "Panuto: Basahin mabuti ang bawat tanong at buoin ang tamang sagot gamit ang puzzle.",
+    title: "",
     desc: "Ito ay isang masining na paraan ng pagpapakita ng teksto. Ginagamit ito para mas maging kaakit-akit ang mga salita sa presentation. "
   },
   {
     src: "P4.png",
-    title: "Panuto: Basahin mabuti ang bawat tanong at buoin ang tamang sagot gamit ang puzzle.",
+    title: "",
     desc: "Ito ay ang proseso na ginagamit para mag lagay ng teksto. Pwede rin itong i-format at baguhin ang font,laki, kulay at alignment."
   },
   {
     src: "P5.png",
-    title: "Panuto: Basahin mabuti ang bawat tanong at buoin ang tamang sagot gamit ang puzzle.",
+    title: "",
     desc: "Ano ang proseso ng pagdaragdag ng larawan, video, o chart sa isang slide upang mas maging malinaw ang impormasyon?"
   },
   ];
@@ -320,7 +328,11 @@ function spawnPieces() {
 }
 
 /* ========== START PUZZLE ========== */
+
+
 function startPuzzle() {
+levelCompleted = false;
+document.getElementById("nextBtn").disabled = true;
   pieces = [];
   board = getBoard();
     // Scale image to fit the board
@@ -370,20 +382,32 @@ imageCtx.fillRect(0, 0, board.size, board.size);
 
   spawnPieces();
 }
-
+  function spawnConfetti() {
+  for (let i = 0; i < 30; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
+    c.style.animationDelay = Math.random() * 0.4 + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3000);
+  }
+}
 /* ========== NEXT LEVEL ========== */
 function nextLevel() {
+  if (!levelCompleted) return;
+
   levelIndex = (levelIndex + 1) % LEVELS.length;
 
   currentImageData = IMAGES[currentImageIndex];
-currentImageIndex = (currentImageIndex + 1) % IMAGES.length;
-
+  currentImageIndex = (currentImageIndex + 1) % IMAGES.length;
 
   image.src = currentImageData.src;
 
   document.getElementById("levelTitle").textContent = currentImageData.title;
   document.getElementById("levelDesc").textContent = currentImageData.desc;
 }
+
 
 
 image.onload = startPuzzle;
@@ -396,52 +420,69 @@ document.getElementById("levelDesc").textContent = currentImageData.desc;
 
 /* ========== INPUT ========== */
 let active = null, ox = 0, oy = 0;
+function getPointerPos(e) {
+  const rect = canvas.getBoundingClientRect();
+  const touch = e.touches ? e.touches[0] : e;
+  return {
+    x: touch.clientX - rect.left,
+    y: touch.clientY - rect.top
+  };
+}
+canvas.addEventListener("pointercancel", () => {
+  active = null;
+});
 
-canvas.addEventListener("mousedown", e => {
-  for (let i = pieces.length-1; i >= 0; i--) {
+canvas.addEventListener("pointerdown", e => {
+  const pos = getPointerPos(e);
+
+  for (let i = pieces.length - 1; i >= 0; i--) {
     const p = pieces[i];
     if (
-  e.offsetX > p.x &&
-  e.offsetX < p.x + p.drawW &&
-  e.offsetY > p.y &&
-  e.offsetY < p.y + p.drawH
-) {
-
+      pos.x > p.x &&
+      pos.x < p.x + p.drawW &&
+      pos.y > p.y &&
+      pos.y < p.y + p.drawH
+    ) {
       active = p.group;
-      ox = e.offsetX;
-      oy = e.offsetY;
+      ox = pos.x;
+      oy = pos.y;
       break;
     }
   }
 });
 
-canvas.addEventListener("mousemove", e => {
+canvas.addEventListener("pointermove", e => {
   if (!active) return;
-  active.move(e.offsetX - ox, e.offsetY - oy);
-  ox = e.offsetX;
-  oy = e.offsetY;
+  const pos = getPointerPos(e);
+  active.move(pos.x - ox, pos.y - oy);
+  ox = pos.x;
+  oy = pos.y;
 });
 
-canvas.addEventListener("mouseup", () => {
+canvas.addEventListener("pointerup", () => {
   if (!active) return;
-  for (let g of groups) if (g !== active && active.trySnap(g)) break;
+
+  for (let g of groups) {
+    if (g !== active && active.trySnap(g)) break;
+  }
+
   active = null;
 
-  // Check if level is completed after snapping
+
   checkLevelComplete();
 });
 
+
 /* ========== LEVEL COMPLETION CHECK ========== */
 function checkLevelComplete() {
-  // If there is only one group containing all pieces, puzzle is complete
-  if (groups.length === 1 && groups[0].pieces.length === pieces.length) {
-    // Show completion message
-    setTimeout(() => { // small delay to avoid overlap with snapping
-      const proceed = confirm("Congratulations! You completed the level. Do you want to go to the next level?");
-      if (proceed) {
-        nextLevel();
-      }
-    }, 50);
+  if (!levelCompleted && groups.length === 1 && groups[0].pieces.length === pieces.length) {
+    levelCompleted = true;
+
+    // Enable Next Level button
+    document.getElementById("nextBtn").disabled = false;
+
+    // Optional: celebration without a prompt
+    spawnConfetti();
   }
 }
 
@@ -465,4 +506,3 @@ loop();
 
 </body>
 </html>
-
