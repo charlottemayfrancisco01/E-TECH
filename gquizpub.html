@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Quiz It</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Child-friendly playful font -->
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+<style>
+ <style>
+  /* GENERAL STYLES */
+  * { box-sizing: border-box; margin:0; padding:0; font-family: 'Comic Neue', cursive; }
+  body, html { 
+    height:100%; 
+    width:100%; 
+    overflow:hidden; 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+	background: linear-gradient(135deg, #c8b6ff, #a0c4ff);
+    position: relative; 
+  }
+
+  /* FLOATING SHAPES */
+  .shape {
+    position:absolute;
+    width:50px; height:50px;
+    opacity:0.7;
+    animation: floatShape linear infinite;
+    z-index:0;
+    border-radius:15%;
+  }
+  .triangle { clip-path: polygon(50% 0%, 0% 100%, 100% 100%); background:#ff0055;}
+  .star { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); background:#ffdd00;}
+  .box { background:#00ffcc; }
+
+  @keyframes floatShape {
+    0% { transform: translate(0, 100vh) rotate(0deg);}
+    100% { transform: translate(100px, -50vh) rotate(720deg);}
+  }
+
+  .page { text-align:center; width:95%; max-width:700px; z-index:1; }
+  .box-container {
+    background: linear-gradient(120deg, #ffffff, #a0c4ff);	 /* Purple to blue containers */
+    padding: 40px 30px;
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    color: #2d0053;
+  }
+
+  h1,h2 { margin-bottom:30px; font-weight:700; font-size:3.5em; color:#2d0053; }
+  h2 { font-size:2em; }
+
+  button { 
+    padding:25px; margin:15px; font-size:1.5em; border:none; border-radius:20px; 
+    cursor:pointer; transition: transform 0.2s, box-shadow 0.2s; width:90%; max-width:300px; 
+    font-weight:700; background: linear-gradient(45deg,#6c5ce7,#74b9ff); color:white; 
+  }
+  button:hover { transform: scale(1.1); box-shadow:0 10px 20px rgba(0,0,0,0.3); }
+
+  .choices { display:grid; grid-template-columns:1fr 1fr; gap:20px; justify-items:center; margin-top:30px; }
+  .choice-btn { background: linear-gradient(45deg,#6c5ce7,#74b9ff); color:white; padding:25px; border-radius:20px; width:100%; font-size:1.5em; font-weight:700; transition: 0.3s; }
+  .choice-btn:hover { transform: scale(1.05); }
+
+  .hidden { display:none; }
+
+  /* QUESTION BOX */
+  #question { 
+    background: linear-gradient(135deg, #d0bfff, #b0d4ff); 
+    padding: 40px; border-radius: 30px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-size:2em; margin-bottom:30px; 
+    color:#2d0053; 
+  }
+
+  /* FEEDBACK COLORS */
+  .correct { background-color:#00ff55 !important; color:white !important; }
+  .wrong { background-color:#ff0055 !important; color:white !important; }
+
+  /* CONGRATS PAGE */
+  .congrats { font-size:90px; margin-bottom:30px; color:#ff00aa; }
+  #scoreBox {
+    background: linear-gradient(135deg, #c8b6ff, #a0c4ff);
+    padding:25px; border-radius:25px; margin-bottom:25px; font-size:1.5em; font-weight:700; color:#2d0053;
+  }
+</style>
+
+</style>
+</head>
+<body>
+
+<!-- FLOATING SHAPES -->
+<div class="shape triangle" style="top:90%; left:5%; animation-duration:6s;"></div>
+<div class="shape triangle" style="top:60%; left:75%; animation-duration:8s;"></div>
+<div class="shape star" style="top:80%; left:40%; animation-duration:7s;"></div>
+<div class="shape star" style="top:50%; left:80%; animation-duration:5s;"></div>
+<div class="shape box" style="top:70%; left:30%; animation-duration:6s;"></div>
+<div class="shape box" style="top:20%; left:60%; animation-duration:9s;"></div>
+
+<!-- PAGE 1: TITLE -->
+<div id="page1" class="page">
+  <div class="box-container">
+    <h1>QUIZ PUB!</h1>
+    <button onclick="nextPage(2)">Start</button>
+  </div>
+</div>
+
+<!-- PAGE 2: PANUTO -->
+<div id="page2" class="page hidden">
+  <div class="box-container">
+    <h2>Hanapin ang tamang sagot sa mga tanong tungkol sa Data Publishing Software</h2>
+    <button onclick="nextPage(3)">Simulan</button>
+  </div>
+</div>
+
+<!-- PAGE 3: GAME -->
+<div id="page3" class="page hidden">
+  <div id="scoreBox" class="hidden">Score: <span id="score">0</span> / 5</div>
+  <div id="question">Question here</div>
+  <div class="choices">
+    <button class="choice-btn" id="choice0" onclick="checkAnswer(0)">A</button>
+    <button class="choice-btn" id="choice1" onclick="checkAnswer(1)">B</button>
+    <button class="choice-btn" id="choice2" onclick="checkAnswer(2)">C</button>
+    <button class="choice-btn" id="choice3" onclick="checkAnswer(3)">D</button>
+  </div>
+</div>
+
+<!-- PAGE 4: CONGRATS -->
+<div id="page4" class="page hidden">
+  <div class="box-container">
+    <div class="congrats">🎉 Congratulations! 🎉</div>
+    <div id="finalScore"></div>
+  </div>
+</div>
+
+<script>
+  const pages = [1,2,3,4];
+  const quizData = [
+    {question:"Alin sa mga sumusunod ang halimbawa ng Desktop Publishing Software?", choices:["Canva","Excel","Word","PowerPoint"], answer:0},
+    {question:"Saan inaayos ang kulay ng teksto at background sa Canva?", choices:["Font Style","Color Tools","Layout Tools","Template"], answer:1},
+    {question:"Anong feature ang ginagamit para ayusin ang ayos ng mga elemento sa poster?", choices:["Text Tool","Layout Tools","Shapes","Font"], answer:1},
+    {question:"Aling bahagi ng Canva ang ginagamit sa pagpili ng handang disenyo?", choices:["Templates","Background","Text","Color"], answer:0},
+    {question:"Saan idinadagdag ang pamagat at mensahe ng poster?", choices:["Shapes","Text Tool","Layout Tools","Insert tool"], answer:1},
+  ];
+  let currentQuestion = 0;
+  let score = 0;
+
+  function nextPage(pageNum){
+    pages.forEach(p=>document.getElementById(`page${p}`).classList.add('hidden'));
+    document.getElementById(`page${pageNum}`).classList.remove('hidden');
+    if(pageNum===3) loadQuestion();
+  }
+
+  function loadQuestion(){
+    const q = quizData[currentQuestion];
+    document.getElementById('question').innerText = q.question;
+    q.choices.forEach((choice,i)=>{
+      const btn = document.getElementById(`choice${i}`);
+      btn.innerText = choice;
+      btn.disabled = false;
+      btn.classList.remove('correct','wrong');
+    });
+    document.getElementById('scoreBox').classList.remove('hidden');
+  }
+
+  function checkAnswer(selected){
+    const q = quizData[currentQuestion];
+    const correct = q.answer===selected;
+    if(correct) score++;
+    document.getElementById('score').innerText = score;
+
+    const btn = document.getElementById(`choice${selected}`);
+    btn.classList.add(correct?'correct':'wrong');
+    for(let i=0;i<4;i++) document.getElementById(`choice${i}`).disabled=true;
+
+    setTimeout(()=>{
+      if(currentQuestion < quizData.length-1){
+        currentQuestion++;
+        loadQuestion();
+      } else {
+        document.getElementById('finalScore').innerHTML = `<h2>Your Score: ${score} / ${quizData.length}</h2>`;
+        nextPage(4);
+      }
+    },1000);
+  }
+</script>
+</body>
+</html>
