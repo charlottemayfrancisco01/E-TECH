@@ -245,28 +245,39 @@ document.querySelectorAll(".card").forEach(card => {
   let dragging = false;
   let startX = 0;
   let startLeft = 0;
+  let activePointerId = null;
 
-  // 🔹 START (mouse + touch)
+  // 🔹 START
   card.addEventListener("pointerdown", e => {
+    e.preventDefault(); // 🔑 critical for mobile
+
     dragging = true;
+    activePointerId = e.pointerId;
     startX = e.clientX;
     startLeft = card.offsetLeft;
-    card.style.transition = "none";
 
-    card.setPointerCapture(e.pointerId);
+    card.style.transition = "none";
+    card.setPointerCapture(activePointerId);
   });
 
-  // 🔹 MOVE
-  document.addEventListener("pointermove", e => {
-    if (!dragging) return;
-    card.style.left =
-      Math.max(0, startLeft + (e.clientX - startX)) + "px";
+  // 🔹 MOVE (on the card, not document)
+  card.addEventListener("pointermove", e => {
+    if (!dragging || e.pointerId !== activePointerId) return;
+
+    e.preventDefault();
+
+    const dx = e.clientX - startX;
+    card.style.left = Math.max(0, startLeft + dx) + "px";
   });
 
   // 🔹 END
-  document.addEventListener("pointerup", () => {
-    if (!dragging) return;
+  card.addEventListener("pointerup", e => {
+    if (e.pointerId !== activePointerId) return;
+
     dragging = false;
+    activePointerId = null;
+
+    card.releasePointerCapture(e.pointerId);
     card.style.transition = "left 0.25s ease";
 
     const center = card.offsetLeft + card.offsetWidth / 2;
@@ -277,9 +288,10 @@ document.querySelectorAll(".card").forEach(card => {
     card.dataset.choice = columns[colIndex];
   });
 
-  // 🔹 SAFETY: cancel drag if touch is interrupted
-  document.addEventListener("pointercancel", () => {
+  // 🔹 CANCEL (finger lifted, app switch, etc.)
+  card.addEventListener("pointercancel", () => {
     dragging = false;
+    activePointerId = null;
   });
 });
 
@@ -303,6 +315,7 @@ document.getElementById("check").addEventListener("click", () => {
     `🎉 Score: ${score} / ${rows.length}`;
 });
 </script>
+
 
 
 </body>
