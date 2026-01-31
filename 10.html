@@ -108,6 +108,8 @@ h2 {
   width: 90px;
   cursor: grab;
   transition: transform 0.2s ease, left 0.25s ease;
+  touch-action: none
+  user-select: none;
 }
 
 .card:active {
@@ -244,19 +246,25 @@ document.querySelectorAll(".card").forEach(card => {
   let startX = 0;
   let startLeft = 0;
 
-  card.addEventListener("mousedown", e => {
+  // 🔹 START (mouse + touch)
+  card.addEventListener("pointerdown", e => {
     dragging = true;
     startX = e.clientX;
     startLeft = card.offsetLeft;
     card.style.transition = "none";
+
+    card.setPointerCapture(e.pointerId);
   });
 
-  document.addEventListener("mousemove", e => {
+  // 🔹 MOVE
+  document.addEventListener("pointermove", e => {
     if (!dragging) return;
-    card.style.left = Math.max(0, startLeft + (e.clientX - startX)) + "px";
+    card.style.left =
+      Math.max(0, startLeft + (e.clientX - startX)) + "px";
   });
 
-  document.addEventListener("mouseup", () => {
+  // 🔹 END
+  document.addEventListener("pointerup", () => {
     if (!dragging) return;
     dragging = false;
     card.style.transition = "left 0.25s ease";
@@ -267,6 +275,11 @@ document.querySelectorAll(".card").forEach(card => {
     card.style.left =
       columnCenters[colIndex] - card.offsetWidth / 2 + "px";
     card.dataset.choice = columns[colIndex];
+  });
+
+  // 🔹 SAFETY: cancel drag if touch is interrupted
+  document.addEventListener("pointercancel", () => {
+    dragging = false;
   });
 });
 
@@ -290,6 +303,7 @@ document.getElementById("check").addEventListener("click", () => {
     `🎉 Score: ${score} / ${rows.length}`;
 });
 </script>
+
 
 </body>
 </html>
