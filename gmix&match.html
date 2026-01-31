@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MIX & MATCH</title>
+<style>
+/* Reset */
+* {margin:0; padding:0; box-sizing:border-box;}
+html, body {height:100%; overflow:hidden;}
+
+/* Cheerful bubble font */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap');
+body {font-family: 'Baloo 2', cursive;}
+
+/* Pages */
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Canvas layers */
+canvas {
+    position: absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:0;
+    pointer-events: none;
+}
+
+/* Center boxes */
+.center-box {
+    position: relative;
+    z-index: 1;
+    text-align:center;
+    background: linear-gradient(135deg, #cdb4db, #a2d2ff);
+    padding: 60px 50px;
+    border-radius: 25px;
+    width: 75%;
+    max-width: 700px;
+    border: 4px solid #6a4fb2;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Titles with bubble font */
+h1, h2 { font-family: 'Baloo 2', cursive; color: black; font-weight: 700; }
+
+/* Buttons enhanced color */
+#start-btn { background: linear-gradient(45deg, #ff6b6b, #feca57); color:white; }
+#play-btn { background: linear-gradient(45deg, #48dbfb, #1dd1a1); color:white; }
+
+button {
+    margin-top: 20px;
+    padding: 15px 30px;
+    font-size: 1.3em;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+button:hover { transform: scale(1.05); }
+
+/* Game container */
+.game-container {
+    display:flex;
+    justify-content:center;
+    gap:100px;
+    z-index:2;
+}
+
+.questions-column { display:flex; flex-direction:column; gap: clamp(15px, 2vw, 30px); width: clamp(300px, 35%, 450px); }
+.question {
+    background: #e0c3fc; 
+    border-radius:12px; 
+    cursor:pointer;
+    border:2px solid transparent;
+    transition: border 0.3s, background 0.3s;
+	font-size: clamp(0.95em, 1vw, 1.05em);
+    line-height: 1.3;
+	padding: clamp(15px, 2vw, 25px);
+	 min-height: auto;
+	display: block;
+    text-align: left;
+}
+.question.selected { border:3px solid #1e90ff; background:#d8b6ff; }
+
+.images-column { display:flex; flex-direction:column; gap:30px; width: %;}
+.image-box {
+    background: linear-gradient(135deg, #cdb4db, #a2d2ff);
+    border-radius: 12px;
+    padding: 10px;
+    position: relative;
+}
+
+.image-item { position: relative; cursor:pointer; }
+.image-item img { width:150px; display:block; margin:auto; }
+.letter-label {
+    position:absolute; top:-10px; left:-10px; width:25px; height:25px;
+    background:#6a4fb2; color:white; font-weight:bold; border-radius:50%;
+    display:flex; justify-content:center; align-items:center;
+}
+
+/* Submit button */
+.submit-btn {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 40px;
+    font-size: 1.3em;
+    background: linear-gradient(45deg, #ff9ff3, #f368e0);
+    color:white;
+    border:none;
+    border-radius:15px;
+}
+.topLink {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 14px;
+    background: #6a5acd;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+/* space them vertically */
+.topLink:nth-child(1) { top: 15px; }
+.topLink:nth-child(2) { top: 60px; }
+
+.topLink:hover {
+    transform: scale(1.08);
+    background: #5846c9;
+}
+
+</style>
+</head>
+<body>
+<a href="activities.html" class="topLink">Activities</a>
+<a href="lottie.html" class="topLink">Story</a>
+
+<!-- Front Page -->
+<section id="front-page" class="page">
+    <canvas id="frontBgCanvas"></canvas>
+    <div class="center-box">
+        <h1>MIX & MATCH</h1>
+        <button id="start-btn" onclick="goToPage('instructions-page')">Start Game</button>
+    </div>
+</section>
+
+<!-- Instructions Page -->
+<section id="instructions-page" class="page">
+    <canvas id="instructionsBgCanvas"></canvas>
+    <div class="center-box">
+        <h2>PANUTO</h2>
+        <p>Tingnan ang mga larawan ng iba’t ibang bahagi ng Word Processing Software. I-click ang tanong, pagkatapos ay i-click ang tamang larawan upang gumawa ng koneksyon.</p>
+        <button id="play-btn" onclick="goToPage('game-page')">Play</button>
+    </div>
+</section>
+
+<!-- Game Page -->
+<section id="game-page" class="page">
+    <canvas id="bgCanvas"></canvas>
+    <canvas id="arrowCanvas"></canvas>
+
+    <div class="game-container">
+        <!-- Left Side: Questions -->
+        <div class="questions-column" id="questions-column"></div>
+
+        <!-- Right Side: Images -->
+        <div class="images-column" id="images-column"></div>
+    </div>
+
+    <button id="submit-btn" class="submit-btn">Submit</button>
+</section>
+
+<!-- Congratulations Page -->
+<section id="congrats-page" class="page">
+    <canvas id="congratsBgCanvas"></canvas>
+    <div class="center-box">
+        <h1>CONGRATULATIONS!</h1>
+        <p>You did well! Keep up the great work!</p>
+    </div>
+</section>
+
+<script>
+// Questions and answers data
+const questionsData = [
+    {text:"1. Ano ang bahagi ng software na ginagamit para gawing makapal, pahilig, o may underline ang text?", answer:"A"},
+    {text:"2. Ano ang button na ginagamit para hindi mawala ang dokumento kapag biglang nawala ang kuryente?", answer:"B"},
+    {text:"3. Ano ang menu na ginagamit para pumili ng style, laki, at kulay ng letra?", answer:"C"},
+    {text:"4. Ano ang bahagi ng software na ginagamit para magdagdag ng larawan o table sa dokumento?", answer:"D"},
+    {text:"5. Ano ang bar sa ibaba ng screen na ginagamit para mag-scroll pataas at pababa sa dokumento?", answer:"E"}
+];
+
+const imagesData = [
+    {letter:"A", src:"fontmenu.jpg", alt:"Font Menu"},
+    {letter:"B", src:"save.jpg", alt:"Save Button"},
+    {letter:"C", src:"fontpicker.jpg", alt:"Font/Color Picker"},
+    {letter:"D", src:"insert.jpg", alt:"Insert Menu"},
+    {letter:"E", src:"scrollbar.jpg", alt:"Scroll Bar"}
+];
+
+// Navigation
+function goToPage(pageId){
+    document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+    document.getElementById(pageId).style.display='flex';
+
+    if(pageId==='front-page') initAnimatedBg('frontBgCanvas');
+    if(pageId==='instructions-page') initAnimatedBg('instructionsBgCanvas');
+    if(pageId==='game-page') initGame();
+    if(pageId==='congrats-page') initAnimatedBg('congratsBgCanvas');
+}
+
+// Animated colorful shapes
+function initAnimatedBg(canvasId){
+    const canvas = document.getElementById(canvasId);
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    let shapes=[];
+    const colors = ['#ff6b6b','#feca57','#48dbfb','#1dd1a1','#f368e0','#ff9ff3','#54a0ff','#00d2d3'];
+    for(let i=0;i<50;i++){
+        shapes.push({
+            x: Math.random()*canvas.width,
+            y: Math.random()*canvas.height,
+            radius: Math.random()*25+10,
+            dx:(Math.random()-0.5)*0.8,
+            dy:(Math.random()-0.5)*0.8,
+            color:colors[Math.floor(Math.random()*colors.length)],
+            alpha:Math.random()*0.6+0.4
+        });
+    }
+    function animate(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        shapes.forEach(s=>{
+            s.x+=s.dx; s.y+=s.dy;
+            if(s.x<0 || s.x>canvas.width) s.dx*=-1;
+            if(s.y<0 || s.y>canvas.height) s.dy*=-1;
+            ctx.beginPath();
+            ctx.arc(s.x,s.y,s.radius,0,Math.PI*2);
+            ctx.fillStyle=`rgba(${hexToRgb(s.color)},${s.alpha})`;
+            ctx.fill();
+        });
+        requestAnimationFrame(animate);
+    }
+    animate();
+}
+
+function hexToRgb(hex){
+    hex = hex.replace('#','');
+    let bigint=parseInt(hex,16);
+    let r=(bigint>>16)&255;
+    let g=(bigint>>8)&255;
+    let b=bigint&255;
+    return `${r},${g},${b}`;
+}
+
+// Game logic
+let bgCanvas, bgCtx, arrowCanvas, arrowCtx, selectedQuestion=null, connections=[];
+function initGame(){
+    // Clear columns
+    const questionsCol = document.getElementById('questions-column');
+    const imagesCol = document.getElementById('images-column');
+    questionsCol.innerHTML = "";
+    imagesCol.innerHTML = "";
+    selectedQuestion=null;
+    connections=[];
+
+    // Shuffle answers
+    const shuffledImages = imagesData.sort(()=>Math.random()-0.5);
+
+    // Create question elements
+    questionsData.forEach(q=>{
+        const div = document.createElement('div');
+        div.className='question';
+        div.dataset.answer=q.answer;
+        div.innerText=q.text;
+        questionsCol.appendChild(div);
+    });
+
+    // Create image elements
+    shuffledImages.forEach(img=>{
+        const box = document.createElement('div');
+        box.className='image-box';
+        const item = document.createElement('div');
+        item.className='image-item';
+        item.dataset.letter=img.letter;
+        const label = document.createElement('span');
+        label.className='letter-label';
+        label.innerText=img.letter;
+        const imageEl = document.createElement('img');
+        imageEl.src=img.src;
+        imageEl.alt=img.alt;
+		item.appendChild(label);
+        item.appendChild(imageEl);
+        box.appendChild(item);
+        imagesCol.appendChild(box);
+    });
+
+    // Canvas setup
+    bgCanvas = document.getElementById('bgCanvas');
+    bgCanvas.width = window.innerWidth;
+    bgCanvas.height = window.innerHeight;
+    bgCtx = bgCanvas.getContext('2d');
+    arrowCanvas = document.getElementById('arrowCanvas');
+    arrowCanvas.width = window.innerWidth;
+    arrowCanvas.height = window.innerHeight;
+    arrowCtx = arrowCanvas.getContext('2d');
+    arrowCtx.lineWidth=3;
+    arrowCtx.strokeStyle="#1e90ff";
+
+    // Floating shapes
+    let shapes=[];
+    for(let i=0;i<30;i++){
+        shapes.push({x:Math.random()*bgCanvas.width, y:Math.random()*bgCanvas.height, radius:Math.random()*20+5,
+                     dx:(Math.random()-0.5)*0.5, dy:(Math.random()-0.5)*0.5, color:`rgba(163,191,250,${Math.random()*0.5+0.3})`});
+    }
+    function animateBg(){
+        bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
+        shapes.forEach(s=>{
+            s.x+=s.dx; s.y+=s.dy;
+            if(s.x<0 || s.x>bgCanvas.width) s.dx*=-1;
+            if(s.y<0 || s.y>bgCanvas.height) s.dy*=-1;
+            bgCtx.beginPath();
+            bgCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);
+            bgCtx.fillStyle=s.color;
+            bgCtx.fill();
+        });
+        requestAnimationFrame(animateBg);
+    }
+    animateBg();
+
+    // Event listeners
+    const questions=document.querySelectorAll('.question');
+    const images=document.querySelectorAll('.image-item');
+
+    questions.forEach(q=>{
+        q.addEventListener('click', ()=>{
+            questions.forEach(qq=>qq.classList.remove('selected'));
+            q.classList.add('selected');
+            selectedQuestion=q;
+        });
+    });
+
+    images.forEach(img=>{
+        img.addEventListener('click', ()=>{
+            if(selectedQuestion){
+                const isCorrect=selectedQuestion.dataset.answer===img.dataset.letter;
+                connections.push({q:selectedQuestion,img:img,correct:isCorrect});
+                selectedQuestion.classList.remove('selected');
+                selectedQuestion=null;
+                drawConnections();
+                if(isCorrect) showMultipleEmojis();
+                else {
+                    document.body.style.backgroundColor="#ffb6b6";
+                    setTimeout(()=>document.body.style.backgroundColor='',500);
+                }
+            }
+        });
+    });
+}
+
+// Draw arrows
+function drawConnections(){
+    arrowCtx.clearRect(0,0,arrowCanvas.width,arrowCanvas.height);
+    connections.forEach(conn=>{
+        const qRect=conn.q.getBoundingClientRect();
+        const iRect=conn.img.getBoundingClientRect();
+        arrowCtx.strokeStyle=conn.correct?"#32cd32":"#ff0000";
+        arrowCtx.beginPath();
+        arrowCtx.moveTo(qRect.right, qRect.top+qRect.height/2);
+        arrowCtx.lineTo(iRect.left, iRect.top+iRect.height/2);
+        arrowCtx.stroke();
+        // arrowhead
+        let angle=Math.atan2(iRect.top+iRect.height/2-(qRect.top+qRect.height/2), iRect.left-qRect.right);
+        let arrowLen=10;
+        arrowCtx.beginPath();
+        arrowCtx.moveTo(iRect.left,iRect.top+iRect.height/2);
+        arrowCtx.lineTo(iRect.left-arrowLen*Math.cos(angle-Math.PI/6), iRect.top+iRect.height/2-arrowLen*Math.sin(angle-Math.PI/6));
+        arrowCtx.lineTo(iRect.left-arrowLen*Math.cos(angle+Math.PI/6), iRect.top+iRect.height/2-arrowLen*Math.sin(angle+Math.PI/6));
+        arrowCtx.lineTo(iRect.left,iRect.top+iRect.height/2);
+        arrowCtx.fillStyle=conn.correct?"#32cd32":"#ff0000";
+        arrowCtx.fill();
+    });
+}
+
+// Multiple emoji confetti
+function showMultipleEmojis(){
+    for(let i=0;i<50;i++){
+        const emoji=document.createElement('div');
+        emoji.innerText='🎉';
+        emoji.style.position='fixed';
+        emoji.style.left=Math.random()*window.innerWidth+'px';
+        emoji.style.top=Math.random()*window.innerHeight+'px';
+        emoji.style.fontSize=(20+Math.random()*40)+'px';
+        emoji.style.zIndex='10';
+        document.body.appendChild(emoji);
+		setTimeout(()=>emoji.remove(),1000+Math.random()*1000);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const submitBtn = document.getElementById('submit-btn');
+    if (!submitBtn) return;
+
+    submitBtn.addEventListener('click', () => {
+        const correct = connections.filter(c => c.correct).length;
+        if (correct === 5) {
+            goToPage('congrats-page');
+        } else {
+            alert(`You matched ${correct}/5 correctly. Try again!`);
+        }
+    });
+});
+
+</script>
+</body>
+</html>
