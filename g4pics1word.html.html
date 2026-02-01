@@ -7,118 +7,163 @@
 
   <!-- CSS -->
   <style>
-  * {
-  box-sizing: border-box;
-}
+  * { box-sizing: border-box; }
 
-body {
-  margin: 0;
-  background: #0e1a2b;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
+  body {
+    margin: 0;
+    background: #0e1a2b;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+  }
 
-.game-container {
-  background: #13294b;
-  width: 420px;
-  padding: 20px;
-  border-radius: 15px;
-  color: white;
-  text-align: center;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
-}
+  /* Tech animated background container */
+  .tech-bg {
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:0; /* behind everything */
+    pointer-events:none;
+    overflow:hidden;
+  }
 
-h1 {
-  margin-bottom: 15px;
-}
+  .tech-dot {
+    position: absolute;
+    font-size: 14px;
+    color: rgba(255,255,255,0.2);
+    animation: floatTech linear infinite;
+  }
 
-.images-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
+  @keyframes floatTech {
+    0% { transform: translateY(0) translateX(0) rotate(0deg); opacity:0; }
+    10% { opacity:0.2; }
+    50% { opacity:0.5; }
+    100% { transform: translateY(-110vh) translateX(20px) rotate(360deg); opacity:0; }
+  }
 
-.images-container img {
-  width: 100%;
-  height: 120px;
-  object-fit: cover;
-  border-radius: 10px;
-  border: 2px solid #1f3b73;
-}
+  .game-container {
+    background: #13294b;
+    width: 420px;
+    padding: 20px;
+    border-radius: 15px;
+    color: white;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    position: relative;
+    z-index:1; /* above tech background */
+  }
 
-/* Answer boxes */
-.answer-container {
-  display: flex;
-  justify-content: center;
-  margin: 15px 0;
-}
+  h1 { margin-bottom: 15px; }
 
-.answer-box {
-  width: 42px;
-  height: 42px;
-  margin: 4px;
-  background: #000;
-  border: 2px solid #1f3b73;
-  color: white;
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 42px;
-}
+  .images-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
 
-/* Letters */
-.letters-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
+  .images-container img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #1f3b73;
+    transition: transform 0.3s;
+  }
 
-.letter-tile {
-  width: 45px;
-  height: 45px;
-  margin: 5px;
-  background: #ffffff;
-  color: #000;
-  font-size: 20px;
-  font-weight: bold;
-  line-height: 45px;
-  border-radius: 6px;
-  cursor: pointer;
-  user-select: none;
-}
+  .images-container img:hover { transform: scale(1.05); }
 
-/* Feedback */
-#feedback {
-  margin-top: 10px;
-  font-weight: bold;
-}
+  .answer-container {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+  }
 
-/* Shake animation */
-.shake {
-  animation: shake 0.4s;
-}
+  .answer-box {
+    width: 42px;
+    height: 42px;
+    margin: 4px;
+    background: #000;
+    border: 2px solid #1f3b73;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 42px;
+    transition: transform 0.2s;
+  }
 
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-6px); }
-  50% { transform: translateX(6px); }
-  75% { transform: translateX(-6px); }
-  100% { transform: translateX(0); }
-}
+  .answer-box:hover { transform: scale(1.1); cursor: pointer; }
 
-button {
-  margin-top: 12px;
-  padding: 8px 20px;
-  border: none;
-  border-radius: 6px;
-  background: #1f6fff;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
- .topLink {
+  .letters-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .letter-tile {
+    width: 45px;
+    height: 45px;
+    margin: 5px;
+    background: #ffffff;
+    color: #000;
+    font-size: 20px;
+    font-weight: bold;
+    line-height: 45px;
+    border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s, background 0.2s;
+  }
+
+  .letter-tile:hover {
+    transform: scale(1.1);
+    background: #d0e1ff;
+  }
+
+  #feedback {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  .shake { animation: shake 0.4s; }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    50% { transform: translateX(6px); }
+    75% { transform: translateX(-6px); }
+    100% { transform: translateX(0); }
+  }
+
+  .directions-container {
+    background: #1f3b73;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: #ffffff;
+  }
+
+  button {
+    margin-top: 12px;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #1f6fff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  button:hover { transform: scale(1.05); }
+
+  .topLink {
     position: fixed;
     top: 15px;
     left: 15px;
@@ -132,205 +177,148 @@ button {
     font-weight: bold;
     box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     transition: 0.3s;
-}
+  }
 
-/* space them vertically */
-.topLink:nth-child(1) { top: 15px; }
-.topLink:nth-child(2) { top: 60px; }
+  .topLink:nth-child(1) { top: 15px; }
+  .topLink:nth-child(2) { top: 60px; }
 
-.topLink:hover {
-    transform: scale(1.08);
-    background: #5846c9;
-}
+  .topLink:hover { transform: scale(1.08); background: #5846c9; }
 
-</style>
+  </style>
 </head>
 <body>
+<!-- Tech animated background -->
+<div class="tech-bg"></div>
+
 <a href="activities.html" class="topLink">Activities</a>
 <a href="lottie.html" class="topLink">Story</a>
 
-  <div class="game-container">
-    <h1>4 Pics 1 Word</h1>
+<div class="game-container">
+  <h1>4 Pics 1 Word</h1>
 
-    <div class="images-container">
-      <img id="img1">
-      <img id="img2">
-      <img id="img3">
-      <img id="img4">
-    </div>
-
-    <div id="answerContainer" class="answer-container"></div>
-
-    <div id="lettersContainer" class="letters-container"></div>
-
-    <div id="feedback"></div>
-
-    <button id="nextBtn">Next</button>
+  <div class="directions-container">
+    <p>Tingnan ang apat (4) na larawan. Tukuyin ang kanilang pagkakapareho at buuin ang tamang salita gamit ang mga letra sa ibaba.</p>
   </div>
 
-  <!-- JavaScript -->
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  <div class="images-container">
+    <img id="img1">
+    <img id="img2">
+    <img id="img3">
+    <img id="img4">
+  </div>
 
-  const puzzles = [
-  {
-    images: ["611.jpg", "612.jpg", "613.jpg", "614.jpg"],
-    answer: "SPREADSHEET",
-    revealed: [0, 3, 1, 5,6,9]
-  },
-  {
-    images: ["621.jpg", "622.jpg", "623.jpg", "624.jpg"],
-    answer: "CELL",
-    revealed: [0, 3]
-  },
-  {
-    images: ["631.jpg", "632.jpg", "633.jpg", "634.jpg"],
-    answer: "FORMULA",
-    revealed: [0,2,5]
-  },
-  {
-    images: ["641.jpg", "642.jpg", "643.jpg", "644.jpg"],
-    answer: "CHARTS",
-    revealed: [0,3,5]
-  },
-  {
-    images: ["651.jpg", "652.jpg", "653.jpg", "654.jpg"],
-    answer: "DATA",
-    revealed: [0,3]
-  }
+  <div id="answerContainer" class="answer-container"></div>
+  <div id="lettersContainer" class="letters-container"></div>
+  <div id="feedback"></div>
+  <button id="nextBtn">Next</button>
+</div>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+const puzzles = [
+  { images: ["611.jpg", "612.jpg", "613.jpg", "614.jpg"], answer: "SPREADSHEET", revealed: [0,3,1,5,6,9] },
+  { images: ["621.jpg", "622.jpg", "623.jpg", "624.jpg"], answer: "CELL", revealed: [0,3] },
+  { images: ["631.jpg", "632.jpg", "633.jpg", "634.jpg"], answer: "FORMULA", revealed: [0,2,5] },
+  { images: ["641.jpg", "642.jpg", "643.jpg", "644.jpg"], answer: "CHARTS", revealed: [0,3,5] },
+  { images: ["651.jpg", "652.jpg", "653.jpg", "654.jpg"], answer: "DATA", revealed: [0,3] }
 ];
 
+let current = 0;
+let userAnswer = [];
+const imgEls = ["img1","img2","img3","img4"].map(id=>document.getElementById(id));
+const answerContainer = document.getElementById("answerContainer");
+const lettersContainer = document.getElementById("lettersContainer");
+const feedback = document.getElementById("feedback");
+const nextBtn = document.getElementById("nextBtn");
+const techBg = document.querySelector(".tech-bg");
 
-  let current = 0;
-  let userAnswer = [];
+function shuffle(arr){ return arr.sort(()=>Math.random()-0.5); }
 
-  const imgEls = ["img1","img2","img3","img4"]
-    .map(id => document.getElementById(id));
+// --- Tech background animation ---
+function createTechDot(){
+  const dot = document.createElement("div");
+  dot.className="tech-dot";
+  const techIcons = ["💻","🖥️","📡","🖱️","⚡","🛠️"];
+  dot.textContent = techIcons[Math.floor(Math.random()*techIcons.length)];
+  dot.style.left = Math.random()*window.innerWidth+"px";
+  dot.style.top = window.innerHeight+"px";
+  dot.style.fontSize = (40 + Math.random()*15)+"px";
+  dot.style.animationDuration = (5 + Math.random()*10)+"s";
+  techBg.appendChild(dot);
+  setTimeout(()=>dot.remove(),12000);
+}
+setInterval(createTechDot,500);
+// --- End tech background ---
 
-  const answerContainer = document.getElementById("answerContainer");
-  const lettersContainer = document.getElementById("lettersContainer");
-  const feedback = document.getElementById("feedback");
-  const nextBtn = document.getElementById("nextBtn");
+function loadPuzzle(){
+  const p = puzzles[current];
+  answerContainer.innerHTML="";
+  lettersContainer.innerHTML="";
+  feedback.textContent="";
+  nextBtn.disabled=true;
+  nextBtn.style.opacity="0.5";
+  nextBtn.style.cursor="not-allowed";
 
-  function shuffle(arr) {
-    return arr.sort(() => Math.random() - 0.5);
-  }
+  userAnswer = Array(p.answer.length).fill("");
+  imgEls.forEach((img,i)=>img.src=p.images[i]);
 
-  function loadPuzzle() {
-    const p = puzzles[current];
-    answerContainer.innerHTML = "";
-    lettersContainer.innerHTML = "";
-    feedback.textContent = "";
-	nextBtn.disabled = true;
-nextBtn.style.opacity = "0.5";
-nextBtn.style.cursor = "not-allowed";
-
-    userAnswer = Array(p.answer.length).fill("");
-
-    // images
-    imgEls.forEach((img, i) => img.src = p.images[i]);
-
-    // answer boxes
-    p.answer.split("").forEach((letter, i) => {
-      const box = document.createElement("div");
-      box.className = "answer-box";
-
-      if (p.revealed.includes(i)) {
-        box.textContent = letter;
-        userAnswer[i] = letter;
-      }
-
-      answerContainer.appendChild(box);
-	  box.onclick = () => {
-
-  // do nothing if revealed letter
-  if (p.revealed.includes(i)) return;
-
-  if (userAnswer[i] === "") return;
-
-  const tileIndex = box.dataset.tileIndex;
-
-  if (tileIndex !== undefined) {
-    const tile = lettersContainer.children[tileIndex];
-    tile.style.visibility = "visible";
-  }
-
-  userAnswer[i] = "";
-  box.textContent = "";
-  delete box.dataset.tileIndex;
-};
-
-    });
-
-    // jumbled letters
-    let letters = p.answer
-      .split("")
-      .filter((_, i) => !p.revealed.includes(i));
-
-    while (letters.length < p.answer.length + 4) {
-
-      letters.push(String.fromCharCode(65 + Math.random() * 26));
+  p.answer.split("").forEach((letter,i)=>{
+    const box=document.createElement("div");
+    box.className="answer-box";
+    if(p.revealed.includes(i)){ box.textContent=letter; userAnswer[i]=letter; }
+    answerContainer.appendChild(box);
+    box.onclick=()=>{
+      if(p.revealed.includes(i)) return;
+      if(userAnswer[i]==="") return;
+      const tileIndex = box.dataset.tileIndex;
+      if(tileIndex!==undefined) lettersContainer.children[tileIndex].style.visibility="visible";
+      userAnswer[i]="";
+      box.textContent="";
+      delete box.dataset.tileIndex;
     }
+  });
 
-    shuffle(letters).forEach(letter => {
-  const tile = document.createElement("div");
-  tile.className = "letter-tile";
-  tile.textContent = letter;
-
-  tile.onclick = () => {
-    const idx = userAnswer.indexOf("");
-    if (idx === -1) return;
-
-    userAnswer[idx] = letter;
-
-    const box = answerContainer.children[idx];
-    box.textContent = letter;
-
-    // store reference to tile so we can restore it later
-    box.dataset.tileIndex = [...lettersContainer.children].indexOf(tile);
-
-    tile.style.visibility = "hidden";
-
-    if (!userAnswer.includes("")) {
-      checkAnswer();
+  let letters = p.answer.split("").filter((_,i)=>!p.revealed.includes(i));
+  while(letters.length < p.answer.length+4){ letters.push(String.fromCharCode(65+Math.random()*26)); }
+  shuffle(letters).forEach(letter=>{
+    const tile=document.createElement("div");
+    tile.className="letter-tile";
+    tile.textContent=letter;
+    tile.onclick=()=>{
+      const idx=userAnswer.indexOf("");
+      if(idx===-1) return;
+      userAnswer[idx]=letter;
+      const box=answerContainer.children[idx];
+      box.textContent=letter;
+      box.dataset.tileIndex=[...lettersContainer.children].indexOf(tile);
+      tile.style.visibility="hidden";
+      if(!userAnswer.includes("")) checkAnswer();
     }
-  };
+    lettersContainer.appendChild(tile);
+  });
+}
 
-  lettersContainer.appendChild(tile);
-});
-
-  }
-
-  function checkAnswer() {
-  if (userAnswer.join("") === puzzles[current].answer) {
-
-    feedback.style.color = "lime";
-    feedback.textContent = "Correct!";
-
-    // unlock next button
-    nextBtn.disabled = false;
-    nextBtn.style.opacity = "1";
-    nextBtn.style.cursor = "pointer";
-
+function checkAnswer(){
+  if(userAnswer.join("")===puzzles[current].answer){
+    feedback.style.color="lime";
+    feedback.textContent="Correct!";
+    nextBtn.disabled=false;
+    nextBtn.style.opacity="1";
+    nextBtn.style.cursor="pointer";
   } else {
-
-    feedback.style.color = "red";
-    feedback.textContent = "Wrong!";
+    feedback.style.color="red";
+    feedback.textContent="Wrong!";
     answerContainer.classList.add("shake");
-    setTimeout(() => answerContainer.classList.remove("shake"), 400);
-
+    setTimeout(()=>answerContainer.classList.remove("shake"),400);
   }
 }
-nextBtn.onclick = () => {
 
-  // block if not yet solved
-  if (nextBtn.disabled) return;
+nextBtn.onclick=()=>{ if(nextBtn.disabled) return; current=(current+1)%puzzles.length; loadPuzzle(); }
 
-  current = (current + 1) % puzzles.length;
-  loadPuzzle();
-};
 loadPuzzle();
 });
-  </script>
+</script>
 </body>
 </html>
