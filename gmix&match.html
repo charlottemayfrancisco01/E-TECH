@@ -4,28 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MIX & MATCH</title>
-<style>
-/* Reset */
-* {margin:0; padding:0; box-sizing:border-box;}
-html, body {height:100%; overflow:hidden;}
 
-/* Cheerful bubble font */
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; }
+
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap');
-body {font-family: 'Baloo 2', cursive;}
+body { font-family:'Baloo 2', cursive; }
 
 /* Pages */
-.page {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
+.page{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
 }
 
-/* Canvas layers */
-canvas {
+/* Canvases */
+canvas{
     position: absolute;
     top:0;
     left:0;
@@ -35,40 +34,40 @@ canvas {
     pointer-events: none;
 }
 
-/* Center boxes */
-.center-box {
-    position: relative;
-    z-index: 1;
+/* Center box */
+.center-box{
+    position:relative;
+    z-index:1;
     text-align:center;
-    background: linear-gradient(135deg, #cdb4db, #a2d2ff);
-    padding: 60px 50px;
-    border-radius: 25px;
-    width: 75%;
-    max-width: 700px;
-    border: 4px solid #6a4fb2;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    background:linear-gradient(135deg,#cdb4db,#a2d2ff);
+    padding:60px 50px;
+    border-radius:25px;
+    width:75%;
+    max-width:700px;
+    border:4px solid #6a4fb2;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
 }
 
-/* Titles with bubble font */
-h1, h2 { font-family: 'Baloo 2', cursive; color: black; font-weight: 700; }
+h1,h2{  font-family: 'Baloo 2', cursive; color: black; font-weight: 700; }
 
-/* Buttons enhanced color */
+/* Buttons */
 #start-btn { background: linear-gradient(45deg, #ff6b6b, #feca57); color:white; }
 #play-btn { background: linear-gradient(45deg, #48dbfb, #1dd1a1); color:white; }
 
-button {
-    margin-top: 20px;
-    padding: 15px 30px;
-    font-size: 1.3em;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: transform 0.2s;
+button{
+    margin-top:20px;
+    padding:15px 30px;
+    font-size:1.3em;
+    border:none;
+    border-radius:15px;
+    cursor:pointer;
+    transition:.2s;
 }
-button:hover { transform: scale(1.05); }
+button:hover{ transform:scale(1.05); }
 
-/* Game container */
-.game-container {
+
+/* Game */
+.game-container{
     display:flex;
     justify-content:center;
     gap:100px;
@@ -91,167 +90,287 @@ button:hover { transform: scale(1.05); }
 }
 .question.selected { border:3px solid #1e90ff; background:#d8b6ff; }
 
-.images-column { display:flex; flex-direction:column; gap:30px; width: %;}
-.image-box {
-    background: linear-gradient(135deg, #cdb4db, #a2d2ff);
+.images-column{
+    display:flex;
+    flex-direction:column;
+    gap:30px; width: %;
+}
+
+.image-box{
+     background: linear-gradient(135deg, #cdb4db, #a2d2ff);
     border-radius: 12px;
     padding: 10px;
     position: relative;
 }
 
-.image-item { position: relative; cursor:pointer; }
-.image-item img { width:150px; display:block; margin:auto; }
-.letter-label {
+.image-item{
+    position:relative;
+    cursor:pointer;
+}
+
+.image-item img{
+    width:150px;
+    display:block;
+    margin:auto;
+}
+
+.letter-label{
     position:absolute; top:-10px; left:-10px; width:25px; height:25px;
     background:#6a4fb2; color:white; font-weight:bold; border-radius:50%;
     display:flex; justify-content:center; align-items:center;
 }
 
-/* Submit button */
-.submit-btn {
-    position: absolute;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 15px 40px;
-    font-size: 1.3em;
-    background: linear-gradient(45deg, #ff9ff3, #f368e0);
+/* Submit + score */
+.submit-container{
+    position:fixed;
+    bottom:15px;
+    right:15px;
+    z-index:50;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+}
+
+.score-box{
+    background:rgba(255,255,255,.9);
+    padding:10px 18px;
+    border-radius:12px;
+    font-size:1.1em;
+    font-weight:bold;
+    color:#6a4fb2;
+    box-shadow:0 6px 15px rgba(0,0,0,.2);
+}
+
+.submit-btn{
+    padding:15px 40px;
+    font-size:1.3em;
+    background:linear-gradient(45deg,#ff9ff3,#f368e0);
     color:white;
-    border:none;
     border-radius:15px;
-}
-.topLink {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 10;
-    padding: 10px 16px;
-    font-size: 14px;
-    border-radius: 14px;
-    background: #6a5acd;
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    transition: 0.3s;
+    box-shadow:0 8px 20px rgba(0,0,0,.25);
 }
 
-/* space them vertically */
-.topLink:nth-child(1) { top: 15px; }
-.topLink:nth-child(2) { top: 60px; }
-
-.topLink:hover {
-    transform: scale(1.08);
-    background: #5846c9;
+/* Links */
+.topLink{
+    position:fixed;
+    left:15px;
+    padding:10px 16px;
+    background:#6a5acd;
+    color:white;
+    border-radius:14px;
+    font-weight:bold;
+    text-decoration:none;
+    box-shadow:0 6px 15px rgba(0,0,0,.2);
 }
-
+.topLink:nth-child(1){ top:15px; }
+.topLink:nth-child(2){ top:60px; }
 </style>
 </head>
+
 <body>
+
 <a href="activities.html" class="topLink">Activities</a>
 <a href="lottie.html" class="topLink">Story</a>
 
-<!-- Front Page -->
+<!-- FRONT -->
 <section id="front-page" class="page">
-    <canvas id="frontBgCanvas"></canvas>
-    <div class="center-box">
-        <h1>MIX & MATCH</h1>
-        <button id="start-btn" onclick="goToPage('instructions-page')">Start Game</button>
-    </div>
+<canvas id="frontBgCanvas"></canvas>
+<div class="center-box">
+<h1>MIX & MATCH</h1>
+<button id="start-btn" onclick="goToPage('instructions-page')">Start Game</button>
+</div>
 </section>
 
-<!-- Instructions Page -->
-<section id="instructions-page" class="page">
-    <canvas id="instructionsBgCanvas"></canvas>
-    <div class="center-box">
-        <h2>PANUTO</h2>
-        <p>Tingnan ang mga larawan ng iba’t ibang bahagi ng Word Processing Software. I-click ang tanong, pagkatapos ay i-click ang tamang larawan upang gumawa ng koneksyon.</p>
-        <button id="play-btn" onclick="goToPage('game-page')">Play</button>
-    </div>
+<!-- INSTRUCTIONS -->
+<section id="instructions-page" class="page" style="display:none;">
+<canvas id="instructionsBgCanvas"></canvas>
+<div class="center-box">
+<h2>PANUTO</h2>
+<p>
+Tingnan ang mga larawan ng Word Processing Software.
+I-click ang tanong at ikonekta ito sa tamang larawan.
+</p>
+<button id="play-btn" onclick="goToPage('game-page')">Play</button>
+</div>
 </section>
 
-<!-- Game Page -->
-<section id="game-page" class="page">
-    <canvas id="bgCanvas"></canvas>
-    <canvas id="arrowCanvas"></canvas>
+<!-- GAME -->
+<section id="game-page" class="page" style="display:none;">
+<canvas id="bgCanvas"></canvas>
+<canvas id="arrowCanvas"></canvas>
 
-    <div class="game-container">
-        <!-- Left Side: Questions -->
-        <div class="questions-column" id="questions-column"></div>
+<div class="game-container">
+<div class="questions-column" id="questions-column"></div>
+<div class="images-column" id="images-column"></div>
+</div>
 
-        <!-- Right Side: Images -->
-        <div class="images-column" id="images-column"></div>
-    </div>
-
-    <button id="submit-btn" class="submit-btn">Submit</button>
+<div class="submit-container">
+<div class="score-box" id="scoreBox">Score: 0 / 5</div>
+<button class="submit-btn" id="submit-btn">Submit</button>
+</div>
 </section>
 
-<!-- Congratulations Page -->
-<section id="congrats-page" class="page">
-    <canvas id="congratsBgCanvas"></canvas>
-    <div class="center-box">
-        <h1>CONGRATULATIONS!</h1>
-        <p>You did well! Keep up the great work!</p>
-    </div>
+<!-- CONGRATS -->
+<section id="congrats-page" class="page" style="display:none;">
+<canvas id="congratsBgCanvas"></canvas>
+<div class="center-box">
+<h1>🎉 CONGRATULATIONS! 🎉</h1>
+<p>You matched everything correctly!</p>
+</div>
 </section>
 
 <script>
-// Questions and answers data
-const questionsData = [
-    {text:"1. Ano ang bahagi ng software na ginagamit para gawing makapal, pahilig, o may underline ang text?", answer:"A"},
-    {text:"2. Ano ang button na ginagamit para hindi mawala ang dokumento kapag biglang nawala ang kuryente?", answer:"B"},
-    {text:"3. Ano ang menu na ginagamit para pumili ng style, laki, at kulay ng letra?", answer:"C"},
-    {text:"4. Ano ang bahagi ng software na ginagamit para magdagdag ng larawan o table sa dokumento?", answer:"D"},
-    {text:"5. Ano ang bar sa ibaba ng screen na ginagamit para mag-scroll pataas at pababa sa dokumento?", answer:"E"}
+const questionsData=[
+{text:"1. Ano ang tawag sa bahagi ng presentation software kung saan makikita ang kabuuang itsura ng software kung saan nandiyan ang mga menu, toolbar, slide panel at workspace.",answer:"A"},
+{text:"2. Ano ang ginagamit upang mabilis na mabigyan ng kulay, font style, at layout ang lahat ng slides sa isang presentasyon?",answer:"B"},
+{text:"3. Ito ay isang masining na paraan ng pagpapakita ng teksto. Ginagamit ito para mas maging kaakit-akit ang mga salita sa presentation.",answer:"C"},
+{text:"4. Ito ay ang proseso na ginagamit para mag lagay ng teksto. Pwede rin itong i-format at baguhin ang font,laki, kulay at alignment",answer:"D"},
+{text:"5. Ano ang proseso ng pagdaragdag ng larawan, video, o chart sa isang slide upang mas maging malinaw ang impormasyon?",answer:"E"}
 ];
 
-const imagesData = [
-    {letter:"A", src:"mmfontmenu.png", alt:"Font Menu"},
-    {letter:"B", src:"mmsavebutton.png", alt:"Save Button"},
-    {letter:"C", src:"mmcolorpicker.png", alt:"Font/Color Picker"},
-    {letter:"D", src:"mminsertmenu.png", alt:"Insert Menu"},
-    {letter:"E", src:"mmscrollbar.png", alt:"Scroll Bar"}
+const imagesData=[
+{letter:"A",src:"mmfontmenu.png"},
+{letter:"B",src:"mmsavebutton.png"},
+{letter:"C",src:"mmcolorpicker.png"},
+{letter:"D",src:"mminsertmenu.png"},
+{letter:"E",src:"mmscrollbar.png"}
 ];
 
-// Navigation
-function goToPage(pageId){
-    document.querySelectorAll('.page').forEach(p=>p.style.display='none');
-    document.getElementById(pageId).style.display='flex';
+let selectedQuestion=null;
+let connections=new Map();
+let arrowCanvas,arrowCtx;
 
-    if(pageId==='front-page') initAnimatedBg('frontBgCanvas');
-    if(pageId==='instructions-page') initAnimatedBg('instructionsBgCanvas');
-    if(pageId==='game-page') initGame();
-    if(pageId==='congrats-page') initAnimatedBg('congratsBgCanvas');
+function goToPage(id){
+document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+document.getElementById(id).style.display='flex';
+if(id==="game-page") initGame();
 }
 
-// Animated colorful shapes
+function initGame(){
+connections.clear();
+updateScore();
+
+const qCol=document.getElementById('questions-column');
+const iCol=document.getElementById('images-column');
+qCol.innerHTML='';
+iCol.innerHTML='';
+
+questionsData.forEach(q=>{
+let div=document.createElement('div');
+div.className='question';
+div.dataset.answer=q.answer;
+div.textContent=q.text;
+div.onclick=()=>{
+document.querySelectorAll('.question').forEach(x=>x.classList.remove('selected'));
+div.classList.add('selected');
+selectedQuestion=div;
+};
+qCol.appendChild(div);
+});
+
+imagesData.sort(()=>Math.random()-.5).forEach(img=>{
+let box=document.createElement('div');
+box.className='image-box';
+let item=document.createElement('div');
+item.className='image-item';
+item.dataset.letter=img.letter;
+item.innerHTML=`<span class="letter-label">${img.letter}</span><img src="${img.src}">`;
+
+item.onclick=()=>{
+if(!selectedQuestion) return;
+
+/* remove old */
+connections.delete(selectedQuestion);
+for(let [q,i] of connections) if(i===item) connections.delete(q);
+
+connections.set(selectedQuestion,item);
+selectedQuestion.classList.remove('selected');
+selectedQuestion=null;
+
+drawConnections();
+updateScore();
+};
+
+box.appendChild(item);
+iCol.appendChild(box);
+});
+
+arrowCanvas=document.getElementById('arrowCanvas');
+arrowCanvas.width=innerWidth;
+arrowCanvas.height=innerHeight;
+arrowCtx=arrowCanvas.getContext('2d');
+arrowCtx.lineWidth=3;
+}
+
+function drawConnections(){
+arrowCtx.clearRect(0,0,arrowCanvas.width,arrowCanvas.height);
+connections.forEach((img,q)=>{
+const qR=q.getBoundingClientRect();
+const iR=img.getBoundingClientRect();
+const correct=q.dataset.answer===img.dataset.letter;
+
+arrowCtx.strokeStyle=correct?"#32cd32":"#ff0000";
+arrowCtx.beginPath();
+arrowCtx.moveTo(qR.right,qR.top+qR.height/2);
+arrowCtx.lineTo(iR.left,iR.top+iR.height/2);
+arrowCtx.stroke();
+});
+}
+
+function updateScore(){
+let score=0;
+connections.forEach((img,q)=>{
+if(q.dataset.answer===img.dataset.letter) score++;
+});
+document.getElementById('scoreBox').textContent=`Score: ${score} / 5`;
+}
+
+document.getElementById('submit-btn').onclick=()=>{
+let score=0;
+connections.forEach((img,q)=>{
+if(q.dataset.answer===img.dataset.letter) score++;
+});
+if(score===5) goToPage('congrats-page');
+else alert(`You got ${score}/5 correct. Try again!`);
+};
+
 function initAnimatedBg(canvasId){
     const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     const ctx = canvas.getContext('2d');
-    let shapes=[];
+
     const colors = ['#ff6b6b','#feca57','#48dbfb','#1dd1a1','#f368e0','#ff9ff3','#54a0ff','#00d2d3'];
-    for(let i=0;i<50;i++){
+    const shapes = [];
+
+    // Create 30 subtle floating circles
+    for(let i=0;i<30;i++){
         shapes.push({
             x: Math.random()*canvas.width,
             y: Math.random()*canvas.height,
-            radius: Math.random()*25+10,
-            dx:(Math.random()-0.5)*0.8,
-            dy:(Math.random()-0.5)*0.8,
-            color:colors[Math.floor(Math.random()*colors.length)],
-            alpha:Math.random()*0.6+0.4
+            radius: Math.random()*30+10,
+            dx: (Math.random()-0.5)*0.3,  // slower movement
+            dy: (Math.random()-0.5)*0.3,
+            color: colors[Math.floor(Math.random()*colors.length)],
+            alpha: Math.random()*0.4+0.2  // semi-transparent
         });
     }
+
     function animate(){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         shapes.forEach(s=>{
-            s.x+=s.dx; s.y+=s.dy;
+            s.x += s.dx;
+            s.y += s.dy;
+
+            // Bounce off edges
             if(s.x<0 || s.x>canvas.width) s.dx*=-1;
             if(s.y<0 || s.y>canvas.height) s.dy*=-1;
+
             ctx.beginPath();
             ctx.arc(s.x,s.y,s.radius,0,Math.PI*2);
-            ctx.fillStyle=`rgba(${hexToRgb(s.color)},${s.alpha})`;
+            ctx.fillStyle = `rgba(${hexToRgb(s.color)},${s.alpha})`;
             ctx.fill();
         });
         requestAnimationFrame(animate);
@@ -259,176 +378,36 @@ function initAnimatedBg(canvasId){
     animate();
 }
 
+// Convert hex color to rgb
 function hexToRgb(hex){
     hex = hex.replace('#','');
-    let bigint=parseInt(hex,16);
-    let r=(bigint>>16)&255;
-    let g=(bigint>>8)&255;
-    let b=bigint&255;
+    const bigint = parseInt(hex,16);
+    const r = (bigint>>16)&255;
+    const g = (bigint>>8)&255;
+    const b = bigint&255;
     return `${r},${g},${b}`;
 }
 
-// Game logic
-let bgCanvas, bgCtx, arrowCanvas, arrowCtx, selectedQuestion=null, connections=[];
-function initGame(){
-    // Clear columns
-    const questionsCol = document.getElementById('questions-column');
-    const imagesCol = document.getElementById('images-column');
-    questionsCol.innerHTML = "";
-    imagesCol.innerHTML = "";
-    selectedQuestion=null;
-    connections=[];
+// Initialize backgrounds for each page
+window.addEventListener('load', ()=>{
+    initAnimatedBg('frontBgCanvas');
+    initAnimatedBg('instructionsBgCanvas');
+    initAnimatedBg('bgCanvas');       // game page background
+    initAnimatedBg('congratsBgCanvas');
+});
 
-    // Shuffle answers
-    const shuffledImages = imagesData.sort(()=>Math.random()-0.5);
-
-    // Create question elements
-    questionsData.forEach(q=>{
-        const div = document.createElement('div');
-        div.className='question';
-        div.dataset.answer=q.answer;
-        div.innerText=q.text;
-        questionsCol.appendChild(div);
-    });
-
-    // Create image elements
-    shuffledImages.forEach(img=>{
-        const box = document.createElement('div');
-        box.className='image-box';
-        const item = document.createElement('div');
-        item.className='image-item';
-        item.dataset.letter=img.letter;
-        const label = document.createElement('span');
-        label.className='letter-label';
-        label.innerText=img.letter;
-        const imageEl = document.createElement('img');
-        imageEl.src=img.src;
-        imageEl.alt=img.alt;
-		item.appendChild(label);
-        item.appendChild(imageEl);
-        box.appendChild(item);
-        imagesCol.appendChild(box);
-    });
-
-    // Canvas setup
-    bgCanvas = document.getElementById('bgCanvas');
-    bgCanvas.width = window.innerWidth;
-    bgCanvas.height = window.innerHeight;
-    bgCtx = bgCanvas.getContext('2d');
-    arrowCanvas = document.getElementById('arrowCanvas');
-    arrowCanvas.width = window.innerWidth;
-    arrowCanvas.height = window.innerHeight;
-    arrowCtx = arrowCanvas.getContext('2d');
-    arrowCtx.lineWidth=3;
-    arrowCtx.strokeStyle="#1e90ff";
-
-    // Floating shapes
-    let shapes=[];
-    for(let i=0;i<30;i++){
-        shapes.push({x:Math.random()*bgCanvas.width, y:Math.random()*bgCanvas.height, radius:Math.random()*20+5,
-                     dx:(Math.random()-0.5)*0.5, dy:(Math.random()-0.5)*0.5, color:`rgba(163,191,250,${Math.random()*0.5+0.3})`});
-    }
-    function animateBg(){
-        bgCtx.clearRect(0,0,bgCanvas.width,bgCanvas.height);
-        shapes.forEach(s=>{
-            s.x+=s.dx; s.y+=s.dy;
-            if(s.x<0 || s.x>bgCanvas.width) s.dx*=-1;
-            if(s.y<0 || s.y>bgCanvas.height) s.dy*=-1;
-            bgCtx.beginPath();
-            bgCtx.arc(s.x,s.y,s.radius,0,Math.PI*2);
-            bgCtx.fillStyle=s.color;
-            bgCtx.fill();
-        });
-        requestAnimationFrame(animateBg);
-    }
-    animateBg();
-
-    // Event listeners
-    const questions=document.querySelectorAll('.question');
-    const images=document.querySelectorAll('.image-item');
-
-    questions.forEach(q=>{
-        q.addEventListener('click', ()=>{
-            questions.forEach(qq=>qq.classList.remove('selected'));
-            q.classList.add('selected');
-            selectedQuestion=q;
-        });
-    });
-
-    images.forEach(img=>{
-        img.addEventListener('click', ()=>{
-            if(selectedQuestion){
-                const isCorrect=selectedQuestion.dataset.answer===img.dataset.letter;
-                connections.push({q:selectedQuestion,img:img,correct:isCorrect});
-                selectedQuestion.classList.remove('selected');
-                selectedQuestion=null;
-                drawConnections();
-                if(isCorrect) showMultipleEmojis();
-                else {
-                    document.body.style.backgroundColor="#ffb6b6";
-                    setTimeout(()=>document.body.style.backgroundColor='',500);
-                }
-            }
-        });
-    });
-}
-
-// Draw arrows
-function drawConnections(){
-    arrowCtx.clearRect(0,0,arrowCanvas.width,arrowCanvas.height);
-    connections.forEach(conn=>{
-        const qRect=conn.q.getBoundingClientRect();
-        const iRect=conn.img.getBoundingClientRect();
-        arrowCtx.strokeStyle=conn.correct?"#32cd32":"#ff0000";
-        arrowCtx.beginPath();
-        arrowCtx.moveTo(qRect.right, qRect.top+qRect.height/2);
-        arrowCtx.lineTo(iRect.left, iRect.top+iRect.height/2);
-        arrowCtx.stroke();
-        // arrowhead
-        let angle=Math.atan2(iRect.top+iRect.height/2-(qRect.top+qRect.height/2), iRect.left-qRect.right);
-        let arrowLen=10;
-        arrowCtx.beginPath();
-        arrowCtx.moveTo(iRect.left,iRect.top+iRect.height/2);
-        arrowCtx.lineTo(iRect.left-arrowLen*Math.cos(angle-Math.PI/6), iRect.top+iRect.height/2-arrowLen*Math.sin(angle-Math.PI/6));
-        arrowCtx.lineTo(iRect.left-arrowLen*Math.cos(angle+Math.PI/6), iRect.top+iRect.height/2-arrowLen*Math.sin(angle+Math.PI/6));
-        arrowCtx.lineTo(iRect.left,iRect.top+iRect.height/2);
-        arrowCtx.fillStyle=conn.correct?"#32cd32":"#ff0000";
-        arrowCtx.fill();
-    });
-}
-
-// Multiple emoji confetti
-function showMultipleEmojis(){
-    for(let i=0;i<50;i++){
-        const emoji=document.createElement('div');
-        emoji.innerText='🎉';
-        emoji.style.position='fixed';
-        emoji.style.left=Math.random()*window.innerWidth+'px';
-        emoji.style.top=Math.random()*window.innerHeight+'px';
-        emoji.style.fontSize=(20+Math.random()*40)+'px';
-        emoji.style.zIndex='10';
-        document.body.appendChild(emoji);
-		setTimeout(()=>emoji.remove(),1000+Math.random()*1000);
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const submitBtn = document.getElementById('submit-btn');
-    if (!submitBtn) return;
-
-    submitBtn.addEventListener('click', () => {
-        const correct = connections.filter(c => c.correct).length;
-        if (correct === 5) {
-            goToPage('congrats-page');
-        } else {
-            alert(`You matched ${correct}/5 correctly. Try again!`);
+// Make canvas resize with window
+window.addEventListener('resize', ()=>{
+    ['frontBgCanvas','instructionsBgCanvas','bgCanvas','congratsBgCanvas'].forEach(id=>{
+        const canvas = document.getElementById(id);
+        if(canvas){
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         }
     });
 });
 
 </script>
+
 </body>
-
 </html>
-
-
