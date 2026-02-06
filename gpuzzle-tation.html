@@ -61,17 +61,30 @@
   .topLink:nth-child(1){ top:15px; }
   .topLink:nth-child(2){ top:60px; }
   .topLink:hover { transform: scale(1.08); background:#5846c9; }
+
+  /* Completion popup */
   #completionPopup {
     display: none;
-    position: fixed; top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.4); z-index: 20;
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.4);
+    z-index: 20;
   }
   #completionPopup div {
-    position: fixed; top:50%; left:50%; transform: translate(-50%,-50%);
-    background:white; padding:40px; border-radius:20px; text-align:center;
+    position: fixed;
+    top:50%; left:50%;
+    transform: translate(-50%,-50%);
+    background:white;
+    padding:40px 60px;
+    border-radius:20px;
+    text-align:center;
     box-shadow:0 10px 40px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
   }
-  #completionPopup h2 { font-size:32px; color:#4b145f; margin-bottom:20px; }
+  #completionPopup h2 { font-size:32px; color:#4b145f; margin:0; }
+  #completionPopup button { margin-top: 10px; }
 </style>
 </head>
 <body>
@@ -95,7 +108,7 @@
 <div id="completionPopup">
   <div>
     <h2>Well Done!</h2>
-    <button id="playAgainBtn">Play Again</button>
+    <button id="playAgainBtn">Play Next Set</button>
   </div>
 </div>
 
@@ -131,7 +144,7 @@ let groups = [];
 let levelIndex = 0;
 let board = null;
 
-let currentSet = 1;
+let currentSet = 1; // start with set 1
 let currentImageIndex = 0;
 let currentImageData = IMAGES_SET_1[0];
 
@@ -235,14 +248,15 @@ function nextLevel(){
   if(currentSet === 1){
     currentImageIndex++;
     if(currentImageIndex >= IMAGES_SET_1.length){
-      currentSet = 2;
-      currentImageIndex = 0;
+      // Show popup after Set 1 is completed
+      document.getElementById("completionPopup").style.display="block";
+      return;
     }
-    currentImageData = currentSet===1 ? IMAGES_SET_1[currentImageIndex] : IMAGES_SET_2[currentImageIndex];
+    currentImageData = IMAGES_SET_1[currentImageIndex];
   } else {
     currentImageIndex++;
     if(currentImageIndex >= IMAGES_SET_2.length){
-      document.getElementById("completionPopup").style.display="block";
+      // End of Set 2, you can add final popup if needed
       return;
     }
     currentImageData = IMAGES_SET_2[currentImageIndex];
@@ -261,8 +275,8 @@ document.getElementById("levelDesc").textContent = currentImageData.desc;
 let active=null,ox=0,oy=0;
 function getPointerPos(e){ const rect=canvas.getBoundingClientRect(); const touch=e.touches?e.touches[0]:e; return {x:touch.clientX-rect.left,y:touch.clientY-rect.top}; }
 canvas.addEventListener("pointercancel",()=>{active=null;});
-canvas.addEventListener("pointerdown",e=>{ const pos=getPointerPos(e); for(let i=pieces.length-1;i>=0;i--){ const p=pieces[i]; if(pos.x>p.x && pos.x<p.x+p.drawW && pos.y>p.y && pos.y<p.y+p.drawH){ active=p.group; ox=pos.x; oy=pos.y; break; } }});
-canvas.addEventListener("pointermove",e=>{ if(!active)return; const pos=getPointerPos(e); active.move(pos.x-ox,pos.y-oy); ox=pos.x; oy=pos.y; });
+canvas.addEventListener("pointerdown",e=>{ const pos=getPointerPos(e); for(let i=pieces.length-1;i>=0;i--){ const p=pieces[i]; if(pos.x>p.x && pos.x<p.x+p.drawW && pos.y>p.y && pos.y<p.y+p.drawH){ active=p.group; ox=pos.x; oy=pos.y; break; } }}); 
+canvas.addEventListener("pointermove",e=>{ if(!active)return; const pos=getPointerPos(e); active.move(pos.x-ox,pos.y-oy); ox=pos.x; oy=pos.y; }); 
 canvas.addEventListener("pointerup",()=>{ if(!active)return; for(let g of groups){ if(g!==active && active.trySnap(g)) break;} active=null; checkLevelComplete(); });
 
 function checkLevelComplete(){ 
@@ -273,12 +287,13 @@ function checkLevelComplete(){
   }
 }
 
+// Play Again button starts Set 2
 document.getElementById("playAgainBtn").addEventListener("click", () => {
   document.getElementById("completionPopup").style.display="none";
-  currentSet = 1;
+  currentSet = 2;
   currentImageIndex = 0;
   levelIndex = 0;
-  currentImageData = IMAGES_SET_1[0];
+  currentImageData = IMAGES_SET_2[0];
   image.src = currentImageData.src;
   document.getElementById("levelTitle").textContent = currentImageData.title;
   document.getElementById("levelDesc").textContent = currentImageData.desc;
