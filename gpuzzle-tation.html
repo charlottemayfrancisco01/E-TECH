@@ -62,29 +62,44 @@
   .topLink:nth-child(2){ top:60px; }
   .topLink:hover { transform: scale(1.08); background:#5846c9; }
 
-  /* Completion popup */
-  #completionPopup {
-    display: none;
-    position: fixed;
-    top:0; left:0; width:100%; height:100%;
-    background: rgba(0,0,0,0.4);
-    z-index: 20;
-  }
-  #completionPopup div {
-    position: fixed;
-    top:50%; left:50%;
-    transform: translate(-50%,-50%);
-    background:white;
-    padding:40px 60px;
-    border-radius:20px;
-    text-align:center;
-    box-shadow:0 10px 40px rgba(0,0,0,0.4);
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  #completionPopup h2 { font-size:32px; color:#4b145f; margin:0; }
-  #completionPopup button { margin-top: 10px; }
+  /* Completion popup overlay */
+#completionPopup {
+  display: none;          /* 👈 stays hidden initially */
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 20;
+
+  justify-content: center;
+  align-items: center;
+}
+
+#completionPopup div {
+  background: white;
+  padding: 40px 60px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* 👈 horizontal center */
+  justify-content: center; /* 👈 vertical balance */
+  gap: 25px;
+}
+
+#completionPopup h2 {
+  font-size: 32px;
+  color: #4b145f;
+  margin: 0;
+}
+
+#completionPopup button {
+  margin-top: 10px;
+  align-self: center;    
+}
+
+
 </style>
 </head>
 <body>
@@ -108,8 +123,8 @@
 <div id="completionPopup">
   <div>
     <h2>Well Done!</h2>
-    <button id="playAgainBtn">Play Next Set</button>
   </div>
+    <button id="playAgainBtn">Play Next Set</button>
 </div>
 
 <script>
@@ -248,10 +263,17 @@ function nextLevel(){
   if(currentSet === 1){
     currentImageIndex++;
     if(currentImageIndex >= IMAGES_SET_1.length){
-      // Show popup after Set 1 is completed
-      document.getElementById("completionPopup").style.display="block";
-      return;
-    }
+  const popup = document.getElementById("completionPopup");
+  popup.style.display = "block";
+
+  // 🎉 Confetti burst when popup appears
+  spawnConfetti();
+  setTimeout(spawnConfetti, 300);
+  setTimeout(spawnConfetti, 600);
+
+  return;
+}
+
     currentImageData = IMAGES_SET_1[currentImageIndex];
   } else {
     currentImageIndex++;
@@ -280,10 +302,30 @@ canvas.addEventListener("pointermove",e=>{ if(!active)return; const pos=getPoint
 canvas.addEventListener("pointerup",()=>{ if(!active)return; for(let g of groups){ if(g!==active && active.trySnap(g)) break;} active=null; checkLevelComplete(); });
 
 function checkLevelComplete(){ 
-  if(!levelCompleted && groups.length===1 && groups[0].pieces.length===pieces.length){
-    levelCompleted=true;
-    document.getElementById("nextBtn").disabled=false;
+  if(!levelCompleted && groups.length === 1 && groups[0].pieces.length === pieces.length){
+    levelCompleted = true;
+
+    // 🎉 Small confetti for every level
     spawnConfetti();
+
+    // 🏁 CHECK: Is this the LAST image of SET 1?
+    if (
+      currentSet === 1 &&
+      currentImageIndex === IMAGES_SET_1.length - 1
+    ) {
+      // 🎊 BIG celebration + popup
+      setTimeout(() => {
+        const popup = document.getElementById("completionPopup");
+        popup.style.display = "block";
+
+        spawnConfetti();
+        setTimeout(spawnConfetti, 300);
+        setTimeout(spawnConfetti, 600);
+      }, 400);
+    } else {
+      // 👉 Normal levels just enable Next Level button
+      document.getElementById("nextBtn").disabled = false;
+    }
   }
 }
 
