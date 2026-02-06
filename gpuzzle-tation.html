@@ -11,6 +11,25 @@
     background: linear-gradient(135deg, #a18cd1, #fbc2eb);
   }
   canvas { display: block; touch-action: none; }
+  .left-instruction {
+  position: absolute; /* allows positioning */
+  left: 0;            /* moves it to the left side */
+  top: 20px;          /* adjust vertical position */
+  width: 300px;       /* optional width */
+}
+
+  h2 {
+  position: fixed;
+  top: 20px;          
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  z-index: 5;         
+}
+
 
   #ui {
     position: fixed; bottom: 20px; right: 20px; z-index: 10;
@@ -52,6 +71,20 @@
   line-height: 1.6;
 }
 
+#levelInfo {
+  position: fixed;
+  top: 80px;          
+  right: 20px;
+  background: rgba(255,255,255,0.95);
+  color: #4b145f;
+  padding: 26px;
+  border-radius: 26px;
+  max-width: 380px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+
+
 button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -81,6 +114,10 @@ button:disabled {
 
 <a href="activities.html" class="topLink">Activities</a>
 <a href="lottie.html" class="topLink">Story</a>
+
+
+  <h2>Panuto: Basahin mabuti ang bawat tanong at buoin ang tamang sagot gamit ang puzzle.</h2>
+
 
 <div id="ui">
   <button id="nextBtn" onclick="nextLevel()"> Next Level</button>
@@ -114,7 +151,7 @@ const LEVELS = [
 const IMAGES = [
   {
     src: "P1.png",
-    title: "Panuto: Basahin mabuti ang bawat tanong at buoin ang tamang sagot gamit ang puzzle.",
+    title: "",
     desc: "Ano ang tawag sa bahagi ng presentation software kung saan makikita ang kabuuang itsura ng software kung saan nandiyan ang mga menu, toolbar, slide panel at workspace."
   },
   {
