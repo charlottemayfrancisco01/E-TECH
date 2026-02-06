@@ -164,25 +164,26 @@ button:hover{ transform:scale(1.05); filter: brightness(1.1); }
 
 .topLink {
     position: fixed;
-    left: 20px;
-    z-index: 100;
-    padding: 10px 20px;
+    top: 15px;
+    left: 15px;
+    z-index: 10;
+    padding: 10px 16px;
     font-size: 14px;
-    border-radius: 12px;
+    border-radius: 14px;
     background: #6a5acd;
     color: white;
     text-decoration: none;
     font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
-.topLink:nth-child(1) { top: 20px; }
-.topLink:nth-child(2) { top: 70px; }
+
+.topLink:nth-child(2) { top: 60px; }
 </style>
 </head>
 <body>
 
-<a href="#" class="topLink">Activities</a>
-<a href="#" class="topLink">Story</a>
+<a href="activities.html" class="topLink">Activities</a>
+<a href="lottie.html" class="topLink">Story</a>
 
 <section id="front-page" class="page">
     <canvas id="frontBg" class="bg-canvas"></canvas>
