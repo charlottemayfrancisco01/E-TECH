@@ -7,7 +7,7 @@
 
 <style>
 /* =====================
-   🌈 BODY + BACKGROUND
+    🌈 BODY + BACKGROUND
 ===================== */
 body {
     margin: 0;
@@ -22,7 +22,7 @@ body {
 }
 
 /* =====================
-   🫧 BUBBLES
+    🫧 BUBBLES
 ===================== */
 #bubbles {
     position: fixed;
@@ -48,7 +48,7 @@ body {
 }
 
 /* =====================
-   ⭐ STARS
+    ⭐ STARS
 ===================== */
 #stars {
     position: fixed;
@@ -74,7 +74,7 @@ body {
 }
 
 /* =====================
-   🖥 SCREENS
+    🖥 SCREENS
 ===================== */
 .screen {
     width: 100%;
@@ -91,7 +91,7 @@ body {
 }
 
 /* =====================
-   🃏 CARD
+    🃏 CARD
 ===================== */
 .card {
     background: white;
@@ -107,7 +107,7 @@ h1 { color: #6a5acd; }
 h2 { color: #5a7fdc; }
 
 /* =====================
-   📦 BOX
+    📦 BOX
 ===================== */
 .box {
     background: #f5f3ff;
@@ -118,7 +118,7 @@ h2 { color: #5a7fdc; }
 }
 
 /* =====================
-   🎮 CHOICES
+    🎮 CHOICES
 ===================== */
 .choices {
     display: flex;
@@ -187,13 +187,9 @@ button:hover { transform: scale(1.08); }
 <a href="activities.html" class="topLink">Activities</a>
 <a href="lottie.html" class="topLink">Story</a>
 
-<!-- BACKGROUND EFFECTS -->
 <div id="bubbles"></div>
 <div id="stars"></div>
 
-<!-- =====================
-   🏠 FRONT PAGE
-===================== -->
 <div class="screen active" id="front">
     <div class="card">
         <h1>🌐 SAFE or SORRY?</h1>
@@ -202,9 +198,6 @@ button:hover { transform: scale(1.08); }
     </div>
 </div>
 
-<!-- =====================
-   📘 INSTRUCTIONS
-===================== -->
 <div class="screen" id="instructions">
     <div class="card">
         <h2>PANUTO</h2>
@@ -218,9 +211,6 @@ button:hover { transform: scale(1.08); }
     </div>
 </div>
 
-<!-- =====================
-   🎮 GAME
-===================== -->
 <div class="screen" id="game">
     <div class="card" id="gameCard">
 
@@ -237,10 +227,99 @@ button:hover { transform: scale(1.08); }
     </div>
 </div>
 
-<!-- =====================
-   ⚙️ JAVASCRIPT
-===================== -->
 <script>
+/* =========================================
+    🔊 SOUND ENGINE (Web Audio API)
+   ========================================= */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    const now = audioCtx.currentTime;
+
+    if (type === 'pop') {
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.1);
+        
+        gainNode.gain.setValueAtTime(0.15, now);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+
+        osc.start(now);
+        osc.stop(now + 0.1);
+
+    } else if (type === 'success') {
+        // NEW LIVELY "SPARKLE" EFFECT for Correct Answers
+        const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        frequencies.forEach((f, i) => {
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            const startTime = now + (i * 0.05);
+            osc.frequency.setValueAtTime(f, startTime);
+            
+            gainNode.gain.setValueAtTime(0.1, startTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.15);
+
+            osc.start(startTime);
+            osc.stop(startTime + 0.15);
+        });
+
+    } else if (type === 'win') {
+        playNote(523.25, now, 0.1); // C5
+        playNote(659.25, now + 0.1, 0.1); // E5
+        playNote(783.99, now + 0.2, 0.4); // G5
+
+    } else if (type === 'error') {
+        const playWonk = (startTime, freq) => {
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            osc.type = 'square'; 
+            osc.frequency.setValueAtTime(freq, startTime);
+            osc.frequency.exponentialRampToValueAtTime(freq / 2.5, startTime + 0.2);
+
+            gainNode.gain.setValueAtTime(0.08, startTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.2);
+
+            osc.start(startTime);
+            osc.stop(startTime + 0.2);
+        };
+
+        playWonk(now, 220); 
+        playWonk(now + 0.2, 180);
+    }
+}
+
+function playNote(freq, time, duration) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    
+    gain.gain.setValueAtTime(0.1, time);
+    gain.gain.exponentialRampToValueAtTime(0.01, time + duration);
+    
+    osc.start(time);
+    osc.stop(time + duration);
+}
+
 /* QUESTIONS */
 const questions = [
   { text: "Hindi mo ibinibigay ang password mo kahit kanino.", safe: true },
@@ -254,6 +333,7 @@ let index = 0;
 
 /* PAGE NAVIGATION */
 function goTo(id) {
+  playSound('pop'); 
   document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 
@@ -264,6 +344,7 @@ function goTo(id) {
 function loadQuestion() {
   document.getElementById("question").textContent = questions[index].text;
   document.getElementById("feedback").textContent = "";
+  document.getElementById("feedback").className = "box feedback"; 
   document.getElementById("nextBtn").style.display = "none";
 }
 
@@ -273,10 +354,12 @@ function answer(choice) {
   const feedback = document.getElementById("feedback");
 
   if (choice === correct) {
+    playSound('success'); // New Sparkle Sound
     feedback.textContent = "🌟 Tama! Magaling!";
     feedback.className = "box feedback correct";
     showStars();
   } else {
+    playSound('error'); // New Wonk Sound
     feedback.textContent = "⚠️ Oops! Ingat online.";
     feedback.className = "box feedback wrong";
   }
@@ -286,6 +369,7 @@ function answer(choice) {
 
 /* NEXT QUESTION */
 function nextQuestion() {
+  playSound('pop');
   index++;
   if (index >= questions.length) {
     goTo("front");
