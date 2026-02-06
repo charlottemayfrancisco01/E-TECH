@@ -61,6 +61,17 @@
   .topLink:nth-child(1){ top:15px; }
   .topLink:nth-child(2){ top:60px; }
   .topLink:hover { transform: scale(1.08); background:#5846c9; }
+  #completionPopup {
+    display: none;
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.4); z-index: 20;
+  }
+  #completionPopup div {
+    position: fixed; top:50%; left:50%; transform: translate(-50%,-50%);
+    background:white; padding:40px; border-radius:20px; text-align:center;
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+  }
+  #completionPopup h2 { font-size:32px; color:#4b145f; margin-bottom:20px; }
 </style>
 </head>
 <body>
@@ -81,10 +92,16 @@
 
 <canvas id="canvas"></canvas>
 
+<div id="completionPopup">
+  <div>
+    <h2>Well Done!</h2>
+    <button id="playAgainBtn">Play Again</button>
+  </div>
+</div>
+
 <script>
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-let currentImageIndex = 0;
 let levelCompleted = false;
 
 function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
@@ -92,23 +109,35 @@ resize();
 addEventListener("resize", resize);
 
 const LEVELS = [{ rows: 2, cols: 2 }];
-const IMAGES = [
-  { src: "P1.png", title: "", desc: "Ano ang tawag sa bahagi ng presentation software kung saan makikita ang kabuuang itsura ng software kung saan nandiyan ang mga menu, toolbar, slide panel at workspace." },
-  { src: "P2.png", title: "", desc: "Ano ang ginagamit upang mabilis na mabigyan ng kulay, font style, at layout ang lahat ng slides sa isang presentasyon?" },
-  { src: "P3.png", title: "", desc: "Ito ay isang masining na paraan ng pagpapakita ng teksto. Ginagamit ito para mas maging kaakit-akit ang mga salita sa presentation." },
-  { src: "P4.png", title: "", desc: "Ito ay ang proseso na ginagamit para mag lagay ng teksto. Pwede rin itong i-format at baguhin ang font,laki, kulay at alignment." },
-  { src: "P5.png", title: "", desc: "Ano ang proseso ng pagdaragdag ng larawan, video, o chart sa isang slide upang mas maging malinaw ang impormasyon?" }
+
+const IMAGES_SET_1 = [
+  { src: "P1.png", title: "", desc: "1. Ano ang tawag sa bahagi ng presentation software kung saan makikita ang kabuuang itsura ng software kung saan nandiyan ang mga menu, toolbar, slide panel at workspace." },
+  { src: "P2.png", title: "", desc: "2. Ano ang ginagamit upang mabilis na mabigyan ng kulay, font style, at layout ang lahat ng slides sa isang presentasyon?" },
+  { src: "P3.png", title: "", desc: "3. Ito ay isang masining na paraan ng pagpapakita ng teksto. Ginagamit ito para mas maging kaakit-akit ang mga salita sa presentation." },
+  { src: "P4.png", title: "", desc: "4. Ito ay ang proseso na ginagamit para mag lagay ng teksto. Pwede rin itong i-format at baguhin ang font,laki, kulay at alignment." },
+  { src: "P5.png", title: "", desc: "5. Ano ang proseso ng pagdaragdag ng larawan, video, o chart sa isang slide upang mas maging malinaw ang impormasyon?" }
 ];
 
-let currentImageData = null;
-const SNAP = 18;
-const TAB_RATIO = 0.28;
-const BLEED_RATIO = 0.3;
+const IMAGES_SET_2 = [
+  { src: "P6.png", title: "", desc: "1. Ano ang tawag sa bahagi ng presentation software kung saan makikita ang kabuuang itsura ng software kung saan nandiyan ang mga menu, toolbar, slide panel at workspace." },
+  { src: "P7.png", title: "", desc: "2. Ano ang ginagamit upang mabilis na mabigyan ng kulay, font style, at layout ang lahat ng slides sa isang presentasyon?" },
+  { src: "P8.png", title: "", desc: "3. Ito ay isang masining na paraan ng pagpapakita ng teksto. Ginagamit ito para mas maging kaakit-akit ang mga salita sa presentation." },
+  { src: "P9.png", title: "", desc: "4. Ito ay ang proseso na ginagamit para mag lagay ng teksto. Pwede rin itong i-format at baguhin ang font,laki, kulay at alignment." },
+  { src: "P10.png", title: "", desc: "5. Ano ang proseso ng pagdaragdag ng larawan, video, o chart sa isang slide upang mas maging malinaw ang impormasyon?" }
+];
 
 let pieces = [];
 let groups = [];
 let levelIndex = 0;
 let board = null;
+
+let currentSet = 1;
+let currentImageIndex = 0;
+let currentImageData = IMAGES_SET_1[0];
+
+const SNAP = 18;
+const TAB_RATIO = 0.28;
+const BLEED_RATIO = 0.3;
 
 const image = new Image();
 const imageCanvas = document.createElement("canvas");
@@ -119,9 +148,8 @@ function getBoard() {
   return { x: (canvas.width - size)/2, y: (canvas.height - size)/2, size };
 }
 
-/* Arrange pieces on left side, closer together */
 function leftSideSpawn(board, pieceW, pieceH, index) {
-  const margin = 8; // smaller margin = closer pieces
+  const margin = 8;
   const piecesPerColumn = Math.floor(canvas.height / (pieceH + margin));
   const row = index % piecesPerColumn;
   const col = Math.floor(index / piecesPerColumn);
@@ -129,62 +157,29 @@ function leftSideSpawn(board, pieceW, pieceH, index) {
 }
 
 class Piece {
-  constructor(r, c, w, h, edges, board, index) {
-    this.row = r;
-    this.col = c;
-    this.w = w;
-    this.h = h;
-    this.edges = edges;
-
-    this.bleed = Math.min(w, h) * BLEED_RATIO;
-    this.drawW = w + this.bleed * 2;
-    this.drawH = h + this.bleed * 2;
-
-    this.correctX = board.x + c * w - this.bleed;
-    this.correctY = board.y + r * h - this.bleed;
-
-    const spawn = leftSideSpawn(board, this.drawW, this.drawH, index);
-    this.x = spawn.x;
-    this.y = spawn.y;
-
-    this.group = null;
+  constructor(r,c,w,h,edges,board,index){
+    this.row=r; this.col=c; this.w=w; this.h=h; this.edges=edges;
+    this.bleed=Math.min(w,h)*BLEED_RATIO;
+    this.drawW=w+2*this.bleed; this.drawH=h+2*this.bleed;
+    this.correctX=board.x+c*w-this.bleed;
+    this.correctY=board.y+r*h-this.bleed;
+    const spawn = leftSideSpawn(board,this.drawW,this.drawH,index);
+    this.x=spawn.x; this.y=spawn.y;
+    this.group=null;
   }
-
-  draw() {
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.beginPath();
-    ctx.translate(this.bleed, this.bleed);
-    drawJigsawPath(ctx, this.w, this.h, this.edges);
-    ctx.closePath();
-    ctx.clip();
-    ctx.drawImage(
-      imageCanvas,
-      this.col*this.w - this.bleed,
-      this.row*this.h - this.bleed,
-      this.w+2*this.bleed,
-      this.h+2*this.bleed,
-      -this.bleed,
-      -this.bleed,
-      this.w+2*this.bleed,
-      this.h+2*this.bleed
-    );
+  draw(){
+    ctx.save(); ctx.translate(this.x,this.y); ctx.beginPath();
+    ctx.translate(this.bleed,this.bleed); drawJigsawPath(ctx,this.w,this.h,this.edges); ctx.closePath(); ctx.clip();
+    ctx.drawImage(imageCanvas,this.col*this.w-this.bleed,this.row*this.h-this.bleed,this.w+2*this.bleed,this.h+2*this.bleed,-this.bleed,-this.bleed,this.w+2*this.bleed,this.h+2*this.bleed);
     ctx.restore();
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.beginPath();
-    ctx.translate(this.bleed, this.bleed);
-    drawJigsawPath(ctx, this.w, this.h, this.edges);
-    ctx.strokeStyle = "rgba(255,255,255,0.35)";
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    ctx.restore();
+    ctx.save(); ctx.translate(this.x,this.y); ctx.beginPath(); ctx.translate(this.bleed,this.bleed);
+    drawJigsawPath(ctx,this.w,this.h,this.edges); ctx.strokeStyle="rgba(255,255,255,0.35)"; ctx.lineWidth=1; ctx.stroke(); ctx.restore();
   }
 }
 
 class Group {
-  constructor(p) { this.pieces=[p]; p.group=this; }
-  move(dx,dy){ this.pieces.forEach(p=>{p.x+=dx; p.y+=dy;}); }
+  constructor(p){ this.pieces=[p]; p.group=this; }
+  move(dx,dy){ this.pieces.forEach(p=>{p.x+=dx;p.y+=dy;}); }
   trySnap(other){
     for(let a of this.pieces){ for(let b of other.pieces){
       const dr=a.row-b.row, dc=a.col-b.col;
@@ -235,18 +230,33 @@ function spawnConfetti(){ for(let i=0;i<30;i++){ const c=document.createElement(
 
 function nextLevel(){
   if(!levelCompleted) return;
-  currentImageIndex=(currentImageIndex+1)%IMAGES.length; currentImageData=IMAGES[currentImageIndex];
-  levelIndex=(levelIndex+1)%LEVELS.length;
-  image.src=currentImageData.src;
-  document.getElementById("levelTitle").textContent=currentImageData.title;
-  document.getElementById("levelDesc").textContent=currentImageData.desc;
+  levelIndex = (levelIndex+1)%LEVELS.length;
+
+  if(currentSet === 1){
+    currentImageIndex++;
+    if(currentImageIndex >= IMAGES_SET_1.length){
+      currentSet = 2;
+      currentImageIndex = 0;
+    }
+    currentImageData = currentSet===1 ? IMAGES_SET_1[currentImageIndex] : IMAGES_SET_2[currentImageIndex];
+  } else {
+    currentImageIndex++;
+    if(currentImageIndex >= IMAGES_SET_2.length){
+      document.getElementById("completionPopup").style.display="block";
+      return;
+    }
+    currentImageData = IMAGES_SET_2[currentImageIndex];
+  }
+
+  image.src = currentImageData.src;
+  document.getElementById("levelTitle").textContent = currentImageData.title;
+  document.getElementById("levelDesc").textContent = currentImageData.desc;
 }
 
 image.onload=startPuzzle;
-currentImageData=IMAGES[0];
 image.src=currentImageData.src;
-document.getElementById("levelTitle").textContent=currentImageData.title;
-document.getElementById("levelDesc").textContent=currentImageData.desc;
+document.getElementById("levelTitle").textContent = currentImageData.title;
+document.getElementById("levelDesc").textContent = currentImageData.desc;
 
 let active=null,ox=0,oy=0;
 function getPointerPos(e){ const rect=canvas.getBoundingClientRect(); const touch=e.touches?e.touches[0]:e; return {x:touch.clientX-rect.left,y:touch.clientY-rect.top}; }
@@ -255,9 +265,31 @@ canvas.addEventListener("pointerdown",e=>{ const pos=getPointerPos(e); for(let i
 canvas.addEventListener("pointermove",e=>{ if(!active)return; const pos=getPointerPos(e); active.move(pos.x-ox,pos.y-oy); ox=pos.x; oy=pos.y; });
 canvas.addEventListener("pointerup",()=>{ if(!active)return; for(let g of groups){ if(g!==active && active.trySnap(g)) break;} active=null; checkLevelComplete(); });
 
-function checkLevelComplete(){ if(!levelCompleted && groups.length===1 && groups[0].pieces.length===pieces.length){ levelCompleted=true; document.getElementById("nextBtn").disabled=false; spawnConfetti(); } }
+function checkLevelComplete(){ 
+  if(!levelCompleted && groups.length===1 && groups[0].pieces.length===pieces.length){
+    levelCompleted=true;
+    document.getElementById("nextBtn").disabled=false;
+    spawnConfetti();
+  }
+}
 
-function loop(){ ctx.clearRect(0,0,canvas.width,canvas.height); if(board){ ctx.strokeStyle="rgba(255,255,255,0.3)"; ctx.lineWidth=2; ctx.strokeRect(board.x,board.y,board.size,board.size);} pieces.forEach(p=>p.draw()); requestAnimationFrame(loop); }
+document.getElementById("playAgainBtn").addEventListener("click", () => {
+  document.getElementById("completionPopup").style.display="none";
+  currentSet = 1;
+  currentImageIndex = 0;
+  levelIndex = 0;
+  currentImageData = IMAGES_SET_1[0];
+  image.src = currentImageData.src;
+  document.getElementById("levelTitle").textContent = currentImageData.title;
+  document.getElementById("levelDesc").textContent = currentImageData.desc;
+});
+
+function loop(){ 
+  ctx.clearRect(0,0,canvas.width,canvas.height); 
+  if(board){ ctx.strokeStyle="rgba(255,255,255,0.3)"; ctx.lineWidth=2; ctx.strokeRect(board.x,board.y,board.size,board.size);} 
+  pieces.forEach(p=>p.draw()); 
+  requestAnimationFrame(loop); 
+}
 loop();
 </script>
 
