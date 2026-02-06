@@ -119,9 +119,9 @@ function getBoard() {
   return { x: (canvas.width - size)/2, y: (canvas.height - size)/2, size };
 }
 
-/* New function: arrange pieces neatly on left side */
+/* Arrange pieces on left side, closer together */
 function leftSideSpawn(board, pieceW, pieceH, index) {
-  const margin = 20;
+  const margin = 8; // smaller margin = closer pieces
   const piecesPerColumn = Math.floor(canvas.height / (pieceH + margin));
   const row = index % piecesPerColumn;
   const col = Math.floor(index / piecesPerColumn);
