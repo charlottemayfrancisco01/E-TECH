@@ -119,19 +119,13 @@ function getBoard() {
   return { x: (canvas.width - size)/2, y: (canvas.height - size)/2, size };
 }
 
-/* Arrange 4 pieces close together on the left side */
+/* Arrange pieces on left side, closer together */
 function leftSideSpawn(board, pieceW, pieceH, index) {
-  const startX = 20;       // left margin
-  const startY = 50;       // top margin
-  const gap = 5;           // tiny gap between pieces
-
-  const row = Math.floor(index / 2);
-  const col = index % 2;
-
-  return { 
-    x: startX + col * (pieceW + gap), 
-    y: startY + row * (pieceH + gap) 
-  };
+  const margin = 8; // smaller margin = closer pieces
+  const piecesPerColumn = Math.floor(canvas.height / (pieceH + margin));
+  const row = index % piecesPerColumn;
+  const col = Math.floor(index / piecesPerColumn);
+  return { x: margin + col * (pieceW + margin), y: margin + row * (pieceH + margin) };
 }
 
 class Piece {
@@ -267,7 +261,5 @@ function loop(){ ctx.clearRect(0,0,canvas.width,canvas.height); if(board){ ctx.s
 loop();
 </script>
 
-
 </body>
 </html>
-
