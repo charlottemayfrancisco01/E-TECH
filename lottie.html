@@ -7,7 +7,7 @@
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-     :root {
+    :root {
       --purple: #c084fc;
       --purple-dark: #a855f7;
       --blue-bg: #e8f6ff;
@@ -40,11 +40,12 @@
       justify-content: space-between;
     }
 
-     .logo {
-  max-width: 150px;
-  width: 100%;
-  height: auto;
-}
+    .logo {
+      max-width: 150px;
+      width: 100%;
+      height: auto;
+    }
+
     .nav-links {
       display: flex;
       gap: 32px;
@@ -79,106 +80,58 @@
       padding: 80px 20px;
     }
 
-    .features {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-    }
-
     .card {
       background: #ffffff;
       border-radius: var(--radius);
       padding: 32px;
       box-shadow: var(--card-shadow);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
     }
 
-    .card h3 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 12px;
+    .card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(168, 85, 247, 0.25);
     }
 
-    .card p {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.6;
+    .cta-button {
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color: #ffffff;
+      border: none;
+      padding: 18px 42px;
+      font-size: 18px;
+      font-weight: 600;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(168, 85, 247, 0.35);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* CTA BUTTON */
-.cta-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-top: 60px;
-}
+    .cta-button:hover {
+      transform: translateY(-4px) scale(1.05);
+      box-shadow: 0 18px 40px rgba(168, 85, 247, 0.45);
+    }
 
-.cta-button {
-  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-  color: #ffffff;
-  border: none;
-  padding: 18px 42px;
-  font-size: 18px;
-  font-weight: 600;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.35);
-}
+    .slide-button {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.35);
+      z-index: 50;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
 
-/* SLIDE TOP-LEFT BUTTON */
-.slide-button {
-  position: absolute;       /* stay on top of the slide */
-  top: 15px;                /* distance from top */
-  left: 15px;               /* distance from left */
-  padding: 10px 16px;
-  background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-  color: #fff;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 8px;
-  text-decoration: none;
-  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.35);
-  z-index: 50;              /* above image/video */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
+    .slide-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(168, 85, 247, 0.45);
+    }
 
-.slide-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 25px rgba(168, 85, 247, 0.45);
-}
-
-	
-	/* CARD HOVER ANIMATION */
-.card {
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
-}
-
-.card:hover {
-  transform: translateY(-12px) scale(1.03);
-  box-shadow: 0 20px 40px rgba(168, 85, 247, 0.25);
-}
-
-/* ICON POP ANIMATION */
-.card-icon {
-  transition: transform 0.35s ease;
-}
-
-.card:hover .card-icon {
-  transform: scale(1.25) rotate(-5deg);
-}
-
-/* BUTTON HOVER (BONUS) */
-.cta-button {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.cta-button:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 18px 40px rgba(168, 85, 247, 0.45);
-}
-
-
-    /* FOOTER */
     footer {
       background: var(--footer-bg);
       text-align: center;
@@ -186,26 +139,18 @@
       font-size: 16px;
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .features {
-        grid-template-columns: 1fr;
-      }
-
-      .hero h1 {
-        font-size: 40px;
-      }
+    .story-layout {
+      max-width: 1100px;
+      margin: 40px auto 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 60px;
     }
-	
-	
-	
-	
-	
-    .story-list {
-  max-width: 400px;
-  margin: 0;          /* removes centering */
-}
 
+    .story-list {
+      max-width: 400px;
+    }
 
     .story-item {
       background: #fff;
@@ -214,27 +159,26 @@
       cursor: pointer;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      transition: background 0.3s;
     }
 
+    .story-item:hover {
+      background: #f3f4f6;
+    }
 
+    .story-image {
+      max-width: 500px;
+      flex-shrink: 0;
+    }
 
+    .story-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /* OVERLAY & VIEWER */
     .overlay {
       position: fixed;
       inset: 0;
@@ -280,6 +224,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
     }
 
     .slide {
@@ -298,13 +243,9 @@
 
     .slide img {
       max-width: 90%;
-      max-height: 60%;
+      max-height: 80%;
       border-radius: 8px;
-    }
-
-    audio {
-      margin-top: 15px;
-      width: 80%;
+      object-fit: contain;
     }
 
     .nav-btn {
@@ -323,33 +264,21 @@
     .prev { left: 10px; }
     .next { right: 10px; }
 
-    .slides-container {
-  flex: 2;
-  position: relative; /* ensures children absolute positioning works */
-  background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
+    .sign-language-overlay {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 190px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      padding: 6px;
+      z-index: 999;
+    }
 
-.sign-language-overlay {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  width: 190px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  padding: 6px;
-  z-index: 999; /* very high so it's above slide content */
-}
-
-.sign-language-overlay video {
-  width: 100%;
-  border-radius: 8px;
-  pointer-events: none; /* optional, allows clicks to pass through */
-}
-
+    .sign-language-overlay video {
+      width: 100%;
+      border-radius: 8px;
+    }
 
     .subtitle {
       position: absolute;
@@ -360,37 +289,20 @@
       color: #fff;
       padding: 8px 16px;
       border-radius: 6px;
+      pointer-events: none;
     }
-	
-.story-layout {
-  max-width: 1100px;
-  margin: 40px auto 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 60px;
-}
 
-.story-list {
-  max-width: 400px;
-}
-
-.story-image {
-  max-width: 500px;
-  flex-shrink: 0; 
-}
-
-.story-image img {
-  width: 100%; 
-  height: auto;
-  border-radius: 16px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-}
-
+    @media (max-width: 900px) {
+      .story-layout {
+        flex-direction: column-reverse;
+        align-items: center;
+      }
+      .hero h1 { font-size: 32px; }
+    }
   </style>
 </head>
 <body>
-<!-- NAV -->
+
   <header class="navbar">
     <img src="lougo.jpg" alt="e-tech logo" class="logo">
     <nav class="nav-links">
@@ -400,224 +312,224 @@
       <a href="activities.html">Activities</a>
     </nav>
   </header>
-  
-    <!-- HERO -->
+
   <section class="hero">
     <h1>Ang Pagtuklas ni Pepe at Pilar sa Mundo ng Teknolohiya</h1>
     <p>FRANCISCO, BAUTISTA, MIGUEL AND PRESTOZA</p>
   </section>
- <section class="features-section">
-<div class="story-layout">
-  <div class="story-list">
-    <div class="story-item" onclick="openStory('1')"><strong>KABANATA 1:</strong> Parts of the Computer</div>
-    <div class="story-item" onclick="openStory('2')"><strong>KABANATA 2:</strong> Digital Citizenship</div>
-    <div class="story-item" onclick="openStory('3')"><strong>KABANATA 3:</strong> Word Processing Software</div>
-    <div class="story-item" onclick="openStory('4')"><strong>KABANATA 4:</strong> Presentation Software</div>
-    <div class="story-item" onclick="openStory('5')"><strong>KABANATA 5:</strong> Desktop Publishing Software</div>
-    <div class="story-item" onclick="openStory('6')"><strong>KABANATA 6:</strong> Spreadsheet Software</div>
-  </div>
 
-  <div class="story-image">
-    <img src="pepenpilar.jpg" alt="Pepe and Pilar" />
-  </div>
-</div>
-
-
-<div class="overlay" id="overlay">
-  <div class="story-viewer">
-    <div class="close-btn" onclick="closeStory()">✕</div>
-
-    <div class="slides-container">
-      <button class="nav-btn prev" onclick="changeSlide(-1)">❮</button>
-      <button class="nav-btn next" onclick="changeSlide(1)">❯</button>
-
-      <!-- Sign language overlay -->
-      <div class="sign-language-overlay">
-        <video id="signVideo" controls></video>
+  <section class="features-section">
+    <div class="story-layout">
+      <div class="story-list">
+        <div class="story-item" onclick="openStory('1')"><strong>KABANATA 1:</strong> Parts of the Computer</div>
+        <div class="story-item" onclick="openStory('2')"><strong>KABANATA 2:</strong> Digital Citizenship</div>
+        <div class="story-item" onclick="openStory('3')"><strong>KABANATA 3:</strong> Word Processing Software</div>
+        <div class="story-item" onclick="openStory('4')"><strong>KABANATA 4:</strong> Presentation Software</div>
+        <div class="story-item" onclick="openStory('5')"><strong>KABANATA 5:</strong> Desktop Publishing Software</div>
+        <div class="story-item" onclick="openStory('6')"><strong>KABANATA 6:</strong> Spreadsheet Software</div>
       </div>
 
-      <div id="slides"></div>
+      <div class="story-image">
+        <img src="pepenpilar.jpg" alt="Pepe and Pilar" />
+      </div>
     </div>
-  </div>
-</div>
-</section>
 
-</body>
- <!-- FOOTER -->
+    <div class="overlay" id="overlay">
+      <div class="story-viewer">
+        <div class="close-btn" onclick="closeStory()">✕</div>
+        <div class="slides-container">
+          <button class="nav-btn prev" onclick="changeSlide(-1)">❮</button>
+          <button class="nav-btn next" onclick="changeSlide(1)">❯</button>
+          <div class="sign-language-overlay">
+            <video id="signVideo" controls></video>
+          </div>
+          <div id="slides"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer>
     Made with ❤️ for curious kids everywhere
   </footer>
 
-<script>
-  const stories = {
-    1: [
-	  { type: 'image', src: 'KABANATA1.jpg' },
-	  { type: 'image', src: '1.1.png', sign: 'SL1.1.mp4', },
-	  { type: 'image', src: '1.2.png', sign: 'SL1.2.mp4', },
-	  { type: 'image', src: '1.3.png', sign: 'SL1.3.mp4', },
-	  { type: 'image', src: '1.4.png', sign: 'SL1.4.mp4', },
-	  { type: 'image', src: '1.5.png', sign: 'SL1.5.mp4', },
-	  { type: 'image', src: '1.6.png', sign: 'SL1.6.mp4', },
-	  { type: 'image', src: '1.7.png', sign: 'SL1.7.mp4', },
-	  { type: 'image', src: '1.8.png', sign: 'SL1.8.mp4', },
-	  { type: 'image', src: '1.9.png', sign: 'SL1.9.mp4', },
-	  { type: 'image', src: '1.10.png', sign: 'SL1.10.mp4', },
-	  { type: 'image', src: '1.11.png', sign: 'SL1.11.mp4', },
-	  { type: 'image', src: '1.12.png', sign: 'SL1.12.mp4', },
-	  { type: 'image', src: '1.13.png', sign: 'SL1.13.mp4', },
-	  { type: 'image', src: '1.14.png', sign: 'SL1.14.mp4', },
-	  { type: 'image', src: '1.15.png', sign: 'SL1.15.mp4', },
-	  { type: 'image', src: '1.16.png', sign: 'SL1.16.mp4', },
-	  { type: 'image', src: '1.17.png', sign: 'SL1.17.mp4', },
-	  { type: 'image', src: '1.18.png', sign: 'SL1.18.mp4', },
-	  { type: 'image', src: '1.19.png', sign: 'SL1.19.mp4', },
-	  { type: 'image', src: '1.20.png', sign: 'SL1.20.mp4', },
-	 { type: 'image', src: '1.21.png', sign: 'SL1.21.mp4', },
-	  { type: 'image', src: '1.22.png', sign: 'SL1.22.mp4', },
-	  { type: 'image', src: '1.23.png', sign: 'SL1.23.mp4', },
-	  { type: 'image', src: '1.24.png', sign: 'SL1.24.mp4', },
-	  { type: 'image', src: '1.25.png', sign: 'SL1.25.mp4', },
-	  { type: 'image', src: '1.26.png', sign: 'SL1.26.mp4', },
-	  { type: 'image', src: '1.27.png', sign: 'SL1.27.mp4', },
-    ],
-    2: [
-	  { type: 'image', src: 'KABANATA2.jpg' },
-		  { type: 'image', src: '2.1.png', sign: 'SL2.1.mp4', },
-	  { type: 'image', src: '2.2.png', sign: 'SL2.2.mp4', },
-	  { type: 'image', src: '2.3.png', sign: 'SL2.3.mp4', },
-	  { type: 'image', src: '2.4.png', sign: 'SL2.4.mp4', },
-	  { type: 'image', src: '2.5.png', sign: 'SL2.5.mp4', },
-	  { type: 'image', src: '2.6.png', sign: 'SL2.6.mp4', },
-	  { type: 'image', src: '2.7.png', sign: 'SL2.7.mp4', },
-	  { type: 'image', src: '2.8.png', sign: 'SL2.8.mp4', },
-	  { type: 'image', src: '2.9.png', sign: 'SL2.9.mp4', },
-	  { type: 'image', src: '2.10.png', sign: 'SL2.10.mp4', },
-	  { type: 'image', src: '2.11.png', sign: 'SL2.11.mp4', },
-	  { type: 'image', src: '2.12.png', sign: 'SL2.12.mp4', },
-	  { type: 'image', src: '2.13.png', sign: 'SL2.13.mp4', },
-	  { type: 'image', src: '2.14.png', sign: 'SL2.14.mp4', },
-	  { type: 'image', src: '2.15.png', sign: 'SL2.15.mp4', },
-	  { type: 'image', src: '2.16.png', sign: 'SL2.16.mp4', },
-	  { type: 'image', src: '2.17.png', sign: 'SL2.17.mp4', },
-	  { type: 'image', src: '2.18.png', sign: 'SL2.18.mp4', },
-	  { type: 'image', src: '2.19.png', sign: 'SL2.19.mp4', },
-	  { type: 'image', src: '2.20.png', sign: 'SL2.20.mp4', },
-	 { type: 'image', src: '2.21.png', sign: 'SL2.21.mp4', },
-	  { type: 'image', src: '2.22.png', sign: 'SL2.22.mp4', },
-	  { type: 'image', src: '2.23.png', sign: 'SL2.23.mp4', },
-	  { type: 'image', src: '2.24.png', sign: 'SL2.24.mp4', },
-    ],
-    3: [
-	 { type: 'image', src: 'KABANATA3.jpg' },
-	  { type: 'image', src: '3.1.png', sign: 'SL3.1.mp4', },
-	  { type: 'image', src: '3.2.png', sign: 'SL3.2.mp4', },
-	  { type: 'image', src: '3.3.png', sign: 'SL3.3.mp4', },
-	  { type: 'image', src: '3.4.png', sign: 'SL3.4.mp4', },
-	  { type: 'image', src: '3.5.png', sign: 'SL3.5.mp4', },
-	  { type: 'image', src: '3.6.png', sign: 'SL3.6.mp4', },
-	  { type: 'image', src: '3.7.png', sign: 'SL3.7.mp4', },
-	  { type: 'image', src: '3.8.png', sign: 'SL3.8.mp4', },
-	  { type: 'image', src: '3.9.png', sign: 'SL3.9.mp4', },
-	  { type: 'image', src: '3.10.png', sign: 'SL3.10.mp4', },
-	  { type: 'image', src: '3.11.png', sign: 'SL3.11.mp4', },
-	  { type: 'image', src: '3.12.png', sign: 'SL3.12.mp4', },
-	  { type: 'image', src: '3.13.png', sign: 'SL3.13.mp4', },
-	  { type: 'image', src: '3.14.png', sign: 'SL3.14.mp4', },
-	  { type: 'image', src: '3.15.png', sign: 'SL3.15.mp4', },
-	  { type: 'image', src: '3.16.png', sign: 'SL3.16.mp4', },
-	  { type: 'image', src: '3.17.png', sign: 'SL3.17.mp4', },
-	  { type: 'image', src: '3.18.png', sign: 'SL3.18.mp4', },
-	  { type: 'image', src: '3.19.png', sign: 'SL3.19.mp4', },
-	  { type: 'image', src: '3.20.png', sign: 'SL3.20.mp4', },
-	 { type: 'image', src: '3.21.png', sign: 'SL3.21.mp4', },
-	  { type: 'image', src: '3.22.png', sign: 'SL3.22.mp4', },
-	  { type: 'image', src: '3.23.png', sign: 'SL3.23.mp4', },
-	  { type: 'image', src: '3.24.png', sign: 'SL3.24.mp4', },
-		{ type: 'image', src: '3.25.png', sign: 'SL3.25.mp4', },
-    ],
-	4: [
-	  { type: 'image', src: 'KABANATA4.jpg' },
-	  { type: 'image', src: '4.1.png', sign: 'SL4.1.mp4', },
-	  { type: 'image', src: '4.2.png', sign: 'SL4.2.mp4', },
-	  { type: 'image', src: '4.3.png', sign: 'SL4.3.mp4', },
-	  { type: 'image', src: '4.4.png', sign: 'SL4.4.mp4', },
-	  { type: 'image', src: '4.5.png', sign: 'SL4.5.mp4', },
-	  { type: 'image', src: '4.6.png', sign: 'SL4.6.mp4', },
-	  { type: 'image', src: '4.7.png', sign: 'SL4.7.mp4', },
-	  { type: 'image', src: '4.8.png', sign: 'SL4.8.mp4', },
-	  { type: 'image', src: '4.9.png', sign: 'SL4.9.mp4', },
-	  { type: 'image', src: '4.10.png', sign: 'SL4.10.mp4', },
-	  { type: 'image', src: '4.11.png', sign: 'SL4.11.mp4', },
-	  { type: 'image', src: '4.12.png', sign: 'SL4.12.mp4', },
-	  { type: 'image', src: '4.13.png', sign: 'SL4.13.mp4', },
-	  { type: 'image', src: '4.14.png', sign: 'SL4.14.mp4', },
-	  { type: 'image', src: '4.15.png', sign: 'SL4.15.mp4', },
-	  { type: 'image', src: '4.16.png', sign: 'SL4.16.mp4', },
-	  { type: 'image', src: '4.17.png', sign: 'SL4.17.mp4', },
-	  { type: 'image', src: '4.18.png', sign: 'SL4.18.mp4', },
-	  { type: 'image', src: '4.19.png', sign: 'SL4.19.mp4', },
-	  { type: 'image', src: '4.20.png', sign: 'SL4.20.mp4', },
-	 { type: 'image', src: '4.21.png', sign: 'SL4.21.mp4', },
-	  { type: 'image', src: '4.22.png', sign: 'SL4.22.mp4', },
-	  { type: 'image', src: '4.23.png', sign: 'SL4.23.mp4', },
-	  { type: 'image', src: '4.24.png', sign: 'SL4.24.mp4', },
-	  { type: 'image', src: '4.25.png', sign: 'SL4.25.mp4', },
-	  { type: 'image', src: '4.26.png', sign: 'SL4.26.mp4', },
-    ],
-	5: [
-	  { type: 'image', src: 'KABANATA5.jpg' },
-	  { type: 'image', src: '5.1.png', sign: 'SL5.1.mp4', },
-	  { type: 'image', src: '5.2.png', sign: 'SL5.2.mp4', },
-	  { type: 'image', src: '5.3.png', sign: 'SL5.3.mp4', },
-	  { type: 'image', src: '5.4.png', sign: 'SL5.4.mp4', },
-	  { type: 'image', src: '5.5.png', sign: 'SL5.5.mp4', },
-	  { type: 'image', src: '5.6.png', sign: 'SL5.6.mp4', },
-	  { type: 'image', src: '5.7.png', sign: 'SL5.7.mp4', },
-	  { type: 'image', src: '5.8.png', sign: 'SL5.8.mp4', },
-	  { type: 'image', src: '5.9.png', sign: 'SL5.9.mp4', },
-	  { type: 'image', src: '5.10.png', sign: 'SL5.10.mp4', },
-	  { type: 'image', src: '5.11.png', sign: 'SL5.11.mp4', },
-	  { type: 'image', src: '5.12.png', sign: 'SL5.12.mp4', },
-	  { type: 'image', src: '5.13.png', sign: 'SL5.13.mp4', },
-	  { type: 'image', src: '5.14.png', sign: 'SL5.14.mp4', },
-	  { type: 'image', src: '5.15.png', sign: 'SL5.15.mp4', },
-	  { type: 'image', src: '5.16.png', sign: 'SL5.16.mp4', },
-	  { type: 'image', src: '5.17.png', sign: 'SL5.17.mp4', },
-	  { type: 'image', src: '5.18.png', sign: 'SL5.18.mp4', },
-	  { type: 'image', src: '5.19.png', sign: 'SL5.19.mp4', },
-	  { type: 'image', src: '5.20.png', sign: 'SL5.20.mp4', },
-	 { type: 'image', src: '5.21.png', sign: 'SL5.21.mp4', },
-    ],
-	6: [
-	  { type: 'image', src: 'KABANATA6.jpg' },
-	  { type: 'image', src: '6.1.png', sign: 'SL6.1.mp4', },
-	  { type: 'image', src: '6.2.png', sign: 'SL6.2.mp4', },
-	  { type: 'image', src: '6.3.png', sign: 'SL6.3.mp4', },
-	  { type: 'image', src: '6.4.png', sign: 'SL6.4.mp4', },
-	  { type: 'image', src: '6.5.png', sign: 'SL6.5.mp4', },
-	  { type: 'image', src: '6.6.png', sign: 'SL6.6.mp4', },
-	  { type: 'image', src: '6.7.png', sign: 'SL6.7.mp4', },
-	  { type: 'image', src: '6.8.png', sign: 'SL6.8.mp4', },
-	  { type: 'image', src: '6.9.png', sign: 'SL6.9.mp4', },
-	  { type: 'image', src: '6.10.png', sign: 'SL6.10.mp4', },
-	  { type: 'image', src: '6.11.png', sign: 'SL6.11.mp4', },
-	  { type: 'image', src: '6.12.png', sign: 'SL6.12.mp4', },
-	  { type: 'image', src: '6.13.png', sign: 'SL6.13.mp4', },
-	  { type: 'image', src: '6.14.png', sign: 'SL6.14.mp4', },
-	  { type: 'image', src: '6.15.png', sign: 'SL6.15.mp4', },
-	  { type: 'image', src: '6.16.png', sign: 'SL6.16.mp4', },
-	  { type: 'image', src: '6.17.png', sign: 'SL6.17.mp4', },
-	  { type: 'image', src: '6.18.png', sign: 'SL6.18.mp4', },
-	  { type: 'image', src: '6.19.png', sign: 'SL6.19.mp4', },
-	  { type: 'image', src: '6.20.png', sign: 'SL6.20.mp4', },
+  <script>
+    const stories = {
+      1: [
+        { type: 'image', src: 'KABANATA1.jpg' },
+        { type: 'image', src: '1.1.png', sign: 'SL1.1.mp4' },
+        { type: 'image', src: '1.2.png', sign: 'SL1.2.mp4' },
+        { type: 'image', src: '1.3.png', sign: 'SL1.3.mp4' },
+        { type: 'image', src: '1.4.png', sign: 'SL1.4.mp4' },
+        { type: 'image', src: '1.5.png', sign: 'SL1.5.mp4' },
+        { type: 'image', src: '1.6.png', sign: 'SL1.6.mp4' },
+        { type: 'image', src: '1.7.png', sign: 'SL1.7.mp4' },
+        { type: 'image', src: '1.8.png', sign: 'SL1.8.mp4' },
+        { type: 'image', src: '1.9.png', sign: 'SL1.9.mp4' },
+        { type: 'image', src: '1.10.png', sign: 'SL1.10.mp4' },
+        { type: 'image', src: '1.11.png', sign: 'SL1.11.mp4' },
+        { type: 'image', src: '1.12.png', sign: 'SL1.12.mp4' },
+        { type: 'image', src: '1.13.png', sign: 'SL1.13.mp4' },
+        { type: 'image', src: '1.14.png', sign: 'SL1.14.mp4' },
+        { type: 'image', src: '1.15.png', sign: 'SL1.15.mp4' },
+        { type: 'image', src: '1.16.png', sign: 'SL1.16.mp4' },
+        { type: 'image', src: '1.17.png', sign: 'SL1.17.mp4' },
+        { type: 'image', src: '1.18.png', sign: 'SL1.18.mp4' },
+        { type: 'image', src: '1.19.png', sign: 'SL1.19.mp4' },
+        { type: 'image', src: '1.20.png', sign: 'SL1.20.mp4' },
+        { type: 'image', src: '1.21.png', sign: 'SL1.21.mp4' },
+        { type: 'image', src: '1.22.png', sign: 'SL1.22.mp4' },
+        { type: 'image', src: '1.23.png', sign: 'SL1.23.mp4' },
+        { type: 'image', src: '1.24.png', sign: 'SL1.24.mp4' },
+        { type: 'image', src: '1.25.png', sign: 'SL1.25.mp4' },
+        { type: 'image', src: '1.26.png', sign: 'SL1.26.mp4' },
+        { type: 'image', src: '1.27.png', sign: 'SL1.27.mp4' },
+      ],
+      2: [
+        { type: 'image', src: 'KABANATA2.jpg' },
+        { type: 'image', src: '2.1.png', sign: 'SL2.1.mp4' },
+        { type: 'image', src: '2.2.png', sign: 'SL2.2.mp4' },
+        { type: 'image', src: '2.3.png', sign: 'SL2.3.mp4' },
+        { type: 'image', src: '2.4.png', sign: 'SL2.4.mp4' },
+        { type: 'image', src: '2.5.png', sign: 'SL2.5.mp4' },
+        { type: 'image', src: '2.6.png', sign: 'SL2.6.mp4' },
+        { type: 'image', src: '2.7.png', sign: 'SL2.7.mp4' },
+        { type: 'image', src: '2.8.png', sign: 'SL2.8.mp4' },
+        { type: 'image', src: '2.9.png', sign: 'SL2.9.mp4' },
+        { type: 'image', src: '2.10.png', sign: 'SL2.10.mp4' },
+        { type: 'image', src: '2.11.png', sign: 'SL2.11.mp4' },
+        { type: 'image', src: '2.12.png', sign: 'SL2.12.mp4' },
+        { type: 'image', src: '2.13.png', sign: 'SL2.13.mp4' },
+        { type: 'image', src: '2.14.png', sign: 'SL2.14.mp4' },
+        { type: 'image', src: '2.15.png', sign: 'SL2.15.mp4' },
+        { type: 'image', src: '2.16.png', sign: 'SL2.16.mp4' },
+        { type: 'image', src: '2.17.png', sign: 'SL2.17.mp4' },
+        { type: 'image', src: '2.18.png', sign: 'SL2.18.mp4' },
+        { type: 'image', src: '2.19.png', sign: 'SL2.19.mp4' },
+        { type: 'image', src: '2.20.png', sign: 'SL2.20.mp4' },
+        { type: 'image', src: '2.21.png', sign: 'SL2.21.mp4' },
+        { type: 'image', src: '2.22.png', sign: 'SL2.22.mp4' },
+        { type: 'image', src: '2.23.png', sign: 'SL2.23.mp4' },
+        { type: 'image', src: '2.24.png', sign: 'SL2.24.mp4' },
+      ],
+      3: [
+        { type: 'image', src: 'KABANATA3.jpg' },
+        { type: 'image', src: '3.1.png', sign: 'SL3.1.mp4' },
+        { type: 'image', src: '3.2.png', sign: 'SL3.2.mp4' },
+        { type: 'image', src: '3.3.png', sign: 'SL3.3.mp4' },
+        { type: 'image', src: '3.4.png', sign: 'SL3.4.mp4' },
+        { type: 'image', src: '3.5.png', sign: 'SL3.5.mp4' },
+        { type: 'image', src: '3.6.png', sign: 'SL3.6.mp4' },
+        { type: 'image', src: '3.7.png', sign: 'SL3.7.mp4' },
+        { type: 'image', src: '3.8.png', sign: 'SL3.8.mp4' },
+        { type: 'image', src: '3.9.png', sign: 'SL3.9.mp4' },
+        { type: 'image', src: '3.10.png', sign: 'SL3.10.mp4' },
+        { type: 'image', src: '3.11.png', sign: 'SL3.11.mp4' },
+        { type: 'image', src: '3.12.png', sign: 'SL3.12.mp4' },
+        { type: 'image', src: '3.13.png', sign: 'SL3.13.mp4' },
+        { type: 'image', src: '3.14.png', sign: 'SL3.14.mp4' },
+        { type: 'image', src: '3.15.png', sign: 'SL3.15.mp4' },
+        { type: 'image', src: '3.16.png', sign: 'SL3.16.mp4' },
+        { type: 'image', src: '3.17.png', sign: 'SL3.17.mp4' },
+        { type: 'image', src: '3.18.png', sign: 'SL3.18.mp4' },
+        { type: 'image', src: '3.19.png', sign: 'SL3.19.mp4' },
+        { type: 'image', src: '3.20.png', sign: 'SL3.20.mp4' },
+        { type: 'image', src: '3.21.png', sign: 'SL3.21.mp4' },
+        { type: 'image', src: '3.22.png', sign: 'SL3.22.mp4' },
+        { type: 'image', src: '3.23.png', sign: 'SL3.23.mp4' },
+        { type: 'image', src: '3.24.png', sign: 'SL3.24.mp4' },
+        { type: 'image', src: '3.25.png', sign: 'SL3.25.mp4' },
+      ],
+      4: [
+        { type: 'image', src: 'KABANATA4.jpg' },
+        { type: 'image', src: '4.1.png', sign: 'SL4.1.mp4' },
+        { type: 'image', src: '4.2.png', sign: 'SL4.2.mp4' },
+        { type: 'image', src: '4.3.png', sign: 'SL4.3.mp4' },
+        { type: 'image', src: '4.4.png', sign: 'SL4.4.mp4' },
+        { type: 'image', src: '4.5.png', sign: 'SL4.5.mp4' },
+        { type: 'image', src: '4.6.png', sign: 'SL4.6.mp4' },
+        { type: 'image', src: '4.7.png', sign: 'SL4.7.mp4' },
+        { type: 'image', src: '4.8.png', sign: 'SL4.8.mp4' },
+        { type: 'image', src: '4.9.png', sign: 'SL4.9.mp4' },
+        { type: 'image', src: '4.10.png', sign: 'SL4.10.mp4' },
+        { type: 'image', src: '4.11.png', sign: 'SL4.11.mp4' },
+        { type: 'image', src: '4.12.png', sign: 'SL4.12.mp4' },
+        { type: 'image', src: '4.13.png', sign: 'SL4.13.mp4' },
+        { type: 'image', src: '4.14.png', sign: 'SL4.14.mp4' },
+        { type: 'image', src: '4.15.png', sign: 'SL4.15.mp4' },
+        { type: 'image', src: '4.16.png', sign: 'SL4.16.mp4' },
+        { type: 'image', src: '4.17.png', sign: 'SL4.17.mp4' },
+        { type: 'image', src: '4.18.png', sign: 'SL4.18.mp4' },
+        { type: 'image', src: '4.19.png', sign: 'SL4.19.mp4' },
+        { type: 'image', src: '4.20.png', sign: 'SL4.20.mp4' },
+        { type: 'image', src: '4.21.png', sign: 'SL4.21.mp4' },
+        { type: 'image', src: '4.22.png', sign: 'SL4.22.mp4' },
+        { type: 'image', src: '4.23.png', sign: 'SL4.23.mp4' },
+        { type: 'image', src: '4.24.png', sign: 'SL4.24.mp4' },
+        { type: 'image', src: '4.25.png', sign: 'SL4.25.mp4' },
+        { type: 'image', src: '4.26.png', sign: 'SL4.26.mp4' },
+      ],
+      5: [
+        { type: 'image', src: 'KABANATA5.jpg' },
+        { type: 'image', src: '5.1.png', sign: 'SL5.1.mp4' },
+        { type: 'image', src: '5.2.png', sign: 'SL5.2.mp4' },
+        { type: 'image', src: '5.3.png', sign: 'SL5.3.mp4' },
+        { type: 'image', src: '5.4.png', sign: 'SL5.4.mp4' },
+        { type: 'image', src: '5.5.png', sign: 'SL5.5.mp4' },
+        { type: 'image', src: '5.6.png', sign: 'SL5.6.mp4' },
+        { type: 'image', src: '5.7.png', sign: 'SL5.7.mp4' },
+        { type: 'image', src: '5.8.png', sign: 'SL5.8.mp4' },
+        { type: 'image', src: '5.9.png', sign: 'SL5.9.mp4' },
+        { type: 'image', src: '5.10.png', sign: 'SL5.10.mp4' },
+        { type: 'image', src: '5.11.png', sign: 'SL5.11.mp4' },
+        { type: 'image', src: '5.12.png', sign: 'SL5.12.mp4' },
+        { type: 'image', src: '5.13.png', sign: 'SL5.13.mp4' },
+        { type: 'image', src: '5.14.png', sign: 'SL5.14.mp4' },
+        { type: 'image', src: '5.15.png', sign: 'SL5.15.mp4' },
+        { type: 'image', src: '5.16.png', sign: 'SL5.16.mp4' },
+        { type: 'image', src: '5.17.png', sign: 'SL5.17.mp4' },
+        { type: 'image', src: '5.18.png', sign: 'SL5.18.mp4' },
+        { type: 'image', src: '5.19.png', sign: 'SL5.19.mp4' },
+        { type: 'image', src: '5.20.png', sign: 'SL5.20.mp4' },
+        { type: 'image', src: '5.21.png', sign: 'SL5.21.mp4' },
+      ],
+      6: [
+        { type: 'image', src: 'KABANATA6.jpg' },
+        { type: 'image', src: '6.1.png', sign: 'SL6.1.mp4' },
+        { type: 'image', src: '6.2.png', sign: 'SL6.2.mp4' },
+        { type: 'image', src: '6.3.png', sign: 'SL6.3.mp4' },
+        { type: 'image', src: '6.4.png', sign: 'SL6.4.mp4' },
+        { type: 'image', src: '6.5.png', sign: 'SL6.5.mp4' },
+        { type: 'image', src: '6.6.png', sign: 'SL6.6.mp4' },
+        { type: 'image', src: '6.7.png', sign: 'SL6.7.mp4' },
+        { type: 'image', src: '6.8.png', sign: 'SL6.8.mp4' },
+        { type: 'image', src: '6.9.png', sign: 'SL6.9.mp4' },
+        { type: 'image', src: '6.10.png', sign: 'SL6.10.mp4' },
+        { type: 'image', src: '6.11.png', sign: 'SL6.11.mp4' },
+        { type: 'image', src: '6.12.png', sign: 'SL6.12.mp4' },
+        { type: 'image', src: '6.13.png', sign: 'SL6.13.mp4' },
+        { type: 'image', src: '6.14.png', sign: 'SL6.14.mp4' },
+        { type: 'image', src: '6.15.png', sign: 'SL6.15.mp4' },
+        { type: 'image', src: '6.16.png', sign: 'SL6.16.mp4' },
+        { type: 'image', src: '6.17.png', sign: 'SL6.17.mp4' },
+        { type: 'image', src: '6.18.png', sign: 'SL6.18.mp4' },
+        { type: 'image', src: '6.19.png', sign: 'SL6.19.mp4' },
+        { type: 'image', src: '6.20.png', sign: 'SL6.20.mp4' },
+      ]
+    };
 
-    ]
-  };
-
- let currentSlides = [];
+    let currentSlides = [];
     let currentIndex = 0;
     let captionTimer = null;
     const signVideo = document.getElementById('signVideo');
+
+    // AUTO-NEXT LOGIC
+    signVideo.onended = function() {
+      // Rule: Do not auto-next if it's the very first slide (Index 0 is the Kabanata title)
+      if (currentIndex > 0 && currentIndex < currentSlides.length - 1) {
+        changeSlide(1);
+      }
+    };
 
     function openStory(key) {
       document.getElementById('overlay').style.display = 'flex';
@@ -626,7 +538,11 @@
 
     function closeStory() {
       document.getElementById('overlay').style.display = 'none';
-      if(signVideo) { signVideo.pause(); signVideo.style.display='none'; signVideo.src=''; }
+      if(signVideo) { 
+        signVideo.pause(); 
+        signVideo.style.display='none'; 
+        signVideo.src=''; 
+      }
       if(captionTimer) clearInterval(captionTimer);
     }
 
@@ -639,16 +555,16 @@
       const kabanataLinks = {1:'gclick&sort.html',2:'gsafeorsorry.html',3:'gmix&match.html',4:'gpuzzle-tation.html',5:'gquizpub.html',6:'g4pics1word.html'};
       const slideLink = kabanataLinks[key];
 
-      currentSlides.forEach((slide,index)=>{
+      currentSlides.forEach((slide, index) => {
         const div = document.createElement('div');
         div.className = 'slide';
-        if(index===0) div.classList.add('active');
+        if(index === 0) div.classList.add('active');
 
-        if(slide.type==='image'){
+        if(slide.type === 'image'){
           div.innerHTML = `<a href="${slideLink}" target="_blank" class="slide-button">Play</a>
             <img src="${slide.src}">
             <div class="subtitle"></div>`;
-        } else if(slide.type==='video'){
+        } else if(slide.type === 'video'){
           div.innerHTML = `<a href="${slideLink}" target="_blank" class="slide-button">Play</a>
             <video src="${slide.src}" controls></video>
             <div class="subtitle"></div>`;
@@ -661,34 +577,38 @@
 
     function showSlide(index){
       const slides = document.querySelectorAll('.slide');
-      slides.forEach(s=>{ s.classList.remove('active'); const video=s.querySelector('video'); if(video) video.pause(); });
+      slides.forEach(s => { 
+        s.classList.remove('active'); 
+        const video = s.querySelector('video'); 
+        if(video) video.pause(); 
+      });
 
-      currentIndex = (index+currentSlides.length)%currentSlides.length;
+      currentIndex = (index + currentSlides.length) % currentSlides.length;
       const activeSlide = slides[currentIndex];
       activeSlide.classList.add('active');
 
       const slideData = currentSlides[currentIndex];
 
-      if(slideData.type==='video'){
+      if(slideData.type === 'video'){
         const mainVideo = activeSlide.querySelector('video');
         if(mainVideo) mainVideo.play().catch(()=>{});
       }
 
       if(slideData.sign){
-        signVideo.style.display='block';
-        signVideo.src=slideData.sign;
-        signVideo.currentTime=0;
+        signVideo.style.display = 'block';
+        signVideo.src = slideData.sign;
+        signVideo.currentTime = 0;
         signVideo.play().catch(()=>{});
       } else {
         signVideo.pause();
-        signVideo.style.display='none';
-        signVideo.src='';
+        signVideo.style.display = 'none';
+        signVideo.src = '';
       }
 
       startCaptionRotation();
     }
 
-    function changeSlide(direction){ showSlide(currentIndex+direction); }
+    function changeSlide(direction){ showSlide(currentIndex + direction); }
 
     function startCaptionRotation(){
       if(captionTimer) clearInterval(captionTimer);
@@ -696,31 +616,28 @@
       const subtitleEl = document.querySelector('.slide.active .subtitle');
       if(!subtitleEl) return;
 
-      let captions=[];
-      if(slideData.captions) captions=slideData.captions;
-      else if(slideData.caption) captions=[slideData.caption];
-      if(captions.length===0){ subtitleEl.textContent=''; return; }
+      let captions = [];
+      if(slideData.captions) captions = slideData.captions;
+      else if(slideData.caption) captions = [slideData.caption];
+      
+      if(captions.length === 0){ 
+        subtitleEl.textContent = ''; 
+        return; 
+      }
 
-      let captionIndex=0;
-      subtitleEl.textContent=captions[captionIndex];
-      if(captions.length===1) return;
+      let captionIndex = 0;
+      subtitleEl.textContent = captions[captionIndex];
+      if(captions.length === 1) return;
 
-      captionTimer=setInterval(()=>{
+      captionTimer = setInterval(() => {
         captionIndex++;
-        if(captionIndex>=captions.length){ clearInterval(captionTimer); return; }
-        subtitleEl.textContent=captions[captionIndex];
-      },5000);
+        if(captionIndex >= captions.length){ 
+          clearInterval(captionTimer); 
+          return; 
+        }
+        subtitleEl.textContent = captions[captionIndex];
+      }, 5000);
     }
   </script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
