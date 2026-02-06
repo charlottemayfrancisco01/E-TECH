@@ -22,6 +22,7 @@ body {
   padding: 20px;
   text-align: center;
   color: #4a3f78;
+  overscroll-behavior: none;
 }
 
 /* 📘 DIRECTIONS BOX */
@@ -56,14 +57,12 @@ body {
   box-shadow: 0 15px 30px rgba(160, 140, 255, 0.25);
 }
 
-/* 🏷 TITLE */
 h2 {
   margin-bottom: 15px;
   font-size: 28px;
   color: var(--purple-dark);
 }
 
-/* 📌 HEADERS */
 .header {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -79,7 +78,6 @@ h2 {
   margin: 0 5px;
 }
 
-/* 🧱 ROW */
 .row {
   position: relative;
   height: 120px;
@@ -89,7 +87,6 @@ h2 {
   overflow: hidden;
 }
 
-/* ➖ TRACK */
 .track {
   position: absolute;
   top: 60px;
@@ -100,7 +97,6 @@ h2 {
   border-radius: 10px;
 }
 
-/* 🃏 CARD */
 .card {
   position: absolute;
   top: 15px;
@@ -110,6 +106,7 @@ h2 {
   transition: transform 0.2s ease, left 0.25s ease;
   touch-action: none;
   user-select: none;
+  z-index: 2;
 }
 
 .card:active {
@@ -136,7 +133,6 @@ h2 {
   animation: shake 0.3s ease;
 }
 
-/* 🎉 BUTTON */
 button {
   margin-top: 25px;
   padding: 14px 30px;
@@ -156,15 +152,14 @@ button:hover {
   box-shadow: 0 14px 26px rgba(160, 140, 255, 0.6);
 }
 
-/* 📊 SCORE */
 #score {
   margin-top: 15px;
   font-size: 18px;
   font-weight: bold;
   color: var(--purple-dark);
+  min-height: 27px;
 }
 
-/* ✨ ANIMATIONS */
 @keyframes pop {
   0% { transform: scale(0.9); }
   100% { transform: scale(1); }
@@ -177,6 +172,7 @@ button:hover {
   75% { transform: translateX(-4px); }
   100% { transform: translateX(0); }
 }
+
 .topLink {
     position: fixed;
     top: 15px;
@@ -190,18 +186,25 @@ button:hover {
     text-decoration: none;
     font-weight: bold;
     box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    transition: 0.3s;
 }
 
-/* space them vertically */
-.topLink:nth-child(1) { top: 15px; }
 .topLink:nth-child(2) { top: 60px; }
 
-.topLink:hover {
-    transform: scale(1.08);
-    background: #5846c9;
+.set { display: none; }
+.set.active { display: block; }
+
+.result {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  display: none;
+  z-index: 1;
 }
 
+.row.correct-row .result { display: block; color: var(--green); }
+.row.wrong-row .result { display: block; color: var(--red); }
 </style>
 </head>
 <body>
@@ -209,141 +212,242 @@ button:hover {
 <a href="lottie.html" class="topLink">Story</a>
 <h2>CLICK AND SORT</h2>
 
-<!-- 📘 DIRECTIONS -->
 <div class="instructions">
   <h3>Panuto:</h3>
-  <p>
-  Suriin ang mga larawan, ilagay ang bawat isa sa tamang kategorya—<strong>Hardware</strong>. kung ito ay pisikal na parte na nahahawakan at <strong>Software</strong> kung ito ay programang ginagamit sa computer.
-  </p>
+  <p>Suriin ang mga larawan, ilagay ang bawat isa sa tamang kategorya—<strong>Software</strong> kung ito ay programang ginagamit sa computer at <strong>Hardware</strong> kung ito ay pisikal na parte na nahahawakan.</p>
 </div>
 
 <div class="game">
-
   <div class="header">
     <div>Software</div>
     <div>Hardware</div>
   </div>
 
-  <div class="row" data-answer="hardware">
-    <div class="track"></div>
-    <div class="card"><img src="GAME1.png" alt="keyboard"></div>
+  <div class="set active" data-set="1">
+    <div class="row" data-answer="hardware">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME1.png" alt="keyboard" onerror="this.src='https://placehold.co/90x90/png?text=KeyBoard'"></div>
+    </div>
+    <div class="row" data-answer="hardware">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME2.png" alt="monitor" onerror="this.src='https://placehold.co/90x90/png?text=Monitor'"></div>
+    </div>
+    <div class="row" data-answer="software">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME3.png" alt="presentation" onerror="this.src='https://placehold.co/90x90/png?text=PPT'"></div>
+    </div>
+    <div class="row" data-answer="software">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME4.png" alt="word" onerror="this.src='https://placehold.co/90x90/png?text=Word'"></div>
+    </div>
+    <div class="row" data-answer="hardware">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME5.png" alt="CPU" onerror="this.src='https://placehold.co/90x90/png?text=CPU'"></div>
+    </div>
   </div>
 
-  <div class="row" data-answer="hardware">
-    <div class="track"></div>
-    <div class="card"><img src="GAME2.png" alt="monitor"></div>
+  <div class="set" data-set="2">
+    <div class="row" data-answer="software">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME6.png" alt="spreadsheet" onerror="this.src='https://placehold.co/90x90/png?text=Excel'"></div>
+    </div>
+    <div class="row" data-answer="software">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME7.png" alt="chrome" onerror="this.src='https://placehold.co/90x90/png?text=Chrome'"></div>
+    </div>
+    <div class="row" data-answer="hardware">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME8.png" alt="CPU" onerror="this.src='https://placehold.co/90x90/png?text=CPU'"></div>
+    </div>
+    <div class="row" data-answer="hardware">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME9.png" alt="mouse" onerror="this.src='https://placehold.co/90x90/png?text=Mouse'"></div>
+    </div>
+    <div class="row" data-answer="software">
+      <span class="result">✔</span>
+      <div class="track"></div>
+      <div class="card"><img src="GAME10.png" alt="Facebook" onerror="this.src='https://placehold.co/90x90/png?text=FB'"></div>
+    </div>
   </div>
-
-  <div class="row" data-answer="software">
-    <div class="track"></div>
-    <div class="card"><img src="GAME3.png" alt="presentation"></div>
-  </div>
-
-  <div class="row" data-answer="software">
-    <div class="track"></div>
-    <div class="card"><img src="GAME4.png" alt="word"></div>
-  </div>
-
-  <div class="row" data-answer="hardware">
-    <div class="track"></div>
-    <div class="card"><img src="GAME5.png" alt="CPU"></div>
-  </div>
-
 </div>
 
 <button id="check">Check Answers</button>
 <p id="score"></p>
+<button id="nextSet">Play Again (Next Set)</button>
 
 <script>
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playSound(type) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+
+    if (type === 'pop') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.1);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+        osc.start(now); osc.stop(now + 0.1);
+    } else if (type === 'success') {
+        // LIVELY SPARKLE (Correct Card)
+        const freqs = [523.25, 659.25, 783.99, 1046.50];
+        freqs.forEach((f, i) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            const start = now + (i * 0.05);
+            osc.frequency.setValueAtTime(f, start);
+            gain.gain.setValueAtTime(0.08, start);
+            gain.gain.exponentialRampToValueAtTime(0.01, start + 0.15);
+            osc.start(start); osc.stop(start + 0.15);
+        });
+    } else if (type === 'win') {
+        // GRAND FINALE
+        playNote(523.25, now, 0.15);
+        playNote(659.25, now + 0.15, 0.15);
+        playNote(783.99, now + 0.3, 0.5);
+    } else if (type === 'error') {
+        // WONK
+        const playWonk = (start, freq) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.type = 'square'; 
+            osc.frequency.setValueAtTime(freq, start);
+            osc.frequency.exponentialRampToValueAtTime(freq / 2.5, start + 0.25);
+            gain.gain.setValueAtTime(0.05, start);
+            gain.gain.exponentialRampToValueAtTime(0.01, start + 0.25);
+            osc.start(start); osc.stop(start + 0.25);
+        };
+        playWonk(now, 220); 
+        playWonk(now + 0.2, 180);
+    }
+}
+
+function playNote(freq, time, duration) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.1, time);
+    gain.gain.exponentialRampToValueAtTime(0.01, time + duration);
+    osc.start(time); osc.stop(time + duration);
+}
+
 const columns = ["software", "hardware"];
 let columnCenters = [];
-
 function calculateColumns() {
   const width = document.querySelector(".game").offsetWidth;
   columnCenters = [width * 0.25, width * 0.75];
 }
-
 calculateColumns();
 window.addEventListener("resize", calculateColumns);
 
-document.querySelectorAll(".card").forEach(card => {
+function attachCardListeners(card) {
   let dragging = false;
-  let startX = 0;
-  let startLeft = 0;
-  let activePointerId = null;
+  let startX = 0, startLeft = 0, activePointerId = null;
 
-  // 🔹 START
   card.addEventListener("pointerdown", e => {
-    e.preventDefault(); // 🔑 critical for mobile
-
+    e.preventDefault();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
     dragging = true;
     activePointerId = e.pointerId;
     startX = e.clientX;
     startLeft = card.offsetLeft;
-
     card.style.transition = "none";
     card.setPointerCapture(activePointerId);
+    card.style.zIndex = 100;
   });
 
-  // 🔹 MOVE (on the card, not document)
   card.addEventListener("pointermove", e => {
     if (!dragging || e.pointerId !== activePointerId) return;
-
-    e.preventDefault();
-
     const dx = e.clientX - startX;
     card.style.left = Math.max(0, startLeft + dx) + "px";
   });
 
-  // 🔹 END
   card.addEventListener("pointerup", e => {
     if (e.pointerId !== activePointerId) return;
-
-    dragging = false;
-    activePointerId = null;
-
+    dragging = false; activePointerId = null;
     card.releasePointerCapture(e.pointerId);
     card.style.transition = "left 0.25s ease";
-
+    card.style.zIndex = 2;
     const center = card.offsetLeft + card.offsetWidth / 2;
     const colIndex = center < columnCenters[1] ? 0 : 1;
-
-    card.style.left =
-      columnCenters[colIndex] - card.offsetWidth / 2 + "px";
+    card.style.left = columnCenters[colIndex] - card.offsetWidth / 2 + "px";
     card.dataset.choice = columns[colIndex];
+    playSound('pop');
   });
+}
 
-  // 🔹 CANCEL (finger lifted, app switch, etc.)
-  card.addEventListener("pointercancel", () => {
-    dragging = false;
-    activePointerId = null;
-  });
-});
+document.querySelectorAll(".card").forEach(attachCardListeners);
 
 document.getElementById("check").addEventListener("click", () => {
-  let score = 0;
-  const rows = document.querySelectorAll(".row");
+  const rows = document.querySelectorAll(".set.active .row");
+  let scoreValue = 0;
+  let hasMistake = false;
 
   rows.forEach(row => {
     const card = row.querySelector(".card");
+    const result = row.querySelector(".result");
+    row.classList.remove("correct-row", "wrong-row");
     card.classList.remove("correct", "wrong");
 
     if (card.dataset.choice === row.dataset.answer) {
-      score++;
+      scoreValue++;
       card.classList.add("correct");
+      row.classList.add("correct-row");
+      result.textContent = "✔";
     } else {
+      hasMistake = true;
       card.classList.add("wrong");
+      row.classList.add("wrong-row");
+      result.textContent = "✖";
     }
   });
 
-  document.getElementById("score").textContent =
-    `🎉 Score: ${score} / ${rows.length}`;
+  document.getElementById("score").textContent = `🎉 Score: ${scoreValue} / ${rows.length}`;
+
+  // Logic to trigger the new sounds
+  if (scoreValue === rows.length) {
+      playSound('win'); // Perfect!
+  } else if (scoreValue > 0) {
+      playSound('success'); // At least some correct, play sparkle
+  } else {
+      playSound('error'); // All wrong
+  }
+});
+
+let currentSet = 1;
+document.getElementById("nextSet").addEventListener("click", () => {
+  document.querySelector(`.set[data-set="${currentSet}"]`).classList.remove("active");
+  currentSet = currentSet === 1 ? 2 : 1;
+  const newSet = document.querySelector(`.set[data-set="${currentSet}"]`);
+  newSet.classList.add("active");
+  newSet.querySelectorAll(".row").forEach(row => {
+      row.classList.remove("correct-row", "wrong-row");
+      const card = row.querySelector(".card");
+      card.style.left = "0px";
+      card.classList.remove("correct", "wrong");
+      delete card.dataset.choice;
+  });
+  document.getElementById("score").textContent = "";
+  playSound('pop');
 });
 </script>
-
-
-
 </body>
 </html>
-
-
