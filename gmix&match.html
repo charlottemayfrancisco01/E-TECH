@@ -388,7 +388,6 @@ function initGame() {
     data.q.forEach(item => {
         const div = document.createElement('div');
         div.className = 'question';
-        // Add content and a span for the icon
         div.innerHTML = `<span>${item.t}</span><span class="status-icon"></span>`;
         div.onclick = () => {
             playSound('pop');
@@ -412,7 +411,6 @@ function initGame() {
             playSound('pop');
             connections.set(selectedQ, box.querySelector('.image-item'));
             
-            // Clear feedback if user changes connection
             selectedQ.style.borderColor = "#cdb4db";
             selectedQ.style.background = "white";
             const icon = selectedQ.querySelector('.status-icon');
@@ -434,9 +432,13 @@ function renderLines() {
     const canvas = document.getElementById('arrowCanvas');
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0,0,canvas.width,canvas.height);
-    ctx.setLineDash([5, 5]);
+    
+    // Solid line configuration
+    ctx.setLineDash([]); // Set to empty array for solid lines
     ctx.lineWidth = 4;
     ctx.strokeStyle = "#6a4fb2";
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
 
     connections.forEach((img, q) => {
         const r1 = q.getBoundingClientRect();
@@ -457,11 +459,9 @@ document.getElementById('submit-btn').onclick = () => {
         
         if (isCorrect) score++;
         
-        // UI Feedback
         q.style.borderColor = isCorrect ? "#1dd1a1" : "#ff6b6b";
         q.style.background = isCorrect ? "#e6fffa" : "#fff5f5";
         
-        // Show Check or X
         icon.textContent = isCorrect ? "✅" : "❌";
         icon.style.display = "inline-block";
     });
