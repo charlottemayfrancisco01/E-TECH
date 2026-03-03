@@ -51,8 +51,47 @@ body {
 .topLink:nth-child(1){ top:15px }
 .topLink:nth-child(2){ top:60px }
 
+/* instruction box */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.instruction-box {
+  background: #13294b;
+  width: 400px;
+  max-width: 90%;
+  padding: 30px;
+  border-radius: 20px;
+  border: 2px solid #1f6fff;
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(31, 111, 255, 0.4);
+}
+
+.instruction-box h2 {
+  color: #fbbf24;
+  margin-top: 0;
+}
+
+.instruction-box ul {
+  text-align: left;
+  line-height: 1.6;
+  margin: 20px 0;
+  padding-left: 20px;
+}
+
 /* game */
 .game-container {
+  display: none; /* Hidden until instructions are closed */
   background: #13294b;
   width: 420px;
   max-width: 95%;
@@ -61,6 +100,8 @@ body {
   color: #fff;
   text-align: center;
   margin: 70px auto 50px;
+  position: relative;
+  z-index: 1;
 }
 
 .images-container {
@@ -73,14 +114,14 @@ body {
   height:120px;
   object-fit:cover;
   border-radius:10px;
-  background: #000; /* Placeholder color if image missing */
+  background: #000;
 }
 
 .answer-container {
   display:flex;
   justify-content:center;
   margin:15px 0;
-  gap: 4px; /* Added gap for better spacing */
+  gap: 4px;
 }
 
 .answer-box {
@@ -91,7 +132,7 @@ body {
   font-size:20px;
   font-weight:bold;
   line-height:42px;
-  cursor: pointer; /* Show pointer on clickable boxes */
+  cursor: pointer;
   user-select: none;
 }
 
@@ -113,36 +154,42 @@ body {
   border-radius:8px;
   cursor: pointer;
   user-select: none;
-  box-shadow: 0 4px 0 #ccc; /* Added 3D effect */
+  box-shadow: 0 4px 0 #ccc;
 }
 
 .letter-tile:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 #ccc;
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 #ccc;
 }
 
 button {
   margin-top:12px;
-  padding:8px 20px;
+  padding:12px 25px;
   border:none;
-  border-radius:6px;
+  border-radius:8px;
   background:#1f6fff;
   color:#fff;
   font-size:16px;
+  font-weight: bold;
   cursor:pointer;
+  transition: transform 0.1s;
+}
+
+button:active {
+  transform: scale(0.95);
 }
 
 button:disabled {
-    background: #555;
-    cursor: not-allowed;
+  background: #555;
+  cursor: not-allowed;
 }
 
 .skip-btn {
-    background: #e74c3c;
-    margin-left: 10px;
+  background: #e74c3c;
+  margin-left: 10px;
 }
 .skip-btn:hover {
-    background: #c0392b;
+  background: #c0392b;
 }
 
 .end-screen {
@@ -150,6 +197,8 @@ button:disabled {
   text-align:center;
   color:white;
   margin-top:120px;
+  position: relative;
+  z-index: 1;
 }
 .end-buttons {
   margin-top:20px;
@@ -159,10 +208,10 @@ button:disabled {
 }
 
 .score-text {
-    font-size: 24px;
-    color: #fbbf24;
-    margin: 10px 0 20px;
-    font-weight: bold;
+  font-size: 24px;
+  color: #fbbf24;
+  margin: 10px 0 20px;
+  font-weight: bold;
 }
 </style>
 </head>
@@ -171,16 +220,29 @@ button:disabled {
 
 <div class="tech-bg"></div>
 
+<!-- Instructions Box -->
+<div id="instructionOverlay" class="overlay">
+  <div class="instruction-box">
+    <h2>Paano Maglaro?</h2>
+    <ul>
+      <li>May makikita kang <strong>apat na larawan</strong> na may iisang tema.</li>
+      <li>Gamitin ang mga letra sa ibaba para <strong>buuin ang salita</strong>.</li>
+      <li>May mga <strong>hint letters</strong> na nakalagay na para tulungan ka!</li>
+      <li>Maaari mong i-<strong>skip</strong> ang level kung nahihirapan, ngunit walang puntos na makukuha.</li>
+    </ul>
+    <button id="startActivityBtn">Magsimula Na!</button>
+  </div>
+</div>
+
 <!-- Top-left links -->
 <div class="side-links">
   <a href="activities.html" class="topLink">Activities</a>
-  <a href="story.html" class="topLink">story</a>
+  <a href="story.html" class="topLink">Story</a>
 </div>
 
 <!-- GAME -->
 <div class="game-container" id="gameContainer">
   <h1>4 Pics 1 Word</h1>
-  <p>Tingnan ang apat na larawan at buuin ang salita.</p>
 
   <div class="images-container">
     <img id="img1"><img id="img2"><img id="img3"><img id="img4">
@@ -198,20 +260,19 @@ button:disabled {
 
 <!-- END SET 1 -->
 <div id="set1End" class="end-screen">
-  <h1>🎉 SET 1 COMPLETE</h1>
+  <h1>Mahusay!</h1>
   <div id="scoreDisplay1" class="score-text">Score: 0/5</div>
   <div class="end-buttons">
-    <button id="playSet1Again">Play Set 1 Again</button>
-    <button id="startSet2">Start Set 2</button>
+    <button id="startSet2">Subukang maglaro ulit</button>
   </div>
 </div>
 
 <!-- END SET 2 -->
 <div id="set2End" class="end-screen">
-  <h1>🏆 SET 2 COMPLETE</h1>
+  <h1>Mahusay!</h1>
   <div id="scoreDisplay2" class="score-text">Score: 0/5</div>
   <div class="end-buttons">
-    <button id="playSet2Again">Play Set 2 Again</button>
+    <button id="playSet1Again">Subukang maglaro ulit</button>
   </div>
 </div>
 
@@ -233,60 +294,46 @@ function playSound(type) {
         const gainNode = audioCtx.createGain();
         osc.connect(gainNode);
         gainNode.connect(audioCtx.destination);
-
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(300, now);
         osc.frequency.exponentialRampToValueAtTime(50, now + 0.1);
-        
         gainNode.gain.setValueAtTime(0.15, now);
         gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
-
         osc.start(now);
         osc.stop(now + 0.1);
-
     } else if (type === 'success') {
-        // NEW LIVELY "SPARKLE" EFFECT for Correct Answers
-        const frequencies = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        const frequencies = [523.25, 659.25, 783.99, 1046.50];
         frequencies.forEach((f, i) => {
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
             osc.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-            
             osc.type = 'sine';
             const startTime = now + (i * 0.05);
             osc.frequency.setValueAtTime(f, startTime);
-            
             gainNode.gain.setValueAtTime(0.1, startTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.15);
-
             osc.start(startTime);
             osc.stop(startTime + 0.15);
         });
-
     } else if (type === 'win') {
-        playNote(523.25, now, 0.1); // C5
-        playNote(659.25, now + 0.1, 0.1); // E5
-        playNote(783.99, now + 0.2, 0.4); // G5
-
+        playNote(523.25, now, 0.1);
+        playNote(659.25, now + 0.1, 0.1);
+        playNote(783.99, now + 0.2, 0.4);
     } else if (type === 'error') {
         const playWonk = (startTime, freq) => {
             const osc = audioCtx.createOscillator();
             const gainNode = audioCtx.createGain();
             osc.connect(gainNode);
             gainNode.connect(audioCtx.destination);
-            
             osc.type = 'square'; 
             osc.frequency.setValueAtTime(freq, startTime);
             osc.frequency.exponentialRampToValueAtTime(freq / 2.5, startTime + 0.2);
-
             gainNode.gain.setValueAtTime(0.08, startTime);
             gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.2);
-
             osc.start(startTime);
             osc.stop(startTime + 0.2);
         };
-
         playWonk(now, 220); 
         playWonk(now + 0.2, 180);
     }
@@ -297,13 +344,10 @@ function playNote(freq, time, duration) {
     const gain = audioCtx.createGain();
     osc.connect(gain);
     gain.connect(audioCtx.destination);
-    
     osc.type = 'sine';
     osc.frequency.value = freq;
-    
     gain.gain.setValueAtTime(0.1, time);
     gain.gain.exponentialRampToValueAtTime(0.01, time + duration);
-    
     osc.start(time);
     osc.stop(time + duration);
 }
@@ -324,16 +368,16 @@ setInterval(createTechDot,500);
 
 /* puzzles */
 const puzzles=[
-{images:["611.jpg","612.jpg","613.jpg","614.jpg"],answer:"SPREADSHEET",revealed:[0,2,6,7]},
-{images:["621.jpg","622.jpg","623.jpg","624.jpg"],answer:"CELL",revealed:[0,2]},
-{images:["631.jpg","632.jpg","633.jpg","634.jpg"],answer:"FORMULA",revealed:[0,3,5]},
-{images:["641.jpg","642.jpg","643.jpg","644.jpg"],answer:"CHARTS",revealed:[0,3]},
-{images:["651.jpg","652.jpg","653.jpg","654.jpg"],answer:"DATA",revealed:[0,2]},
+  {images:["611.jpg","612.jpg","613.jpg","614.jpg"],answer:"SPREADSHEET",revealed:[0,2,6,7]},
+  {images:["621.jpg","622.jpg","623.jpg","624.jpg"],answer:"CELL",revealed:[0,2]},
+  {images:["631.jpg","632.jpg","633.jpg","634.jpg"],answer:"FORMULA",revealed:[0,3,5]},
+  {images:["641.jpg","642.jpg","643.jpg","644.jpg"],answer:"CHARTS",revealed:[0,3]},
+  {images:["651.jpg","652.jpg","653.jpg","654.jpg"],answer:"DATA",revealed:[0,2]},
   {images:["table1image.jpg","table2image.jpg","table3image.jpg","table4image.jpg"],answer:"TABLE",revealed:[0,3]},
-{images:["rows1image.jpg","rows2image.jpg","rows3image.jpg","rows4image.jpg"],answer:"ROWS",revealed:[0,2]},
-{images:["column1image.jpg","column2image.jpg","column3image.jpg","column4image.jpg"],answer:"COLUMN",revealed:[0,3,5]},
-{images:["list1image.jpg","list2image.jpg","list3image.jpg","list4image.jpg"],answer:"LIST",revealed:[0,2]},
-{images:["graph1image.jpg","graph2image.jpg","graph3image.jpg","graph4image.jpg"],answer:"GRAPH",revealed:[0,2]}
+  {images:["rows1image.jpg","rows2image.jpg","rows3image.jpg","rows4image.jpg"],answer:"ROWS",revealed:[0,2]},
+  {images:["column1image.jpg","column2image.jpg","column3image.jpg","column4image.jpg"],answer:"COLUMN",revealed:[0,3,5]},
+  {images:["list1image.jpg","list2image.jpg","list3image.jpg","list4image.jpg"],answer:"LIST",revealed:[0,2]},
+  {images:["graph1image.jpg","graph2image.jpg","graph3image.jpg","graph4image.jpg"],answer:"GRAPH",revealed:[0,2]}
 ];
 
 let current=0;
@@ -343,18 +387,19 @@ let puzzleCorrect = false;
 const SET1_END=5;
 
 const imgs=[img1,img2,img3,img4];
-const answerBox=answer;
-const lettersBox=letters;
+const answerBox=document.getElementById("answer");
+const lettersBox=document.getElementById("letters");
 const feedback=document.getElementById("feedback");
 const nextBtn=document.getElementById("nextBtn");
 const skipBtn=document.getElementById("skipBtn");
 const gameContainer = document.getElementById("gameContainer");
+const instructionOverlay = document.getElementById("instructionOverlay");
+const startActivityBtn = document.getElementById("startActivityBtn");
 const set1End = document.getElementById("set1End");
 const set2End = document.getElementById("set2End");
 const playSet1Again = document.getElementById("playSet1Again");
 const startSet2 = document.getElementById("startSet2");
 const playSet2Again = document.getElementById("playSet2Again");
-
 
 function shuffle(a){
   for(let i=a.length-1;i>0;i--){
@@ -372,86 +417,60 @@ function loadPuzzle(){
   userAnswer=[];
   puzzleCorrect = false;
   
-  // Re-enable interactions in case they were disabled by skip
   answerBox.style.pointerEvents = "auto";
   lettersBox.style.pointerEvents = "auto";
 
   const p=puzzles[current];
   imgs.forEach((img,i)=>img.src=p.images[i]);
-  // Fallback for broken images just in case
-  imgs.forEach(img => img.onerror = function() { this.style.display='none'; });
+  imgs.forEach(img => img.onerror = function() { this.style.backgroundColor='#1f3b73'; });
 
-
-  // 1. CREATE ANSWER BOXES
   p.answer.split("").forEach((letter, i) => {
     const box = document.createElement("div");
     box.className = "answer-box";
-
     if(p.revealed.includes(i)){
         box.textContent = letter;
         userAnswer[i] = letter;
-        box.style.backgroundColor = "#1f3b73"; // Visually distinguish pre-filled
+        box.style.backgroundColor = "#1f3b73";
     } else {
         userAnswer[i] = "";
     }
-
-    // CLICK ANSWER BOX TO RETURN LETTER
     box.onclick = () => {
-        if(p.revealed.includes(i)) return; // Locked hints
-        
-        playSound('pop'); // Play sound on return
-
-        // This is the part that was broken before:
+        if(p.revealed.includes(i)) return;
+        playSound('pop');
         const tileIndex = box.dataset.tile; 
-        
         if(tileIndex !== undefined) {
-            // Make the letter visible again in the bottom pool
             if(lettersBox.children[tileIndex]) {
                 lettersBox.children[tileIndex].style.visibility = "visible";
             }
         }
-        
         box.textContent = "";
         userAnswer[i] = "";
-        delete box.dataset.tile; // Clear the data
-        feedback.textContent = ""; // Clear success/fail message
+        delete box.dataset.tile;
+        feedback.textContent = "";
         nextBtn.disabled = true;
-        skipBtn.disabled = false; // Can still skip if not correct
+        skipBtn.disabled = false;
     };
-
     answerBox.appendChild(box);
   });
 
-  // 2. PREPARE LETTERS POOL
   let letterPool = p.answer.split("");
-  // Fill with random letters until we have enough (answer length + 4 randoms)
   while(letterPool.length < p.answer.length + 4){
     letterPool.push(String.fromCharCode(65+Math.random()*26));
   }
   shuffle(letterPool);
 
-  // 3. CREATE LETTER TILES
-  // We add 'index' here to track which tile is which
   letterPool.forEach((l, index) => {
     const t = document.createElement("div");
     t.className = "letter-tile";
     t.textContent = l;
-    
     t.onclick = () => {
-      playSound('pop'); // Play sound on select
-      
-      const i = userAnswer.indexOf(""); // Find first empty slot
-      if(i === -1) return; // No space left
-
+      playSound('pop');
+      const i = userAnswer.indexOf(""); 
+      if(i === -1) return;
       userAnswer[i] = l;
       answerBox.children[i].textContent = l;
-      
-      // CRITICAL FIX: Save the index of this tile into the answer box
-      // so we know which one to show again if the user cancels.
       answerBox.children[i].dataset.tile = index;
-      
       t.style.visibility = "hidden";
-      
       if(!userAnswer.includes("")) checkAnswer();
     };
     lettersBox.appendChild(t);
@@ -460,16 +479,16 @@ function loadPuzzle(){
 
 function checkAnswer(){
   if(userAnswer.join("") === puzzles[current].answer){
-    playSound('success'); // Play success sound
+    playSound('success');
     feedback.textContent = "Correct!";
-    feedback.style.color = "#4ade80"; // brighter green
+    feedback.style.color = "#4ade80";
     nextBtn.disabled = false;
-    skipBtn.disabled = true; // Cannot skip if you already won
+    skipBtn.disabled = true;
     puzzleCorrect = true;
   } else {
-    playSound('error'); // Play error sound
+    playSound('error');
     feedback.textContent = "Wrong!";
-    feedback.style.color = "#ef4444"; // brighter red
+    feedback.style.color = "#ef4444";
     nextBtn.disabled = true;
     skipBtn.disabled = false;
     puzzleCorrect = false;
@@ -477,12 +496,10 @@ function checkAnswer(){
 }
 
 skipBtn.onclick = () => {
-    playSound('error'); // Play fail/reveal sound
+    playSound('error');
     const p = puzzles[current];
     feedback.textContent = "Skipped! The answer was " + p.answer;
     feedback.style.color = "#e74c3c";
-    
-    // Fill the boxes visually so they see the answer
     answerBox.innerHTML = '';
     p.answer.split("").forEach(l => {
         const box = document.createElement("div");
@@ -492,69 +509,62 @@ skipBtn.onclick = () => {
         box.style.borderColor = "#e74c3c";
         answerBox.appendChild(box);
     });
-    
-    // Disable interaction so they don't mess up the skipped state
     answerBox.style.pointerEvents = "none";
     lettersBox.style.pointerEvents = "none";
-
-    puzzleCorrect = false; // No points for skipping
+    puzzleCorrect = false;
     nextBtn.disabled = false;
     skipBtn.disabled = true;
 };
 
 nextBtn.onclick=()=>{
-  if(puzzleCorrect) {
-      score++;
-  }
-
+  if(puzzleCorrect) score++;
   current++;
-
   if(current===SET1_END){
-    playSound('win'); // Play set win sound
+    playSound('win');
     gameContainer.style.display="none";
     set1End.style.display="block";
     document.getElementById("scoreDisplay1").textContent = "Score: " + score + " / 5";
     return;
   }
-
   if(current===puzzles.length){
-    playSound('win'); // Play set win sound
+    playSound('win');
     gameContainer.style.display="none";
     set2End.style.display="block";
     document.getElementById("scoreDisplay2").textContent = "Score: " + score + " / 5";
     return;
   }
-
   loadPuzzle();
 };
 
-/* PLAY AGAIN */
+/* Start Activity Interaction */
+startActivityBtn.onclick = () => {
+  playSound('pop');
+  instructionOverlay.style.display = "none";
+  gameContainer.style.display = "block";
+  loadPuzzle();
+};
+
 playSet1Again.onclick=()=>{
-  current=0;
-  score=0; // Reset score
+  current=0; score=0;
   set1End.style.display="none";
   gameContainer.style.display="block";
   loadPuzzle();
 };
 
 startSet2.onclick=()=>{
-  score=0; // Reset score for new set
+  score=0;
   set1End.style.display="none";
   gameContainer.style.display="block";
-  // current is already at SET1_END (5), so just load
   loadPuzzle();
 };
 
 playSet2Again.onclick=()=>{
-  current=SET1_END;
-  score=0; // Reset score
+  current=SET1_END; score=0;
   set2End.style.display="none";
   gameContainer.style.display="block";
   loadPuzzle();
 };
 
-loadPuzzle();
 </script>
-
 </body>
 </html>
