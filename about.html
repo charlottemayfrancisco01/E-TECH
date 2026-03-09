@@ -95,10 +95,13 @@ body {
 }
 
 .hero-placeholder h2 {
-  font-size: 100px;
+  font-size: clamp(32px, 8vw, 100px); /* responsive text */
   color: #ffffff;
   font-weight: 800;
+  text-align: center;
+  line-height: 1.1;
 }
+
 
 .hero-placeholder img {
   max-width: 450px;
