@@ -162,7 +162,14 @@
   transform: translateY(-4px) scale(1.05);
   box-shadow: 0 18px 40px rgba(168, 85, 247, 0.45);
 }
-
+.card {
+  background: #ffffff;
+  border-radius: var(--radius);
+  padding: 32px;
+  box-shadow: var(--card-shadow);
+  position: relative;
+  overflow: hidden;
+}
 
     /* FOOTER */
     footer {
@@ -172,16 +179,100 @@
       font-size: 16px;
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .features {
-        grid-template-columns: 1fr;
-      }
+		/* =========================
+	   TABLET
+	========================= */
 
-      .hero h1 {
-        font-size: 40px;
-      }
-    }
+	@media (max-width: 1024px){
+
+	.story-layout{
+	flex-direction:column;
+	align-items:center;
+	text-align:center;
+	}
+
+	.story-image{
+	max-width:400px;
+	margin-bottom:30px;
+	}
+
+	}
+
+
+	/* =========================
+	   MOBILE
+	========================= */
+
+	@media (max-width: 768px){
+
+	.navbar{
+	flex-direction:column;
+	gap:15px;
+	}
+
+	.nav-links{
+	flex-wrap:wrap;
+	justify-content:center;
+	gap:15px;
+	}
+
+	.hero{
+	padding:60px 20px;
+	}
+
+	.hero h1{
+	font-size:32px;
+	}
+
+	.hero p{
+	font-size:16px;
+	}
+
+	.story-item{
+	font-size:14px;
+	padding:15px 18px;
+	}
+
+	.story-viewer{
+	width:100%;
+	height:90vh;
+	border-radius:0;
+	}
+
+	.nav-btn{
+	padding:12px 10px;
+	font-size:20px;
+	}
+
+	.sign-language-overlay{
+	width:140px;
+	bottom:15px;
+	right:15px;
+	}
+
+	}
+
+
+	/* =========================
+	   VERY SMALL PHONES
+	========================= */
+
+	@media (max-width: 480px){
+
+	.hero h1{
+	font-size:26px;
+	}
+
+	.hero p{
+	font-size:15px;
+	}
+
+	.activity-btn{
+	font-size:15px;
+	padding:12px 25px;
+	}
+
+	}
   </style>
 </head>
 
@@ -247,12 +338,11 @@
 
   <!-- FOOTER -->
   <footer>
-    Made with ❤️ for curious kids everywhere
+ Learning made fun, one story at a time
   </footer>
 
 </body>
 </html>
-
 
 
 
