@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Content</title>
+  <title>Ang Pagtuklas ni Pepe at Pilar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <!-- Confetti Script -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
       --purple: #c084fc;
@@ -18,16 +20,13 @@
       --radius: 18px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: "Inter", sans-serif;
       color: var(--text-dark);
       background: #ffffff;
+      overflow-x: hidden;
     }
 
     /* NAVBAR */
@@ -40,256 +39,160 @@
       justify-content: space-between;
     }
 
-    .logo {
-      max-width: 150px;
-      width: 100%;
-      height: auto;
+    .logo { max-width: 150px; width: 100%; height: auto; }
+
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      text-decoration: none;
+      color: #111827;
+      font-weight: 500;
+      transition: 0.3s;
     }
-
-	.nav-links {
-	  display: flex;
-	  gap: 30px;
-	}
-
-	.nav-links a {
-	  text-decoration: none;
-	  color: #111827;
-	  font-weight: 500;
-	  transition: 0.3s;
-	}
-
-	.nav-links a:hover {
-	  color: var(--purple-mid);
-	}
-
-
+    .nav-links a:hover { color: var(--purple-dark); }
 
     /* HERO */
-/* HERO SECTION WITH BACKGROUND IMAGE */
-	.hero {
-	  text-align: center;
-	  padding: 100px 20px; /* Increased padding for better visibility */
-	  
-	  /* Replace 'your-photo.jpg' with your actual image file name */
-	  background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('dilaw.jpg');
-	  
-	  background-size: cover;
-	  background-position: center;
-	  background-attachment: fixed; /* Optional: creates a parallax scrolling effect */
-	  
-	  position: relative;
-	}
-
-	.hero h1 {
-	  font-size: 48px; /* Slightly larger for impact */
-	  font-weight: 800;
-	  margin-bottom: 16px;
-	  color: #111827;
-	  text-shadow: 0 2px 4px rgba(255,255,255,0.5); /* Helps text pop */
-	}
-
-	.hero p {
-	  font-size: 22px;
-	  color: #374151;
-	  max-width: 800px;
-	  margin: 0 auto;
-	  line-height: 1.6;
-}
-
-    /* FEATURE SECTION */
-    /* --- ENHANCED BACKGROUND ELEMENTS --- */
-.features-section {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #e8f6ff 0%, #fdfaff 100%);
-  z-index: 1;
-}
-
-/* Floating Bubbles */
-.bubble {
-  position: absolute;
-  bottom: -100px;
-  background: rgba(192, 132, 252, 0.2);
-  border-radius: 50%;
-  opacity: 0.5;
-  animation: floatUp 10s infinite ease-in;
-  pointer-events: none;
-  z-index: -1;
-}
-
-@keyframes floatUp {
-  0% { transform: translateY(0) translateX(0); opacity: 0; }
-  20% { opacity: 0.4; }
-  80% { opacity: 0.2; }
-  100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
-}
-
-/* Subtle Twinkling Stars */
-.star {
-  position: absolute;
-  background: var(--purple);
-  border-radius: 50%;
-  opacity: 0;
-  animation: twinkleStar 3s infinite ease-in-out;
-  pointer-events: none;
-  z-index: -1;
-}
-
-@keyframes twinkleStar {
-  0%, 100% { transform: scale(0.5); opacity: 0; }
-  50% { transform: scale(1.2); opacity: 0.7; shadow: 0 0 10px var(--purple); }
-}
-
-    .card {
-      background: #ffffff;
-      border-radius: var(--radius);
-      padding: 32px;
-      box-shadow: var(--card-shadow);
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-12px) scale(1.03);
-      box-shadow: 0 20px 40px rgba(168, 85, 247, 0.25);
-    }
-
-    .cta-button {
-      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-      color: #ffffff;
-      border: none;
-      padding: 18px 42px;
-      font-size: 18px;
-      font-weight: 600;
-      border-radius: 999px;
-      cursor: pointer;
-      box-shadow: 0 12px 30px rgba(168, 85, 247, 0.35);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .cta-button:hover {
-      transform: translateY(-4px) scale(1.05);
-      box-shadow: 0 18px 40px rgba(168, 85, 247, 0.45);
-    }
-
-    .slide-button {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      padding: 10px 16px;
-      background: linear-gradient(135deg, var(--purple), var(--purple-dark));
-      color: #fff;
-      font-weight: 600;
-      font-size: 14px;
-      border-radius: 8px;
-      text-decoration: none;
-      box-shadow: 0 6px 18px rgba(168, 85, 247, 0.35);
-      z-index: 50;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .slide-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 25px rgba(168, 85, 247, 0.45);
-    }
-
-    footer {
-      background: var(--footer-bg);
+    .hero {
       text-align: center;
-      padding: 32px 16px;
-      font-size: 16px;
+      padding: 100px 20px;
+      background-color: #f3e8ff;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), url('dilaw.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      position: relative;
     }
 
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: #111827;
+    }
+
+    .hero p {
+      font-size: 20px;
+      color: #374151;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* FEATURES & BACKGROUND */
+    .features-section {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #e8f6ff 0%, #fdfaff 100%);
+      z-index: 1;
+      padding: 60px 0;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -100px;
+      background: rgba(192, 132, 252, 0.2);
+      border-radius: 50%;
+      animation: floatUp 10s infinite ease-in;
+      z-index: -1;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      20% { opacity: 0.4; }
+      100% { transform: translateY(-120vh) translateX(50px); opacity: 0; }
+    }
+
+    .star {
+      position: absolute;
+      background: var(--purple);
+      border-radius: 50%;
+      animation: twinkleStar 3s infinite ease-in-out;
+      z-index: -1;
+    }
+
+    @keyframes twinkleStar {
+      0%, 100% { transform: scale(0.5); opacity: 0.2; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+
+    /* STORY LAYOUT */
     .story-layout {
       max-width: 1100px;
-      margin: 40px auto 0;
+      margin: 0 auto;
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       gap: 60px;
+      padding: 0 20px;
     }
 
-    .story-list {
-      max-width: 400px;
-    }
+    .story-list { width: 100%; max-width: 450px; }
 
-/* --- ENHANCED STORY ITEM HOVER EFFECTS --- */
     .story-item {
       background: #fff;
-      padding: 16px 20px;
-      margin-bottom: 12px;
+      padding: 18px 24px;
+      margin-bottom: 15px;
       cursor: pointer;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
-      overflow: hidden; 
       border: 1px solid transparent;
+      opacity: 0;
+      animation: fadeInRight 0.5s ease forwards;
     }
 
-    /* Card slightly lifts & Background glows */
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(30px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
     .story-item:hover {
-	transform: translateY(-8px) translateX(0) !important; 
-  box-shadow: 0 15px 30px rgba(168, 85, 247, 0.3); 
-  border-color: var(--purple);
-  background: #faf5ff;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-    /* Small animation appears (Shimmer effect) */
-    .story-item::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 50%; height: 100%;
-      background: linear-gradient(to right, transparent, rgba(192, 132, 252, 0.15), transparent);
-      transition: left 0.6s ease;
-    }
-    
-    .story-item:hover::before {
-      left: 100%;
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(168, 85, 247, 0.2);
+      border-color: var(--purple);
+      background: #faf5ff;
     }
 
-    /* Icon setup (hidden by default) */
-	.chapter-icon {
-	  opacity: 0; 
-	  transform: translateY(0);
-	  transition: opacity 0.3s ease;
-	  font-size: 20px;
-	  filter: drop-shadow(0 0 5px rgba(192, 132, 252, 0.5)); /* Adds a little glow to the star */
-	}
+    .chapter-icon {
+      opacity: 0;
+      transition: 0.3s;
+      font-size: 20px;
+    }
 
-
-    /* Icon appears and bounces on hover */
     .story-item:hover .chapter-icon {
       opacity: 1;
-      animation: bounceIcon 0.6s ease-in-out infinite alternate;
+      animation: bounceIcon 0.6s infinite alternate;
     }
 
     @keyframes bounceIcon {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-6px); }
+      from { transform: translateY(0); }
+      to { transform: translateY(-5px); }
     }
 
     .story-image {
       max-width: 500px;
-      flex-shrink: 0;
+      width: 100%;
+      animation: floatImg 4s ease-in-out infinite;
+    }
+
+    @keyframes floatImg {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
     }
 
     .story-image img {
       width: 100%;
-      height: auto;
-      border-radius: 16px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
     }
 
-    /* OVERLAY & VIEWER */
+    /* VIEWER MODAL */
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.9);
       display: none;
       justify-content: center;
       align-items: center;
@@ -298,189 +201,242 @@
 
     .story-viewer {
       background: #fff;
-      width: 90%;
+      width: 95%;
       max-width: 1000px;
-      height: 80%;
-      border-radius: 12px;
-      display: flex;
+      height: 85vh;
+      border-radius: 20px;
       position: relative;
       overflow: hidden;
+      display: flex;
     }
 
     .close-btn {
       position: absolute;
-      top: 15px;
-      right: 15px;
-      width: 36px;
-      height: 36px;
-      background: rgba(0,0,0,0.7);
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      background: #000;
       color: #fff;
       border-radius: 50%;
-      font-size: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      z-index: 50;
+      z-index: 1100;
     }
 
     .slides-container {
-      flex: 2;
-      position: relative;
-      background: #000;
+      flex: 1;
+      background: #111;
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 100%;
     }
 
     .slide {
       display: none;
+      width: 100%;
+      height: 100%;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      height: 100%;
-      color: #fff;
     }
 
-    .slide.active {
-      display: flex;
-    }
+    .slide.active { display: flex; }
 
     .slide img {
       max-width: 90%;
-      max-height: 80%;
-      border-radius: 8px;
+      max-height: 75%;
       object-fit: contain;
+      border-radius: 10px;
     }
 
     .nav-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 30px;
+      background: rgba(255,255,255,0.2);
       color: #fff;
-      background: rgba(0,0,0,0.5);
       border: none;
-      padding: 10px 15px;
+      padding: 20px 15px;
+      font-size: 24px;
       cursor: pointer;
-      z-index: 10;
+      border-radius: 5px;
+      z-index: 100;
     }
+
     .prev { left: 10px; }
     .next { right: 10px; }
 
     .sign-language-overlay {
       position: absolute;
-      bottom: 20px;
-      right: 20px;
-      width: 190px;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 10px;
-      padding: 6px;
-      z-index: 999;
+      bottom: 30px;
+      right: 30px;
+      width: 220px;
+      background: #fff;
+      padding: 8px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 1000;
     }
 
-    .sign-language-overlay video {
-      width: 100%;
-      border-radius: 8px;
-    }
+    .sign-language-overlay video { width: 100%; border-radius: 10px; }
 
-    .subtitle {
+    .progress-container {
       position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.7);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 6px;
-      pointer-events: none;
+      top: 0; left: 0; width: 100%; height: 8px;
+      background: rgba(0,0,0,0.1);
     }
 
-    @media (max-width: 900px) {
-      .story-layout {
-        flex-direction: column-reverse;
-        align-items: center;
-      }
-      .hero h1 { font-size: 32px; }
+    .progress-bar {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--purple), var(--purple-dark));
+      transition: width 0.3s ease;
     }
-	
-	/* PROGRESS BAR */
 
-	.progress-container{
-	  position:absolute;
-	  top:0;
-	  left:0;
-	  width:100%;
-	  height:6px;
-	  background:rgba(255,255,255,0.2);
-	  z-index:1000;
-	}
+    .activity-btn {
+      margin-top: 20px;
+      padding: 15px 40px;
+      background: #22c55e;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(34, 197, 94, 0.3);
+      transition: 0.3s;
+    }
 
-	.progress-bar{
-	  height:100%;
-	  width:0%;
-	  background:linear-gradient(90deg,#c084fc,#a855f7);
-	  transition:width 0.4s ease;
-	}
+    .activity-btn:hover {
+      transform: scale(1.05);
+      background: #16a34a;
+    }
 
-	.reward-modal {
-	  position: fixed; inset: 0; background: rgba(0,0,0,0.8);
-	  display: flex; justify-content: center; align-items: center; z-index: 2000;
-	}
-	.reward-content {
-	  background: white; padding: 40px; border-radius: 20px;
-	  text-align: center; max-width: 300px;
-	  animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-	}
-	@keyframes popIn {
-	  0% { transform: scale(0.5); opacity: 0; }
-	  100% { transform: scale(1); opacity: 1; }
-	}
-	.badge-icon { font-size: 60px; margin: 20px 0; }
-	.close-reward-btn {
-	  background: var(--purple); color: white; border: none;
-	  padding: 10px 25px; border-radius: 50px; cursor: pointer; font-weight: 600;
-	}
+    /* REWARD MODAL */
+    .reward-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      display: none; justify-content: center; align-items: center; z-index: 2000;
+    }
 
-	/* Floating Effect for the image */
-	.story-image {
-	  animation: float 4s ease-in-out infinite;
-	}
+    .reward-content {
+      background: #fff; padding: 40px; border-radius: 30px;
+      text-align: center; max-width: 400px;
+      animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
 
-	@keyframes float {
-	  0% { transform: translateY(0px); }
-	  50% { transform: translateY(-20px); }
-	  100% { transform: translateY(0px); }
-	}
+    @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-	/* Staggered entrance for story items */
-	.story-item {
-	  opacity: 0;
-	  animation: fadeInRight 0.5s ease forwards;
-	}
+    .badge { font-size: 80px; margin: 20px 0; display: block; }
 
-	/* Stagger the delay for each item */
-	.story-item:nth-child(1) { animation-delay: 0.1s; }
-	.story-item:nth-child(2) { animation-delay: 0.2s; }
-	.story-item:nth-child(3) { animation-delay: 0.3s; }
-	.story-item:nth-child(4) { animation-delay: 0.4s; }
-	.story-item:nth-child(5) { animation-delay: 0.5s; }
-	.story-item:nth-child(6) { animation-delay: 0.6s; }
+    footer {
+      background: var(--footer-bg);
+      text-align: center;
+      padding: 40px 20px;
+      font-weight: 600;
+    }
+		
+		/* =========================
+	   TABLET
+	========================= */
 
-	@keyframes fadeInRight {
-	  from { opacity: 0; transform: translateX(30px); }
-	  to { opacity: 1; transform: translateX(0); }
+	@media (max-width: 1024px){
+
+	.story-layout{
+	flex-direction:column;
+	align-items:center;
+	text-align:center;
 	}
 
+	.story-image{
+	max-width:400px;
+	margin-bottom:30px;
+	}
+
+	}
+
+
+	/* =========================
+	   MOBILE
+	========================= */
+
+	@media (max-width: 768px){
+
+	.navbar{
+	flex-direction:column;
+	gap:15px;
+	}
+
+	.nav-links{
+	flex-wrap:wrap;
+	justify-content:center;
+	gap:15px;
+	}
+
+	.hero{
+	padding:60px 20px;
+	}
+
+	.hero h1{
+	font-size:32px;
+	}
+
+	.hero p{
+	font-size:16px;
+	}
+
+	.story-item{
+	font-size:14px;
+	padding:15px 18px;
+	}
+
+	.story-viewer{
+	width:100%;
+	height:90vh;
+	border-radius:0;
+	}
+
+	.nav-btn{
+	padding:12px 10px;
+	font-size:20px;
+	}
+
+	.sign-language-overlay{
+	width:140px;
+	bottom:15px;
+	right:15px;
+	}
+
+	}
+
+
+	/* =========================
+	   VERY SMALL PHONES
+	========================= */
+
+	@media (max-width: 480px){
+
+	.hero h1{
+	font-size:26px;
+	}
+
+	.hero p{
+	font-size:15px;
+	}
+
+	.activity-btn{
+	font-size:15px;
+	padding:12px 25px;
+	}
+
+	}
   </style>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <body>
 
   <header class="navbar">
-    <img src="lougo.jpg" alt="e-tech logo" class="logo">
+    <img src="lougo.jpg" alt="Logo" class="logo" onerror="this.src='https://via.placeholder.com/150x50?text=E-TECH'">
     <nav class="nav-links">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
@@ -488,391 +444,343 @@
       <a href="activities.html">Activities</a>
     </nav>
   </header>
-  
- 
 
   <section class="hero">
     <h1>Ang Pagtuklas ni Pepe at Pilar sa Mundo ng Teknolohiya</h1>
-	<p>Tuklasin ang saya ng pag-aaral kasama sina Pepe at Pilar! Samahan ang magka-klase sa isang makulay na kuwento ng paghahanap ng sagot, pagkatuto, at paglago sa mundo ng teknolohiya.</p>
-	
+    <p>Samahan sina Pepe at Pilar sa kanilang makulay na misyon sa mundo ng Teknolohiya, kung saan ang bawat karanasan ay nagiging isang kwento ng pagkatuto!</p>
   </section>
 
-  <section class="features-section">
+  <section class="features-section" id="particles-js">
     <div class="story-layout">
-     <div class="story-list">
-  <div class="story-item" onclick="openStory('1')">
-    <span><strong>KABANATA 1:</strong> Introduction to Computer</span>
-    <span class="chapter-icon">⭐</span>
-  </div>
-  <div class="story-item" onclick="openStory('2')">
-    <span><strong>KABANATA 2:</strong> Digital Citizenship</span>
-    <span class="chapter-icon">⭐</span>
-  </div>
-  <div class="story-item" onclick="openStory('3')">
-    <span><strong>KABANATA 3:</strong> Word Processing Software</span>
-    <span class="chapter-icon">⭐</span>
-  </div>
-  <div class="story-item" onclick="openStory('4')">
-    <span><strong>KABANATA 4:</strong> Presentation Software</span>
-    <span class="chapter-icon">⭐</span>
-  </div>
-  <div class="story-item" onclick="openStory('5')">
-    <span><strong>KABANATA 5:</strong> Desktop Publishing Software</span>
-    <span class="chapter-icon">⭐</span>
-  </div>
-  <div class="story-item" onclick="openStory('6')">
-    <span><strong>KABANATA 6:</strong> Spreadsheet Software</span>
-    <span class="chapter-icon">⭐</span>
-  </div>
-</div>
+      <div class="story-list">
+        <!-- Chapters -->
+        <div class="story-item" onclick="openStory(1)" style="animation-delay: 0.1s">
+          <span><strong>KABANATA 1:</strong> Introduction to Computer</span>
+          <span class="chapter-icon">⭐</span>
+        </div>
+        <div class="story-item" onclick="openStory(2)" style="animation-delay: 0.2s">
+          <span><strong>KABANATA 2:</strong> Digital Citizenship</span>
+          <span class="chapter-icon">⭐</span>
+        </div>
+        <div class="story-item" onclick="openStory(3)" style="animation-delay: 0.3s">
+          <span><strong>KABANATA 3:</strong> Word Processing Software</span>
+          <span class="chapter-icon">⭐</span>
+        </div>
+        <div class="story-item" onclick="openStory(4)" style="animation-delay: 0.4s">
+          <span><strong>KABANATA 4:</strong> Presentation Software</span>
+          <span class="chapter-icon">⭐</span>
+        </div>
+        <div class="story-item" onclick="openStory(5)" style="animation-delay: 0.5s">
+          <span><strong>KABANATA 5:</strong> Desktop Publishing Software</span>
+          <span class="chapter-icon">⭐</span>
+        </div>
+        <div class="story-item" onclick="openStory(6)" style="animation-delay: 0.6s">
+          <span><strong>KABANATA 6:</strong> Spreadsheet Software</span>
+          <span class="chapter-icon">⭐</span>
+        </div>
+      </div>
 
- <div class="story-image">
-        <img src="pepenpilar.jpg" alt="Pepe and Pilar" />
+      <div class="story-image">
+        <img src="pepenpilar.jpg" alt="Pepe and Pilar" onerror="this.src='https://via.placeholder.com/500x400?text=Pepe+at+Pilar'">
       </div>
     </div>
 
-   <div class="overlay" id="overlay">
+    <!-- Viewer -->
+    <div class="overlay" id="overlay">
       <div class="story-viewer">
         <div class="close-btn" onclick="closeStory()">✕</div>
-
+        <div class="progress-container"><div class="progress-bar" id="progressBar"></div></div>
+        
         <button class="nav-btn prev" onclick="changeSlide(-1)">❮</button>
         <button class="nav-btn next" onclick="changeSlide(1)">❯</button>
 
-        <div class="slides-container" id="slides">
-          </div>
+        <div class="slides-container" id="slides"></div>
 
-        <div class="sign-language-overlay">
-          <video id="signVideo" playsinline></video>
-        </div>
-
-        <div class="progress-container">
-          <div class="progress-bar" id="progressBar"></div>
+        <div class="sign-language-overlay" id="signContainer" style="display:none;">
+          <video id="signVideo" playsinline muted></video>
         </div>
       </div>
     </div>
   </section>
-  
-  <div id="rewardModal" class="reward-modal" style="display:none;">
-  <div class="reward-content">
-    <h2>Mahusay! Natapos mo ang Kabanata</h2>
-    <div class="badge-icon">🏅</div>
-    <p>Mayroon kang <strong>10 STARS </strong> para sa bagong kaalaman</p>
-    <button class="close-reward-btn" onclick="closeReward()">Isara</button>
+
+  <div id="rewardModal" class="reward-modal">
+    <div class="reward-content">
+      <h2>Mahusay!</h2>
+      <span class="badge">🏅</span>
+      <p>Natapos mo ang kabanata at nakakuha ng 10 Stars!</p>
+      <button class="activity-btn" id="modalActivityBtn">Maglaro! Subukin ang iyong kaalaman!</button>
+      <br>
+      <button onclick="closeReward()" style="background:none; border:none; margin-top:15px; cursor:pointer; color:#666;">Close</button>
+    </div>
   </div>
-</div>
 
+  <footer>Learning made fun, one story at a time</footer>
 
-  <footer>
-    Learning made fun, one story at a time
-  </footer>
+<script>
+const stories = {
+  1: {
+    slides: [
+      { type:'image', src:'KABANATA1.jpg' },
+      { type:'image', src:'1.1.png', sign:'SL1.1.mp4' },
+      { type:'image', src:'1.2.png', sign:'SL1.2.mp4' },
+      { type:'image', src:'1.3.png', sign:'SL1.3.mp4' },
+      { type:'image', src:'1.4.png', sign:'SL1.4.mp4' },
+      { type:'image', src:'1.5.png', sign:'SL1.5.mp4' },
+      { type:'image', src:'1.6.png', sign:'SL1.6.mp4' },
+      { type:'image', src:'1.7.png', sign:'SL1.7.mp4' },
+      { type:'image', src:'1.8.png', sign:'SL1.8.mp4' },
+      { type:'image', src:'1.9.png', sign:'SL1.9.mp4' },
+      { type:'image', src:'1.10.png', sign:'SL1.10.mp4' },
+      { type:'image', src:'1.11.png', sign:'SL1.11.mp4' },
+      { type:'image', src:'1.12.png', sign:'SL1.12.mp4' },
+      { type:'image', src:'1.13.png', sign:'SL1.13.mp4' },
+      { type:'image', src:'1.14.png', sign:'SL1.14.mp4' },
+      { type:'image', src:'1.15.png', sign:'SL1.15.mp4' },
+      { type:'image', src:'1.16.png', sign:'SL1.16.mp4' },
+      { type:'image', src:'1.17.png', sign:'SL1.17.mp4' },
+      { type:'image', src:'1.18.png', sign:'SL1.18.mp4' },
+      { type:'image', src:'1.19.png', sign:'SL1.19.mp4' },
+      { type:'image', src:'1.20.png', sign:'SL1.20.mp4' },
+      { type:'image', src:'1.21.png', sign:'SL1.21.mp4' },
+      { type:'image', src:'1.22.png', sign:'SL1.22.mp4' },
+      { type:'image', src:'1.23.png', sign:'SL1.23.mp4' },
+      { type:'image', src:'1.24.png', sign:'SL1.24.mp4' },
+      { type:'image', src:'1.25.png', sign:'SL1.25.mp4' },
+      { type:'image', src:'1.26.png', sign:'SL1.26.mp4' },
+      { type:'image', src:'1.27.png', sign:'SL1.27.mp4' },
+      { type:'image', src:'credits.png' }
+    ],
+    activity: 'gclick&sort.html'
+  },
 
-  <script>
-    const stories = {
-      1: [
-        { type: 'image', src: 'KABANATA1.jpg' },
-        { type: 'image', src: '1.1.png', sign: 'SL1.1.mp4' },
-        { type: 'image', src: '1.2.png', sign: 'SL1.2.mp4' },
-        { type: 'image', src: '1.3.png', sign: 'SL1.3.mp4' },
-        { type: 'image', src: '1.4.png', sign: 'SL1.4.mp4' },
-        { type: 'image', src: '1.5.png', sign: 'SL1.5.mp4' },
-        { type: 'image', src: '1.6.png', sign: 'SL1.6.mp4' },
-        { type: 'image', src: '1.7.png', sign: 'SL1.7.mp4' },
-        { type: 'image', src: '1.8.png', sign: 'SL1.8.mp4' },
-        { type: 'image', src: '1.9.png', sign: 'SL1.9.mp4' },
-        { type: 'image', src: '1.10.png', sign: 'SL1.10.mp4' },
-        { type: 'image', src: '1.11.png', sign: 'SL1.11.mp4' },
-        { type: 'image', src: '1.12.png', sign: 'SL1.12.mp4' },
-        { type: 'image', src: '1.13.png', sign: 'SL1.13.mp4' },
-        { type: 'image', src: '1.14.png', sign: 'SL1.14.mp4' },
-        { type: 'image', src: '1.15.png', sign: 'SL1.15.mp4' },
-        { type: 'image', src: '1.16.png', sign: 'SL1.16.mp4' },
-        { type: 'image', src: '1.17.png', sign: 'SL1.17.mp4' },
-        { type: 'image', src: '1.18.png', sign: 'SL1.18.mp4' },
-        { type: 'image', src: '1.19.png', sign: 'SL1.19.mp4' },
-        { type: 'image', src: '1.20.png', sign: 'SL1.20.mp4' },
-        { type: 'image', src: '1.21.png', sign: 'SL1.21.mp4' },
-        { type: 'image', src: '1.22.png', sign: 'SL1.22.mp4' },
-        { type: 'image', src: '1.23.png', sign: 'SL1.23.mp4' },
-        { type: 'image', src: '1.24.png', sign: 'SL1.24.mp4' },
-        { type: 'image', src: '1.25.png', sign: 'SL1.25.mp4' },
-        { type: 'image', src: '1.26.png', sign: 'SL1.26.mp4' },
-        { type: 'image', src: '1.27.png', sign: 'SL1.27.mp4' },
-        { type: 'image', src: 'credits.png' },
-      ],
-      2: [
-        { type: 'image', src: 'KABANATA2.jpg' },
-        { type: 'image', src: '2.1.png', sign: 'SL2.1.mp4' },
-        { type: 'image', src: '2.2.png', sign: 'SL2.2.mp4' },
-        { type: 'image', src: '2.3.png', sign: 'SL2.3.mp4' },
-        { type: 'image', src: '2.4.png', sign: 'SL2.4.mp4' },
-        { type: 'image', src: '2.5.png', sign: 'SL2.5.mp4' },
-        { type: 'image', src: '2.6.png', sign: 'SL2.6.mp4' },
-        { type: 'image', src: '2.7.png', sign: 'SL2.7.mp4' },
-        { type: 'image', src: '2.8.png', sign: 'SL2.8.mp4' },
-        { type: 'image', src: '2.9.png', sign: 'SL2.9.mp4' },
-        { type: 'image', src: '2.10.png', sign: 'SL2.10.mp4' },
-        { type: 'image', src: '2.11.png', sign: 'SL2.11.mp4' },
-        { type: 'image', src: '2.12.png', sign: 'SL2.12.mp4' },
-        { type: 'image', src: '2.13.png', sign: 'SL2.13.mp4' },
-        { type: 'image', src: '2.14.png', sign: 'SL2.14.mp4' },
-        { type: 'image', src: '2.15.png', sign: 'SL2.15.mp4' },
-        { type: 'image', src: '2.16.png', sign: 'SL2.16.mp4' },
-        { type: 'image', src: '2.17.png', sign: 'SL2.17.mp4' },
-        { type: 'image', src: '2.18.png', sign: 'SL2.18.mp4' },
-        { type: 'image', src: '2.19.png', sign: 'SL2.19.mp4' },
-        { type: 'image', src: '2.20.png', sign: 'SL2.20.mp4' },
-        { type: 'image', src: '2.21.png', sign: 'SL2.21.mp4' },
-        { type: 'image', src: '2.22.png', sign: 'SL2.22.mp4' },
-        { type: 'image', src: '2.23.png', sign: 'SL2.23.mp4' },
-        { type: 'image', src: '2.24.png', sign: 'SL2.24.mp4' },
-        { type: 'image', src: 'credits.png' },
-      ],
-      3: [
-        { type: 'image', src: 'KABANATA3.jpg' },
-        { type: 'image', src: '3.1.png', sign: 'SL3.1.mp4' },
-        { type: 'image', src: '3.2.png', sign: 'SL3.2.mp4' },
-        { type: 'image', src: '3.3.png', sign: 'SL3.3.mp4' },
-        { type: 'image', src: '3.4.png', sign: 'SL3.4.mp4' },
-        { type: 'image', src: '3.5.png', sign: 'SL3.5.mp4' },
-        { type: 'image', src: '3.6.png', sign: 'SL3.6.mp4' },
-        { type: 'image', src: '3.7.png', sign: 'SL3.7.mp4' },
-        { type: 'image', src: '3.8.png', sign: 'SL3.8.mp4' },
-        { type: 'image', src: '3.9.png', sign: 'SL3.9.mp4' },
-        { type: 'image', src: '3.10.png', sign: 'SL3.10.mp4' },
-        { type: 'image', src: '3.11.png', sign: 'SL3.11.mp4' },
-        { type: 'image', src: '3.12.png', sign: 'SL3.12.mp4' },
-        { type: 'image', src: '3.13.png', sign: 'SL3.13.mp4' },
-        { type: 'image', src: '3.14.png', sign: 'SL3.14.mp4' },
-        { type: 'image', src: '3.15.png', sign: 'SL3.15.mp4' },
-        { type: 'image', src: '3.16.png', sign: 'SL3.16.mp4' },
-        { type: 'image', src: '3.17.png', sign: 'SL3.17.mp4' },
-        { type: 'image', src: '3.18.png', sign: 'SL3.18.mp4' },
-        { type: 'image', src: '3.19.png', sign: 'SL3.19.mp4' },
-        { type: 'image', src: '3.20.png', sign: 'SL3.20.mp4' },
-        { type: 'image', src: '3.21.png', sign: 'SL3.21.mp4' },
-        { type: 'image', src: '3.22.png', sign: 'SL3.22.mp4' },
-        { type: 'image', src: '3.23.png', sign: 'SL3.23.mp4' },
-        { type: 'image', src: '3.24.png', sign: 'SL3.24.mp4' },
-        { type: 'image', src: '3.25.png', sign: 'SL3.25.mp4' },
-        { type: 'image', src: 'credits.png' },
-      ],
-      4: [
-        { type: 'image', src: 'KABANATA4.jpg' },
-        { type: 'image', src: '4.1.png', sign: 'SL4.1.mp4' },
-        { type: 'image', src: '4.2.png', sign: 'SL4.2.mp4' },
-        { type: 'image', src: '4.3.png', sign: 'SL4.3.mp4' },
-        { type: 'image', src: '4.4.png', sign: 'SL4.4.mp4' },
-        { type: 'image', src: '4.5.png', sign: 'SL4.5.mp4' },
-        { type: 'image', src: '4.6.png', sign: 'SL4.6.mp4' },
-        { type: 'image', src: '4.7.png', sign: 'SL4.7.mp4' },
-        { type: 'image', src: '4.8.png', sign: 'SL4.8.mp4' },
-        { type: 'image', src: '4.9.png', sign: 'SL4.9.mp4' },
-        { type: 'image', src: '4.10.png', sign: 'SL4.10.mp4' },
-        { type: 'image', src: '4.11.png', sign: 'SL4.11.mp4' },
-        { type: 'image', src: '4.12.png', sign: 'SL4.12.mp4' },
-        { type: 'image', src: '4.13.png', sign: 'SL4.13.mp4' },
-        { type: 'image', src: '4.14.png', sign: 'SL4.14.mp4' },
-        { type: 'image', src: '4.15.png', sign: 'SL4.15.mp4' },
-        { type: 'image', src: '4.16.png', sign: 'SL4.16.mp4' },
-        { type: 'image', src: '4.17.png', sign: 'SL4.17.mp4' },
-        { type: 'image', src: '4.18.png', sign: 'SL4.18.mp4' },
-        { type: 'image', src: '4.19.png', sign: 'SL4.19.mp4' },
-        { type: 'image', src: '4.20.png', sign: 'SL4.20.mp4' },
-        { type: 'image', src: '4.21.png', sign: 'SL4.21.mp4' },
-        { type: 'image', src: '4.22.png', sign: 'SL4.22.mp4' },
-        { type: 'image', src: '4.23.png', sign: 'SL4.23.mp4' },
-        { type: 'image', src: '4.24.png', sign: 'SL4.24.mp4' },
-        { type: 'image', src: '4.25.png', sign: 'SL4.25.mp4' },
-        { type: 'image', src: '4.26.png', sign: 'SL4.26.mp4' },
-        { type: 'image', src: 'credits.png' },
-      ],
-      5: [
-        { type: 'image', src: 'KABANATA5.jpg' },
-        { type: 'image', src: '5.1.png', sign: 'SL5.1.mp4' },
-        { type: 'image', src: '5.2.png', sign: 'SL5.2.mp4' },
-        { type: 'image', src: '5.3.png', sign: 'SL5.3.mp4' },
-        { type: 'image', src: '5.4.png', sign: 'SL5.4.mp4' },
-        { type: 'image', src: '5.5.png', sign: 'SL5.5.mp4' },
-        { type: 'image', src: '5.6.png', sign: 'SL5.6.mp4' },
-        { type: 'image', src: '5.7.png', sign: 'SL5.7.mp4' },
-        { type: 'image', src: '5.8.png', sign: 'SL5.8.mp4' },
-        { type: 'image', src: '5.9.png', sign: 'SL5.9.mp4' },
-        { type: 'image', src: '5.10.png', sign: 'SL5.10.mp4' },
-        { type: 'image', src: '5.11.png', sign: 'SL5.11.mp4' },
-        { type: 'image', src: '5.12.png', sign: 'SL5.12.mp4' },
-        { type: 'image', src: '5.13.png', sign: 'SL5.13.mp4' },
-        { type: 'image', src: '5.14.png', sign: 'SL5.14.mp4' },
-        { type: 'image', src: '5.15.png', sign: 'SL5.15.mp4' },
-        { type: 'image', src: '5.16.png', sign: 'SL5.16.mp4' },
-        { type: 'image', src: '5.17.png', sign: 'SL5.17.mp4' },
-        { type: 'image', src: '5.18.png', sign: 'SL5.18.mp4' },
-        { type: 'image', src: '5.19.png', sign: 'SL5.19.mp4' },
-        { type: 'image', src: '5.20.png', sign: 'SL5.20.mp4' },
-        { type: 'image', src: '5.21.png', sign: 'SL5.21.mp4' },
-        { type: 'image', src: 'credits.png' },
-      ],
-      6: [
-        { type: 'image', src: 'KABANATA6.jpg' },
-        { type: 'image', src: '6.1.png', sign: 'SL6.1.mp4' },
-        { type: 'image', src: '6.2.png', sign: 'SL6.2.mp4' },
-        { type: 'image', src: '6.3.png', sign: 'SL6.3.mp4' },
-        { type: 'image', src: '6.4.png', sign: 'SL6.4.mp4' },
-        { type: 'image', src: '6.5.png', sign: 'SL6.5.mp4' },
-        { type: 'image', src: '6.6.png', sign: 'SL6.6.mp4' },
-        { type: 'image', src: '6.7.png', sign: 'SL6.7.mp4' },
-        { type: 'image', src: '6.8.png', sign: 'SL6.8.mp4' },
-        { type: 'image', src: '6.9.png', sign: 'SL6.9.mp4' },
-        { type: 'image', src: '6.10.png', sign: 'SL6.10.mp4' },
-        { type: 'image', src: '6.11.png', sign: 'SL6.11.mp4' },
-        { type: 'image', src: '6.12.png', sign: 'SL6.12.mp4' },
-        { type: 'image', src: '6.13.png', sign: 'SL6.13.mp4' },
-        { type: 'image', src: '6.14.png', sign: 'SL6.14.mp4' },
-        { type: 'image', src: '6.15.png', sign: 'SL6.15.mp4' },
-        { type: 'image', src: '6.16.png', sign: 'SL6.16.mp4' },
-        { type: 'image', src: '6.17.png', sign: 'SL6.17.mp4' },
-        { type: 'image', src: '6.18.png', sign: 'SL6.18.mp4' },
-        { type: 'image', src: '6.19.png', sign: 'SL6.19.mp4' },
-        { type: 'image', src: '6.20.png', sign: 'SL6.20.mp4' },
-        { type: 'image', src: 'credits.png' },
-	],
-    };
-let currentStory = [];
-let currentSlide = 0;
+  2: {
+    slides: [
+      { type:'image', src:'KABANATA2.jpg' },
+      { type:'image', src:'2.1.png', sign:'SL2.1.mp4' },
+      { type:'image', src:'2.2.png', sign:'SL2.2.mp4' },
+      { type:'image', src:'2.3.png', sign:'SL2.3.mp4' },
+      { type:'image', src:'2.4.png', sign:'SL2.4.mp4' },
+      { type:'image', src:'2.5.png', sign:'SL2.5.mp4' },
+      { type:'image', src:'2.6.png', sign:'SL2.6.mp4' },
+      { type:'image', src:'2.7.png', sign:'SL2.7.mp4' },
+      { type:'image', src:'2.8.png', sign:'SL2.8.mp4' },
+      { type:'image', src:'2.9.png', sign:'SL2.9.mp4' },
+      { type:'image', src:'2.10.png', sign:'SL2.10.mp4' },
+      { type:'image', src:'2.11.png', sign:'SL2.11.mp4' },
+      { type:'image', src:'2.12.png', sign:'SL2.12.mp4' },
+      { type:'image', src:'2.13.png', sign:'SL2.13.mp4' },
+      { type:'image', src:'2.14.png', sign:'SL2.14.mp4' },
+      { type:'image', src:'2.15.png', sign:'SL2.15.mp4' },
+      { type:'image', src:'2.16.png', sign:'SL2.16.mp4' },
+      { type:'image', src:'2.17.png', sign:'SL2.17.mp4' },
+      { type:'image', src:'2.18.png', sign:'SL2.18.mp4' },
+      { type:'image', src:'2.19.png', sign:'SL2.19.mp4' },
+      { type:'image', src:'2.20.png', sign:'SL2.20.mp4' },
+      { type:'image', src:'2.21.png', sign:'SL2.21.mp4' },
+      { type:'image', src:'2.22.png', sign:'SL2.22.mp4' },
+      { type:'image', src:'2.23.png', sign:'SL2.23.mp4' },
+      { type:'image', src:'2.24.png', sign:'SL2.24.mp4' },
+      { type:'image', src:'credits.png' }
+    ],
+    activity: 'gsafeorsorry.html'
+  },
+
+  3: {
+    slides: [
+      { type:'image', src:'KABANATA3.jpg' },
+      { type:'image', src:'3.1.png', sign:'SL3.1.mp4' },
+      { type:'image', src:'3.2.png', sign:'SL3.2.mp4' },
+      { type:'image', src:'3.3.png', sign:'SL3.3.mp4' },
+      { type:'image', src:'3.4.png', sign:'SL3.4.mp4' },
+      { type:'image', src:'3.5.png', sign:'SL3.5.mp4' },
+      { type:'image', src:'3.6.png', sign:'SL3.6.mp4' },
+      { type:'image', src:'3.7.png', sign:'SL3.7.mp4' },
+      { type:'image', src:'3.8.png', sign:'SL3.8.mp4' },
+      { type:'image', src:'3.9.png', sign:'SL3.9.mp4' },
+      { type:'image', src:'3.10.png', sign:'SL3.10.mp4' },
+      { type:'image', src:'3.11.png', sign:'SL3.11.mp4' },
+      { type:'image', src:'3.12.png', sign:'SL3.12.mp4' },
+      { type:'image', src:'3.13.png', sign:'SL3.13.mp4' },
+      { type:'image', src:'3.14.png', sign:'SL3.14.mp4' },
+      { type:'image', src:'3.15.png', sign:'SL3.15.mp4' },
+      { type:'image', src:'3.16.png', sign:'SL3.16.mp4' },
+      { type:'image', src:'3.17.png', sign:'SL3.17.mp4' },
+      { type:'image', src:'3.18.png', sign:'SL3.18.mp4' },
+      { type:'image', src:'3.19.png', sign:'SL3.19.mp4' },
+      { type:'image', src:'3.20.png', sign:'SL3.20.mp4' },
+      { type:'image', src:'3.21.png', sign:'SL3.21.mp4' },
+      { type:'image', src:'3.22.png', sign:'SL3.22.mp4' },
+      { type:'image', src:'3.23.png', sign:'SL3.23.mp4' },
+      { type:'image', src:'3.24.png', sign:'SL3.24.mp4' },
+      { type:'image', src:'3.25.png', sign:'SL3.25.mp4' },
+      { type:'image', src:'credits.png' }
+    ],
+    activity: 'gmix&match.html'
+  },
+
+  4: {
+    slides: [
+      { type:'image', src:'KABANATA4.jpg' },
+      { type:'image', src:'4.1.png', sign:'SL4.1.mp4' },
+      { type:'image', src:'4.2.png', sign:'SL4.2.mp4' },
+      { type:'image', src:'4.3.png', sign:'SL4.3.mp4' },
+      { type:'image', src:'4.4.png', sign:'SL4.4.mp4' },
+      { type:'image', src:'4.5.png', sign:'SL4.5.mp4' },
+      { type:'image', src:'4.6.png', sign:'SL4.6.mp4' },
+      { type:'image', src:'4.7.png', sign:'SL4.7.mp4' },
+      { type:'image', src:'4.8.png', sign:'SL4.8.mp4' },
+      { type:'image', src:'4.9.png', sign:'SL4.9.mp4' },
+      { type:'image', src:'4.10.png', sign:'SL4.10.mp4' },
+      { type:'image', src:'4.11.png', sign:'SL4.11.mp4' },
+      { type:'image', src:'4.12.png', sign:'SL4.12.mp4' },
+      { type:'image', src:'4.13.png', sign:'SL4.13.mp4' },
+      { type:'image', src:'4.14.png', sign:'SL4.14.mp4' },
+      { type:'image', src:'4.15.png', sign:'SL4.15.mp4' },
+      { type:'image', src:'4.16.png', sign:'SL4.16.mp4' },
+      { type:'image', src:'4.17.png', sign:'SL4.17.mp4' },
+      { type:'image', src:'4.18.png', sign:'SL4.18.mp4' },
+      { type:'image', src:'4.19.png', sign:'SL4.19.mp4' },
+      { type:'image', src:'4.20.png', sign:'SL4.20.mp4' },
+      { type:'image', src:'4.21.png', sign:'SL4.21.mp4' },
+      { type:'image', src:'4.22.png', sign:'SL4.22.mp4' },
+      { type:'image', src:'4.23.png', sign:'SL4.23.mp4' },
+      { type:'image', src:'4.24.png', sign:'SL4.24.mp4' },
+      { type:'image', src:'4.25.png', sign:'SL4.25.mp4' },
+      { type:'image', src:'4.26.png', sign:'SL4.26.mp4' },
+      { type:'image', src:'credits.png' }
+    ],
+    activity: 'gpuzzle-tation.html'
+  },
+
+  5: {
+    slides: [
+      { type:'image', src:'KABANATA5.jpg' },
+      { type:'image', src:'5.1.png', sign:'SL5.1.mp4' },
+      { type:'image', src:'5.2.png', sign:'SL5.2.mp4' },
+      { type:'image', src:'5.3.png', sign:'SL5.3.mp4' },
+      { type:'image', src:'5.4.png', sign:'SL5.4.mp4' },
+      { type:'image', src:'5.5.png', sign:'SL5.5.mp4' },
+      { type:'image', src:'5.6.png', sign:'SL5.6.mp4' },
+      { type:'image', src:'5.7.png', sign:'SL5.7.mp4' },
+      { type:'image', src:'5.8.png', sign:'SL5.8.mp4' },
+      { type:'image', src:'5.9.png', sign:'SL5.9.mp4' },
+      { type:'image', src:'5.10.png', sign:'SL5.10.mp4' },
+      { type:'image', src:'5.11.png', sign:'SL5.11.mp4' },
+      { type:'image', src:'5.12.png', sign:'SL5.12.mp4' },
+      { type:'image', src:'5.13.png', sign:'SL5.13.mp4' },
+      { type:'image', src:'5.14.png', sign:'SL5.14.mp4' },
+      { type:'image', src:'5.15.png', sign:'SL5.15.mp4' },
+      { type:'image', src:'5.16.png', sign:'SL5.16.mp4' },
+      { type:'image', src:'5.17.png', sign:'SL5.17.mp4' },
+      { type:'image', src:'5.18.png', sign:'SL5.18.mp4' },
+      { type:'image', src:'5.19.png', sign:'SL5.19.mp4' },
+      { type:'image', src:'5.20.png', sign:'SL5.20.mp4' },
+      { type:'image', src:'5.21.png', sign:'SL5.21.mp4' },
+      { type:'image', src:'credits.png' }
+    ],
+    activity: 'gquizpub.html'
+  },
+
+  6: {
+    slides: [
+      { type:'image', src:'KABANATA6.jpg' },
+      { type:'image', src:'6.1.png', sign:'SL6.1.mp4' },
+      { type:'image', src:'6.2.png', sign:'SL6.2.mp4' },
+      { type:'image', src:'6.3.png', sign:'SL6.3.mp4' },
+      { type:'image', src:'6.4.png', sign:'SL6.4.mp4' },
+      { type:'image', src:'6.5.png', sign:'SL6.5.mp4' },
+      { type:'image', src:'6.6.png', sign:'SL6.6.mp4' },
+      { type:'image', src:'6.7.png', sign:'SL6.7.mp4' },
+      { type:'image', src:'6.8.png', sign:'SL6.8.mp4' },
+      { type:'image', src:'6.9.png', sign:'SL6.9.mp4' },
+      { type:'image', src:'6.10.png', sign:'SL6.10.mp4' },
+      { type:'image', src:'6.11.png', sign:'SL6.11.mp4' },
+      { type:'image', src:'6.12.png', sign:'SL6.12.mp4' },
+      { type:'image', src:'6.13.png', sign:'SL6.13.mp4' },
+      { type:'image', src:'6.14.png', sign:'SL6.14.mp4' },
+      { type:'image', src:'6.15.png', sign:'SL6.15.mp4' },
+      { type:'image', src:'6.16.png', sign:'SL6.16.mp4' },
+      { type:'image', src:'6.17.png', sign:'SL6.17.mp4' },
+      { type:'image', src:'6.18.png', sign:'SL6.18.mp4' },
+      { type:'image', src:'6.19.png', sign:'SL6.19.mp4' },
+      { type:'image', src:'6.20.png', sign:'SL6.20.mp4' },
+      { type:'image', src:'credits.png' }
+    ],
+    activity: 'g4pics1word.html'
+  }
+};
+
 let currentChapter = null;
+let currentSlideIndex = 0;
 
-function openStory(chapter){
-  currentChapter = chapter;
-  currentStory = stories[chapter];
-  currentSlide = 0;
-
-  document.getElementById("overlay").style.display = "flex";
-  
-  const signVideo = document.getElementById("signVideo");
-
-	signVideo.addEventListener("ended", function () {
-	  changeSlide(1);
-	});
-
-
-  const slidesContainer = document.getElementById("slides");
-  slidesContainer.innerHTML = "";
-
-  currentStory.forEach((item,index)=>{
-    const slide = document.createElement("div");
-    slide.classList.add("slide");
-
-    if(index === 0) slide.classList.add("active");
-
-    const img = document.createElement("img");
-    img.src = item.src;
-
-    slide.appendChild(img);
-    slidesContainer.appendChild(slide);
-  });
-
+function openStory(id){
+  currentChapter = stories[id];
+  currentSlideIndex = 0;
+  document.getElementById("overlay").style.display="flex";
+  renderSlides();
   showSlide(0);
+}
+
+function renderSlides(){
+  const container=document.getElementById("slides");
+  container.innerHTML="";
+
+  currentChapter.slides.forEach((slideData,index)=>{
+    const slide=document.createElement("div");
+    slide.className="slide"+(index===0?" active":"");
+
+    const img=document.createElement("img");
+    img.src=slideData.src;
+    img.onerror=()=>img.src="https://via.placeholder.com/800x600?text=Slide";
+    slide.appendChild(img);
+
+    if(index===currentChapter.slides.length-1){
+      const btn=document.createElement("button");
+      btn.className="activity-btn";
+      btn.innerText="Maglaro at Subukin ang iyong kaalaman!";
+      btn.onclick=()=>window.location.href=currentChapter.activity;
+      slide.appendChild(btn);
+    }
+
+    container.appendChild(slide);
+  });
+}
+
+function showSlide(index){
+  const slides=document.querySelectorAll(".slide");
+  slides.forEach(s=>s.classList.remove("active"));
+  slides[index].classList.add("active");
+
+  const signVideo=document.getElementById("signVideo");
+  const signContainer=document.getElementById("signContainer");
+  const slideData=currentChapter.slides[index];
+
+  if(slideData.sign){
+    signVideo.src=slideData.sign;
+    signContainer.style.display="block";
+    signVideo.play().catch(()=>{});
+  }else{
+    signContainer.style.display="none";
+    signVideo.pause();
+  }
+
+  const progress=((index+1)/currentChapter.slides.length)*100;
+  document.getElementById("progressBar").style.width=progress+"%";
+}
+
+function changeSlide(step){
+  const next=currentSlideIndex+step;
+
+  if(next>=0 && next<currentChapter.slides.length){
+    currentSlideIndex=next;
+    showSlide(currentSlideIndex);
+  }
 }
 
 function closeStory(){
   document.getElementById("overlay").style.display="none";
+  document.getElementById("signVideo").pause();
 }
-
-function changeSlide(direction){
-  currentSlide += direction;
-
-  if(currentSlide < 0) currentSlide = 0;
-  if(currentSlide >= currentStory.length){
-    currentSlide = currentStory.length -1;
-    showReward();
-  }
-
-  showSlide(currentSlide);
-}
-
-function showSlide(index){
-
-  const slides = document.querySelectorAll(".slide");
-  slides.forEach(slide => slide.classList.remove("active"));
-
-  slides[index].classList.add("active");
-
-  const signVideo = document.getElementById("signVideo");
-
-  if(currentStory[index].sign){
-    signVideo.src = currentStory[index].sign;
-    signVideo.style.display = "block";
-    signVideo.play();
-  } else {
-    signVideo.pause();
-    signVideo.style.display = "none";
-  }
-
-  updateProgress();
-}
-
-function updateProgress(){
-  const percent = ((currentSlide+1)/currentStory.length)*100;
-  document.getElementById("progressBar").style.width = percent + "%";
-
-  localStorage.setItem("chapter_"+currentChapter,currentSlide);
-}
-
-function showReward(){
-  document.getElementById("rewardModal").style.display="flex";
-
-  confetti({
-    particleCount: 120,
-    spread: 70,
-    origin: { y: 0.6 }
-  });
-}
-
-function closeReward(){
-  document.getElementById("rewardModal").style.display="none";
-}
-const signVideo = document.getElementById("signVideo");
-signVideo.addEventListener("ended", () => {
-  changeSlide(1);
-});
-
-function createParticles() {
-  const section = document.querySelector('.features-section');
-  
-  // Create 15 Floating Bubbles
-  for (let i = 0; i < 15; i++) {
-    const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    
-    // Randomize size, position, and speed
-    const size = Math.random() * 60 + 20 + "px";
-    bubble.style.width = size;
-    bubble.style.height = size;
-    bubble.style.left = Math.random() * 100 + "%";
-    bubble.style.animationDuration = Math.random() * 8 + 7 + "s";
-    bubble.style.animationDelay = Math.random() * 5 + "s";
-    
-    section.appendChild(bubble);
-  }
-
-  // Create 30 Subtle Stars
-  for (let i = 0; i < 30; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    
-    const size = Math.random() * 4 + 2 + "px";
-    star.style.width = size;
-    star.style.height = size;
-    star.style.top = Math.random() * 100 + "%";
-    star.style.left = Math.random() * 100 + "%";
-    star.style.animationDelay = Math.random() * 3 + "s";
-    
-    section.appendChild(star);
-  }
-}
-
-// Run the function when the page loads
-window.addEventListener('DOMContentLoaded', createParticles);
-
-  </script>
+</script>
 </body>
 </html>
