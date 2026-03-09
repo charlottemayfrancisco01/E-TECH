@@ -269,20 +269,24 @@
     .prev { left: 10px; }
     .next { right: 10px; }
 
-    .sign-language-overlay {
-      position: absolute;
-      bottom: 30px;
-      right: 30px;
-      width: 220px;
-      background: #fff;
-      padding: 8px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      z-index: 1000;
-    }
+	.sign-language-overlay {
+	  position: absolute;
+	  bottom: 20px;
+	  right: 20px;
+	  width: 200px;   /* smaller */
+	  background: #fff;
+	  padding: 6px;
+	  border-radius: 12px;
+	  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+	  z-index: 1000;
+	}
 
-    .sign-language-overlay video { width: 100%; border-radius: 10px; }
-
+	 .sign-language-overlay video {
+	  width: 100%;
+	  height: auto;
+	  border-radius: 10px;
+	}
+	
     .progress-container {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 8px;
